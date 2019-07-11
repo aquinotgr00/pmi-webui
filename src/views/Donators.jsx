@@ -1,17 +1,14 @@
 import React from 'react'
-import Main from 'components/Main'
-import Tool from 'components/Tool'
+import { Main, Tool } from 'components'
 
 class Donators extends React.Component {
-  render() {
+  render () {
     return (
-      <Main title="Donators">
-        <Tool/>
+      <Main title='Donators'>
+        <Tool />
       </Main>
     )
   }
 }
-
-
 
 export default Donators

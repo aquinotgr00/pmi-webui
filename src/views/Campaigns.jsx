@@ -1,23 +1,23 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Button } from 'reactstrap'
-import { login } from 'actions'
+import { Main, Tool, PaginationLink } from 'components'
+import ucwords from 'utils/string'
 
 class Campaigns extends React.Component {
-  render() {
-    const {campaign} = this.props.match.params
-    
+  componentDidMount () {
+    console.log('mounted')
+  }
+
+  render () {
+    const { campaign } = this.props.match.params
+
     return (
-      <>
-        <div>Campaign : {campaign}</div>
-        <Button color="danger" onClick={()=>this.props.dispatch(login('coba'))}>Danger!</Button>
-      </>
+      <Main title={ucwords(campaign.split('-').join(' '))}>
+        <Tool />
+        <PaginationLink />
+      </Main>
+
     )
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-})
-
-export default connect(mapStateToProps)(Campaigns)
+export default Campaigns
