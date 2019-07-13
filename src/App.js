@@ -19,6 +19,7 @@ function App () {
         <PrivateRoute path='/admin' component={AdminLayout} />
         <Route path='/login' component={Login} />
         <Route path='/reset-password/:token' component={ResetPassword} />
+        <Redirect from='/' to='/admin' />
         <Route component={NoMatch} />
       </Switch>
     </Router>

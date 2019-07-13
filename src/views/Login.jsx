@@ -2,7 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Button, Container, Form, FormGroup, Label, Input, Row } from 'reactstrap'
+import { Formik } from 'formik'
 import { login } from 'actions'
+import { logout } from 'services/api'
 
 class Login extends React.Component {
   constructor (props) {
@@ -11,9 +13,17 @@ class Login extends React.Component {
   }
 
   handleLogin () {
-    this.props.dispatch(login('testing'))
-    this.props.history.push('/admin/campaigns/bulan-dana')
-    console.log(this.props)
+    const email = 'user@mail.com'
+    const password = 'test1234'
+    //const loginResponse = api.auth.login({ email, password })
+    //if (loginResponse.status === 'success') {
+      //this.props.dispatch(login(loginResponse.token))
+      this.props.dispatch(login('coba'))
+      logout()
+      this.props.history.push('/admin/campaigns/bulan-dana')
+    //} else {
+
+    //}
   }
 
   render () {
