@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import PrivateRoute from 'components/PrivateRoute'
 import AdminLayout from 'layouts/Admin'
 import Login from 'views/Login'

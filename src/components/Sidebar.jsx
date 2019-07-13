@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink as RouterNavLink } from 'react-router-dom'
 
 import { Nav, Navbar, NavItem, NavLink, UncontrolledCollapse } from 'reactstrap'
 
@@ -38,7 +38,18 @@ export function Sidebar () {
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>Manual Transaksi</NavLink>
+            <RouterNavLink to='#' className='nav-link' id='manual-input'>Manual Transaksi</RouterNavLink>
+            <UncontrolledCollapse toggler='#manual-input' tag='ul' className='list-unstyled'>
+              <NavItem>
+                <RouterNavLink exact={true} activeClassName='active' to='/admin/donations/bulan-dana'>Bulan Dana</RouterNavLink>
+              </NavItem>
+              <NavItem>
+                <RouterNavLink to='/admin/donations/donasi-dana'>Donasi Dana</RouterNavLink>
+              </NavItem>
+              <NavItem>
+                <RouterNavLink to='/admin/donations/donasi-barang'>Donasi Barang</RouterNavLink>
+              </NavItem>
+            </UncontrolledCollapse>
           </NavItem>
         </Nav>
       </div>

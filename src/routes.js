@@ -2,6 +2,7 @@ import Users from 'views/Users'
 import Donators from 'views/Donators'
 import Volunteers from 'views/Volunteers'
 import Campaigns from 'views/Campaigns'
+import Donations from 'views/Donations'
 
 var routes = [
   {
@@ -23,6 +24,11 @@ var routes = [
     path: '/campaigns/:campaign',
     name: 'Dashboard',
     component:Campaigns
+  },
+  {
+    path: '/donations/:donation',
+    name: 'Donations',
+    component:Donations
   },
 ];
 export default routes;
