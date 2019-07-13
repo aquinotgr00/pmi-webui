@@ -1,8 +1,8 @@
 const user = (state = { token: null, showConfirmLogout: false }, action) => {
   switch (action.type) {
-    case 'USER_LOGIN':
+    case 'LOGIN_SUCCESS':
       return { ...state, token: action.token }
-    case 'USER_LOGOUT':
+    case 'LOGOUT_SUCCESS':
       return { token: null, showConfirmLogout: false }
     case 'SHOW_CONFIRM_LOGOUT':
       return { ...state, showConfirmLogout: true }
