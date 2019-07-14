@@ -7,19 +7,19 @@ import routes from 'routes.js'
 import { logout, toggleConfirmLogout } from 'actions'
 
 class Admin extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      
-    }
+  constructor (props) {
+    super(props)
+
+    this.getRoutes = this.getRoutes.bind(this)
     this.toggleConfirmLogoutModal = this.toggleConfirmLogoutModal.bind(this)
     this.logout = this.logout.bind(this)
   }
-  
-  getRoutes = routes => {
+
+  getRoutes (routes) {
     return routes.map((prop, key) => {
       return (
         <Route
+          exact
           path={`${this.props.match.path + prop.path}`}
           component={prop.component}
           key={key}
@@ -28,40 +28,40 @@ class Admin extends React.Component {
     })
   }
 
-  toggleConfirmLogoutModal() {
+  toggleConfirmLogoutModal () {
     this.props.dispatch(toggleConfirmLogout())
   }
 
-  logout() {
+  logout () {
     this.props.dispatch(logout())
   }
-  
-  render() {
+
+  render () {
     return (
       <>
-        <div className="container-fluid">
+        <div className='container-fluid'>
           <Row>
             <Sidebar />
-            <div className="col-md-9 ml-sm-auto col-lg-10 main">
+            <div className='col-md-9 ml-sm-auto col-lg-10 main'>
               <Switch>{this.getRoutes(routes)}</Switch>
             </div>
           </Row>
         </div>
-        
+
         <Footer />
 
-        <ConfirmLogoutModal 
+        <ConfirmLogoutModal
           isOpen={this.props.user.showConfirmLogout}
           toggle={this.toggleConfirmLogoutModal}
-          onLogout={this.logout} 
+          onLogout={this.logout}
         />
       </>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => ({
-  user:state.user
+  user: state.user
 })
 
 export default connect(mapStateToProps)(Admin)

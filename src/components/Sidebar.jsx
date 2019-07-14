@@ -20,13 +20,13 @@ export function Sidebar () {
 
             <UncontrolledCollapse toggler='#toggler' tag='ul' className='list-unstyled'>
               <NavItem>
-                <NavLink href='/admin/campaigns/bulan-dana' active>Bulan Dana</NavLink>
+                <Link to='/admin/campaigns/bulan-dana'>Bulan Dana</Link>
               </NavItem>
               <NavItem>
-                <NavLink href='/admin/campaigns/donasi-dana'>Donasi Dana</NavLink>
+                <Link to='/admin/campaigns/donasi-dana'>Donasi Dana</Link>
               </NavItem>
               <NavItem>
-                <NavLink href='/admin/campaigns/donasi-barang'>Donasi Barang</NavLink>
+                <Link to='/admin/campaigns/donasi-barang'>Donasi Barang</Link>
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>

@@ -6,6 +6,7 @@ export function Tool (props) {
     <div>
       <Form className='form-inline my-2 mb-3'>
         <Searchbar />
+        {props.children}
       </Form>
     </div>
   )

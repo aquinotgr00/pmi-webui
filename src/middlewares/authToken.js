@@ -4,16 +4,18 @@ export default (store) => next => action => {
   switch (action['type']) {
     case 'LOGIN_SUCCESS':
       setAuthToken(action.token)
-      break
+      return next(action)
     case 'persist/REHYDRATE':
-      const { token } = action.payload.user
-      setAuthToken(token)
-      break;
+      let result = next(action)
+      const { token } = store.getState().user
+      if (token) {
+        setAuthToken(token)
+      }
+      return result
     case 'LOGOUT_SUCCESS':
       setAuthToken(null)
-      break
+      return next(action)
     default:
+      return next(action)
   }
-
-  return next(action)
 }
