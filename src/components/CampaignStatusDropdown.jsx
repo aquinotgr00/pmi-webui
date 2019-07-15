@@ -3,7 +3,7 @@ import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from
 
 export function CampaignStatusDropdown () {
   return (
-    
+
     <UncontrolledDropdown className='mr-4'>
       <DropdownToggle
         caret

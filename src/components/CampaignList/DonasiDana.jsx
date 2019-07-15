@@ -1,7 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
 
 export function DonasiDana (props) {
+  const { data } = props
   return (
     <Table hover>
       <thead>
@@ -17,16 +19,17 @@ export function DonasiDana (props) {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-        </tr>
+        {data && data.map((campaign, key) => (
+          <tr key={key}>
+            <td>{campaign.image}</td>
+            <td>{campaign.title}</td>
+            <td>{campaign.get_type.name}</td>
+            <td>{campaign.ranges_donation}</td>
+            <td>{campaign.amount_goal}</td>
+            <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
+            <td><Link to='/admin/campaigns/bulan-dana/1/edit'>edit</Link></td>
+          </tr>
+        ))}
       </tbody>
     </Table>
   )

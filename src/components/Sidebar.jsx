@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-import { Nav, Navbar, NavItem, NavLink, UncontrolledCollapse } from 'reactstrap'
+import { Nav, Navbar, NavItem, NavLink as SubMenu, UncontrolledCollapse } from 'reactstrap'
 
 export function Sidebar () {
   return (
@@ -11,34 +11,34 @@ export function Sidebar () {
         <hr />
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>User Management</NavLink>
+            <SubMenu href='#'>User Management</SubMenu>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#' id='toggler' className='side'>Donasi Management</NavLink>
+            <SubMenu href='#' id='toggler' className='side'>Donasi Management</SubMenu>
 
             <UncontrolledCollapse toggler='#toggler' tag='ul' className='list-unstyled'>
               <NavItem>
-                <Link to='/admin/campaigns/bulan-dana'>Bulan Dana</Link>
+                <NavLink to='/admin/campaigns/bulan-dana' activeClassName='active'>Bulan Dana</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/campaigns/donasi-dana'>Donasi Dana</Link>
+                <NavLink to='/admin/campaigns/donasi-dana' activeClassName='active'>Donasi Dana</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/campaigns/donasi-barang'>Donasi Barang</Link>
+                <NavLink to='/admin/campaigns/donasi-barang' activeClassName='active'>Donasi Barang</NavLink>
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>Transaksi Management</NavLink>
+            <SubMenu href='#'>Transaksi Management</SubMenu>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>Manual Transaksi</NavLink>
+            <SubMenu href='#'>Manual Transaksi</SubMenu>
           </NavItem>
         </Nav>
       </div>

@@ -1,68 +1,47 @@
 import { loginApi, logoutApi } from 'services/api'
 import { persistor } from 'store'
 
-
-export function login(credentials) {
-  return async function(dispatch, getState) {
+export function login (credentials) {
+  return async function (dispatch, getState) {
     dispatch({
       type: 'LOGIN_REQUEST',
       credentials
     })
 
     const loginResponse = await loginApi(credentials)
-    
-    const { status,data } = loginResponse.data
-    if(status==='success') {
+
+    const { status, data } = loginResponse.data
+    if (status === 'success') {
       const { token } = data
       dispatch({
         type: 'LOGIN_SUCCESS',
         token
       })
-    }
-    else {
+    } else {
       const { account } = data
       dispatch({
         type: 'LOGIN_FAILURE',
         account
       })
     }
-    
   }
 }
 
-export function logout() {
-  return async function(dispatch, getState) {
+export function logout () {
+  return async function (dispatch, getState) {
     dispatch({
       type: 'LOGOUT_REQUEST'
     })
-    
+
     const logoutResponse = await logoutApi()
-    console.log(logoutResponse)
+    const { status } = logoutResponse
+    if (status === 'success') {
+      persistor.purge()
 
-    persistor.purge()
-    
-    dispatch({
-      type: 'LOGOUT_SUCCESS'
-    })
-
-    //
-    //
-
-    /*
-    const { status,data } = logoutResponse.data
-    if(status==='success') {
       dispatch({
         type: 'LOGOUT_SUCCESS'
       })
     }
-    else {
-      const { account } = data
-      dispatch({
-        type: 'LOGOUT_FAILURE',
-        account
-      })
-    }
-    */
   }
 }
 
