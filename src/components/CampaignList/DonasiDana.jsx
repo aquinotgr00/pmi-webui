@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
+import { formatCurrency } from 'utils/number'
 
 export function DonasiDana (props) {
   const { data } = props
@@ -21,13 +22,19 @@ export function DonasiDana (props) {
       <tbody>
         {data && data.map((campaign, key) => (
           <tr key={key}>
-            <td>{campaign.image}</td>
-            <td>{campaign.title}</td>
+            <th><img src={campaign.image} alt='' /></th>
+            <td>{campaign.formatted_title}</td>
             <td>{campaign.get_type.name}</td>
             <td>{campaign.ranges_donation}</td>
-            <td>{campaign.amount_goal}</td>
+            <td>-</td>
+            <td>{ formatCurrency(campaign.amount_goal) }</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
-            <td><Link to='/admin/campaigns/bulan-dana/1/edit'>edit</Link></td>
+            <td>
+              <Link
+                to={`/admin/campaigns/donasi-dana/${campaign.id}/edit`}
+                className='btn btn-table circle-table edit-table'
+              />
+            </td>
           </tr>
         ))}
       </tbody>

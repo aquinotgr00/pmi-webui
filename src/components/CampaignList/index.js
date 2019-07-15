@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 import { CampaignStatusDropdown, PaginationLink, Tool } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { BulanDana } from './BulanDana'
@@ -11,6 +12,7 @@ export default class CampaignList extends Component {
     super(props)
     this.state = {
       searchFor: '',
+      published: null,
       tooltipOpen: false,
       isLoading: false,
       data: [],
@@ -21,38 +23,61 @@ export default class CampaignList extends Component {
     this.handleSearch = this.handleSearch.bind(this)
     this.toggleTooltip = this.toggleTooltip.bind(this)
     this.renderCampaignList = this.renderCampaignList.bind(this)
+    this.goToPage = this.goToPage.bind(this)
+    this.handleStatusChange = this.handleStatusChange.bind(this)
   }
 
   componentDidMount () {
     this.loadCampaign()
   }
 
-  async loadCampaign (campaign) {
+  async loadCampaign (page = 1, published = null, searchFor = '') {
+    const campaignParams = new URLSearchParams()
+    const { campaign } = this.props
+    switch (campaign) {
+      case 'bulan-dana':
+        campaignParams.append('t', 3)
+        break
+      case 'donasi-dana':
+        campaignParams.append('f', 1)
+        break
+      default:
+        campaignParams.append('f', 0)
+    }
+
+    campaignParams.append('page', page)
+    if (published !== null) {
+      campaignParams.append('p', published)
+    }
+
+    if (searchFor) {
+      campaignParams.append('s', searchFor)
+    }
+
     this.setState({ isLoading: true, error: null })
-    const response = await listCampaignApi()
+
+    const response = await listCampaignApi(campaignParams)
     const { status } = response.data
     if (status === 'success') {
       const { data } = response.data
-      console.log(data)
       const { current_page: currentPage, last_page: numberOfPages, data: campaignData, from, to, total: numberOfEntries } = data
-      this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries })
-      console.log(this.state)
+      this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries, published, searchFor })
     } else {
       this.setState({ isLoading: false, error: null })
     }
-
-    /*
-    switch (campaign) {
-      case 'bulan-dana':
-
-        break
-      default:
-    }
-    */
   }
 
-  handleSearch () {
+  handleSearch (event) {
+    const searchKeyword = event.target.value
+    this.loadCampaign(this.state.page, this.state.published, searchKeyword)
+  }
 
+  handleStatusChange (published) {
+    this.loadCampaign(this.state.page, published, this.state.searchFor)
+  }
+
+  goToPage (page) {
+    this.loadCampaign(page, this.state.published, this.state.searchFor)
   }
 
   toggleTooltip () {
@@ -61,8 +86,7 @@ export default class CampaignList extends Component {
     })
   }
 
-  renderCampaignList () {
-    const { campaign } = this.props
+  renderCampaignList (campaign) {
     const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
     return (
       <>
@@ -72,10 +96,11 @@ export default class CampaignList extends Component {
           numberOfEntries={numberOfEntries}
           currentPage={currentPage}
           numberOfPages={numberOfPages}
+          onPageChange={this.goToPage}
         />
         { (campaign === 'bulan-dana') && <BulanDana data={campaignData} /> }
-        { (campaign === 'donasi-dana') && <DonasiDana /> }
-        { (campaign === 'donasi-barang') && <DonasiBarang /> }
+        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} /> }
+        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} /> }
       </>
     )
   }
@@ -86,12 +111,12 @@ export default class CampaignList extends Component {
     return (
       <>
         <Tool onSearch={this.handleSearch}>
-          <CampaignStatusDropdown />
+          <CampaignStatusDropdown onChange={this.handleStatusChange} published={this.state.published} />
           <AddNewActionButton path={`${campaign}/create`} tooltipText={`Tambah ${title} Baru`} />
         </Tool>
         {error
           ? <div>Error</div>
-          : this.renderCampaignList()
+          : this.renderCampaignList(campaign)
         }
       </>
     )

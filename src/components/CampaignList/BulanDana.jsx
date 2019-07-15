@@ -27,7 +27,13 @@ export function BulanDana (props) {
             <td>-</td>
             <td>{ formatCurrency(campaign.amount_goal) }</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
-            <td><Link to='/admin/campaigns/bulan-dana/1/edit'>edit</Link></td>
+            <td>
+              <Link
+                to={`/admin/campaigns/bulan-dana/${campaign.id}/edit`}
+                className='btn btn-table circle-table edit-table'
+                title='Edit'
+              />
+            </td>
           </tr>
         ))}
       </tbody>
