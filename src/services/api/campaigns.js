@@ -1,5 +1,15 @@
+import axios from 'axios'
 import { authRequest } from 'utils/network'
 
-export function listCampaignApi () {
-  return authRequest().get('/campaigns')
+const CancelToken = axios.CancelToken
+let cancel
+
+export function listCampaignApi (params) {
+  cancel && cancel()
+
+  return authRequest().get('/campaigns', { params,
+    cancelToken: new CancelToken(function executor (c) {
+      cancel = c
+    })
+  })
 }

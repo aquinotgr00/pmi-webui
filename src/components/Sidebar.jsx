@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-import { Nav, Navbar, NavItem, NavLink, UncontrolledCollapse } from 'reactstrap'
+import { Nav, Navbar, NavItem, NavLink as SubMenu, UncontrolledCollapse } from 'reactstrap'
 
 export function Sidebar() {
   return (
@@ -11,50 +11,50 @@ export function Sidebar() {
         <hr />
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#' id='toggler-user' className='side'>User Management</NavLink>
+            <SubMenu href='#' id='toggler-user' className='side'>User Management</SubMenu>
             <UncontrolledCollapse toggler='#toggler-user' tag='ul' className='list-unstyled'>
               <NavItem>
-                <Link to='/admin/users/admin'>Administrator</Link>
+                <NavLink to='/admin/users/admin'>Administrator</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/users/donator'>Donatur</Link>
+                <NavLink to='/admin/users/donator'>Donatur</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/users/volunteer'>Relawan</Link>
+                <NavLink to='/admin/users/volunteer'>Relawan</NavLink>
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#' id='toggler' className='side'>Donasi Management</NavLink>
+            <SubMenu href='#' id='toggler' className='side'>Donasi Management</SubMenu>
 
             <UncontrolledCollapse toggler='#toggler' tag='ul' className='list-unstyled'>
               <NavItem>
-                <Link to='/admin/campaigns/bulan-dana'>Bulan Dana</Link>
+                <NavLink to='/admin/campaigns/bulan-dana' activeClassName='active'>Bulan Dana</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/campaigns/donasi-dana'>Donasi Dana</Link>
+                <NavLink to='/admin/campaigns/donasi-dana' activeClassName='active'>Donasi Dana</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/campaigns/donasi-barang'>Donasi Barang</Link>
+                <NavLink to='/admin/campaigns/donasi-barang' activeClassName='active'>Donasi Barang</NavLink>
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#' id='toggler-transaction' className='side'>Transaksi Management</NavLink>
+            <SubMenu href='#' id='toggler-transaction' className='side'>Transaksi Management</SubMenu>
 
             <UncontrolledCollapse toggler='#toggler-transaction' tag='ul' className='list-unstyled'>
               <NavItem>
-                <Link to='/admin/transactions/bulan-dana'>Bulan Dana</Link>
+                <NavLink to='/admin/transactions/bulan-dana'>Bulan Dana</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/transactions/donasi-dana'>Donasi Dana</Link>
+                <NavLink to='/admin/transactions/donasi-dana'>Donasi Dana</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/transactions/donasi-barang'>Donasi Barang</Link>
+                <NavLink to='/admin/transactions/donasi-barang'>Donasi Barang</NavLink>
               </NavItem>
             </UncontrolledCollapse>
 
@@ -62,7 +62,7 @@ export function Sidebar() {
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>Manual Transaksi</NavLink>
+            <SubMenu href='#'>Manual Transaksi</SubMenu>
           </NavItem>
         </Nav>
       </div>

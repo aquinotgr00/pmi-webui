@@ -13,7 +13,7 @@ export function DonasiBarang(props) {
   ]
 
   let items = props.items
-
+  const { data } = props
   return (
     <Table hover>
       <thead>
@@ -25,7 +25,7 @@ export function DonasiBarang(props) {
         </tr>
       </thead>
       <tbody>
-        {items.map((item, key) => {
+        {data && data.map((item, key) => {
           return (
             <tr key={key}>
               <td>
@@ -34,7 +34,7 @@ export function DonasiBarang(props) {
               <td>{item.created_at}</td>
               <td>{item.transaction_id}</td>
               <td>{item.name}</td>
-              <td>{item.title}</td>
+              <td>{item.campaign.title}</td>
               <td>{item.status}</td>
             </tr>
           )

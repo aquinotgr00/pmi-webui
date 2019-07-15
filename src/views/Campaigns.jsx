@@ -9,11 +9,12 @@ export default function Campaigns (props) {
   const title = ucwords(campaign.split('-').join(' '))
   return (
     <Main title={title}>
-      {['bulan-dana', 'donasi-dana', 'donasi-barang'].map(function (c) {
+      {['bulan-dana', 'donasi-dana', 'donasi-barang'].map(function (c, key) {
         return (
           <Route
             path={`/admin/campaigns/${c}`}
             render={(props) => <CampaignList {...props} campaign={campaign} title={title} />}
+            key={key}
           />
         )
       })}
