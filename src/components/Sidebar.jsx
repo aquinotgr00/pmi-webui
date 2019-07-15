@@ -44,7 +44,20 @@ export function Sidebar() {
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>Transaksi Management</NavLink>
+            <NavLink href='#' id='toggler-transaction' className='side'>Transaksi Management</NavLink>
+
+            <UncontrolledCollapse toggler='#toggler-transaction' tag='ul' className='list-unstyled'>
+              <NavItem>
+                <Link to='/admin/transactions/bulan-dana'>Bulan Dana</Link>
+              </NavItem>
+              <NavItem>
+                <Link to='/admin/transactions/donasi-dana'>Donasi Dana</Link>
+              </NavItem>
+              <NavItem>
+                <Link to='/admin/transactions/donasi-barang'>Donasi Barang</Link>
+              </NavItem>
+            </UncontrolledCollapse>
+
           </NavItem>
         </Nav>
         <Nav className='flex-column'>

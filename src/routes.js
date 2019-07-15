@@ -3,6 +3,8 @@ import Donators from 'views/Donators'
 import Volunteers from 'views/Volunteers'
 import Campaigns from 'views/Campaigns'
 import CampaignForm from 'views/CampaignForm'
+import Transactions from 'views/Transactions'
+import DetailsTransaction from 'views/DetailsTransaction'
 
 var routes = [
   {
@@ -34,7 +36,16 @@ var routes = [
     path: '/campaigns/:campaign/:campaignId/edit',
     name: 'Edit Campaign',
     component: CampaignForm
+  },
+  {
+    path: '/transactions/:transaction',
+    name: 'Transactions',
+    component: Transactions
+  },
+  {
+    path: '/transactions/:transaction/:transactionId',
+    name: 'Details Transactions',
+    component: DetailsTransaction
   }
-
 ]
 export default routes
