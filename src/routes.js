@@ -6,7 +6,7 @@ import CampaignForm from 'views/CampaignForm'
 
 var routes = [
   {
-    path: '/users',
+    path: '/users/:user',
     name: 'Users',
     component: Users
   },
