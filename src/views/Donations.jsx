@@ -1,16 +1,20 @@
 import React from 'react'
-import { Main, ImageForm } from 'components'
+import { Main, ImageForm, InputItemsForm } from 'components'
 import ucwords from 'utils/string'
+import { Link } from 'react-router-dom'
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap'
 
 class Donations extends React.Component {
   render () {
     const { donation } = this.props.match.params
+    const bulanDana    = donation === 'bulan-dana'
+    const itemDonation = donation === 'donasi-barang'
 
     return (
       <Main title={'Form '+ucwords(donation.split('-').join(' '))}>
         <Row className='pl-3'>
           <Form className='col-md-6 pl-0'>
+            {!bulanDana &&
             <FormGroup>
               <Label for='judul'>Tipe Donasi</Label>
               <Input type='select' name='donation_category'>
@@ -19,6 +23,7 @@ class Donations extends React.Component {
                 <option>Khusus</option>
               </Input>
             </FormGroup>
+            }
             <FormGroup>
               <Label for='judul'>Judul</Label>
               <Input type='select' name='campaign_id'>
@@ -39,10 +44,20 @@ class Donations extends React.Component {
               <Label for='phone'>No Telepon</Label>
               <Input type='number' id='phone' name='phone' />
             </FormGroup>
+            {!itemDonation &&
             <FormGroup>
               <Label for='amount'>Besar Donasi</Label>
               <Input type='number' id='amount' name='amount' />
             </FormGroup>
+            }
+            {itemDonation &&
+            <FormGroup>
+              <InputItemsForm />
+              <div className='mt-4 link-tambah'>
+                <Link to='#'>Tambah barang Donasi</Link>
+              </div>
+            </FormGroup>
+            }
             <div className="d-flex flex-row-reverse mt-4">
               <Button type='submit' color='success'>Simpan</Button>
             </div>
