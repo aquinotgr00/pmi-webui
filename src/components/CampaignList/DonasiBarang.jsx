@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { CampaignListActionButtons } from 'components/ActionButtons'
 import { Table } from 'reactstrap'
 
 export function DonasiBarang (props) {
@@ -25,9 +25,8 @@ export function DonasiBarang (props) {
             <td>{campaign.ranges_donation}</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
             <td>
-              <Link
-                to={`/admin/campaigns/donasi-barang/${campaign.id}/edit`}
-                className='btn btn-table circle-table edit-table'
+              <CampaignListActionButtons
+                editPath={`/admin/campaigns/donasi-barang/${campaign.id}/edit`}
               />
             </td>
           </tr>

@@ -17,7 +17,7 @@ export function CampaignStatusDropdown (props) {
 
       </DropdownToggle>
       <DropdownMenu>
-        {props.published !== null &&  <DropdownItem onClick={() => props.onChange(null)}>Semua</DropdownItem> }
+        {props.published !== null && <DropdownItem onClick={() => props.onChange(null)}>Semua</DropdownItem> }
         <DropdownItem onClick={() => props.onChange(1)} active={props.published === 1}>Terpublikasi</DropdownItem>
         <DropdownItem onClick={() => props.onChange(0)} active={props.published === 0}>Draft</DropdownItem>
       </DropdownMenu>
