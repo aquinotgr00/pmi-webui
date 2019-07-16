@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
-import { AddNewActionButton, CampaignStatusDropdown, CampaignTypeDropdown, PaginationLink, Tool } from 'components'
+import { AddNewActionButton, PaginationLink, Tool } from 'components'
+import { CampaignStatusDropdown, CampaignTypeDropdown } from './Dropdowns'
 import { BulanDana } from './BulanDana'
 import { DonasiDana } from './DonasiDana'
 import { DonasiBarang } from './DonasiBarang'
@@ -32,7 +33,7 @@ export default class CampaignList extends Component {
     this.loadCampaign()
   }
 
-  async loadCampaign (page = 1, published = null, campaignType=null, searchFor = '') {
+  async loadCampaign (page = 1, published = null, campaignType = null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
     switch (campaign) {
@@ -97,6 +98,7 @@ export default class CampaignList extends Component {
 
   renderCampaignList (campaign) {
     const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
+    const { pathname } = this.props.location
     return (
       <>
         <PaginationLink
@@ -107,9 +109,9 @@ export default class CampaignList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} /> }
-        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} /> }
-        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} /> }
+        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} path={pathname} /> }
+        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} path={pathname} /> }
+        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} path={pathname} /> }
       </>
     )
   }

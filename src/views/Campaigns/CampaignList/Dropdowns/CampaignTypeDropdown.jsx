@@ -17,7 +17,7 @@ export function CampaignTypeDropdown (props) {
 
       </DropdownToggle>
       <DropdownMenu>
-        {props.campaignType !== null &&  <DropdownItem onClick={() => props.onChange(null)}>Semua</DropdownItem> }
+        {props.campaignType !== null && <DropdownItem onClick={() => props.onChange(null)}>Semua</DropdownItem> }
         <DropdownItem onClick={() => props.onChange(1)} active={props.campaignType === 1}>Umum</DropdownItem>
         <DropdownItem onClick={() => props.onChange(2)} active={props.campaignType === 2}>Khusus</DropdownItem>
       </DropdownMenu>

@@ -333,6 +333,26 @@ a.side[aria-expanded="true"]::after {
     background-position: center;
     background-repeat: no-repeat;
 }
+.visible-table{
+    background-image: url(../images/eye.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.visible-table:hover{
+    background-image: url(../images/eye-slash.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.hidden-table{
+    background-image: url(../images/eye-slash.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.hidden-table:hover{
+    background-image: url(../images/eye.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+}
 .view-img{
     background-image: url(../images/view-img.svg);
     background-position: center;

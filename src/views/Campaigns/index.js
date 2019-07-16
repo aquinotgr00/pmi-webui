@@ -2,7 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { Main } from 'components'
 import ucwords from 'utils/string'
-import CampaignList from 'components/CampaignList'
+import CampaignList from './CampaignList'
 
 export default function Campaigns (props) {
   const { campaign } = props.match.params

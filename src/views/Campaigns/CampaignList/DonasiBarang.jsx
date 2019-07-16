@@ -1,19 +1,17 @@
 import React from 'react'
+import ActionButtons from './ActionButtons'
 import { Table } from 'reactstrap'
-import { CampaignListActionButtons } from 'components/ActionButtons'
-import { formatCurrency } from 'utils/number'
 
-export function BulanDana (props) {
-  const { data } = props
+export function DonasiBarang (props) {
+  const { data, path } = props
   return (
     <Table hover>
       <thead>
         <tr>
           <th>Gambar</th>
           <th>Judul</th>
+          <th>Tipe Donasi</th>
           <th>Rentang Waktu Donasi</th>
-          <th>Donasi Terkumpul</th>
-          <th>Target Donasi</th>
           <th>Status</th>
           <th>Aksi</th>
         </tr>
@@ -23,13 +21,14 @@ export function BulanDana (props) {
           <tr key={key}>
             <th><img src={campaign.image} alt='' /></th>
             <td>{campaign.formatted_title}</td>
+            <td>{campaign.get_type.name}</td>
             <td>{campaign.ranges_donation}</td>
-            <td>-</td>
-            <td>{ formatCurrency(campaign.amount_goal) }</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
             <td>
-              <CampaignListActionButtons
-                editPath={`/admin/campaigns/bulan-dana/${campaign.id}/edit`}
+              <ActionButtons
+                editPath={`${path}/${campaign.id}/edit`}
+                isClosed={campaign.closed}
+                isHidden={campaign.hidden}
               />
             </td>
           </tr>

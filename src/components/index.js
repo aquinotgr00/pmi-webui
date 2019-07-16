@@ -8,4 +8,3 @@ export { Searchbar } from './Searchbar'
 export { Tool } from './Tool'
 
 export * from './ActionButtons'
-export * from './Dropdowns'

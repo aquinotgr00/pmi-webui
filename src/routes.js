@@ -2,7 +2,7 @@ import Users from 'views/Users'
 import Donators from 'views/Donators'
 import Volunteers from 'views/Volunteers'
 import Campaigns from 'views/Campaigns'
-import CampaignForm from 'views/CampaignForm'
+import CampaignForm from 'views/Campaigns/CampaignForm'
 
 var routes = [
   {
