@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CampaignStatusDropdown, PaginationLink, Tool } from 'components'
+import { PaginationLink, Tool } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { Administrator } from './Administrator'
 import { Donator } from './Donator'
@@ -38,7 +38,6 @@ export default class UserList extends Component {
     return (
       <>
         <Tool onSearch={this.handleSearch}>
-          <CampaignStatusDropdown />
           <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
         </Tool>
 

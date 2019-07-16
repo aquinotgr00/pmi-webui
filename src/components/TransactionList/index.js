@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { ExportButton, FilterDropdown, PaginationLink, Tool } from 'components'
-import { AddNewActionButton } from 'components/ActionButtons'
 import { BulanDana } from './BulanDana'
 import { DonasiDana } from './DonasiDana'
 import { DonasiBarang } from './DonasiBarang'
@@ -113,7 +112,7 @@ export default class TransactionList extends Component {
   }
 
   render() {
-    const { transaction, title } = this.props
+    const { transaction } = this.props
     const { error } = this.state
     return (
       <>
@@ -121,7 +120,6 @@ export default class TransactionList extends Component {
           <Col md="4">
             <Tool onSearch={this.handleSearch}>
               <FilterDropdown items={this.state.filterItems} />
-              <AddNewActionButton path={`${transaction}/create`} tooltipText={`Tambah ${title} Baru`} />
             </Tool>
           </Col>
           <Col md="2">

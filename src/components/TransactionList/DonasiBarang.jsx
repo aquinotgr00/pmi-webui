@@ -11,8 +11,6 @@ export function DonasiBarang(props) {
     'Tipe Donasi',
     'Status'
   ]
-
-  let items = props.items
   const { data } = props
   return (
     <Table hover>
