@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 
-import { Nav, Navbar, NavItem, NavLink, UncontrolledCollapse } from 'reactstrap'
+import { Nav, Navbar, NavItem, NavLink as SubMenu, UncontrolledCollapse } from 'reactstrap'
 
 export function Sidebar () {
   return (
@@ -11,29 +11,29 @@ export function Sidebar () {
         <hr />
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>User Management</NavLink>
+            <SubMenu href='#'>User Management</SubMenu>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#' id='toggler' className='side'>Donasi Management</NavLink>
+            <SubMenu href='#' id='toggler' className='side'>Donasi Management</SubMenu>
 
             <UncontrolledCollapse toggler='#toggler' tag='ul' className='list-unstyled'>
               <NavItem>
-                <NavLink href='/admin/campaigns/bulan-dana' active>Bulan Dana</NavLink>
+                <NavLink to='/admin/campaigns/bulan-dana' activeClassName='active'>Bulan Dana</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href='/admin/campaigns/donasi-dana'>Donasi Dana</NavLink>
+                <NavLink to='/admin/campaigns/donasi-dana' activeClassName='active'>Donasi Dana</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href='/admin/campaigns/donasi-barang'>Donasi Barang</NavLink>
+                <NavLink to='/admin/campaigns/donasi-barang' activeClassName='active'>Donasi Barang</NavLink>
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink href='#'>Transaksi Management</NavLink>
+            <SubMenu href='#'>Transaksi Management</SubMenu>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>

@@ -1,9 +1,9 @@
 import { authRequest, basicRequest } from 'utils/network'
 
-export function login (credential) {
-  basicRequest().post('/login', credential)
+export function loginApi (credentials) {
+  return basicRequest().post('/login', credentials)
 }
 
-export function logout () {
-  authRequest().get('/admin/logout')
+export function logoutApi () {
+  return authRequest().get('/logout')
 }

@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { Button, Container, Form, FormGroup, Label, Input, Row } from 'reactstrap'
-import { Formik } from 'formik'
+import { Link } from 'react-router-dom'
+import { Button, Container, Form, FormFeedback, FormGroup, Label, Input, Row } from 'reactstrap'
+import { Formik, Field } from 'formik'
 import { login } from 'actions'
-import { logout } from 'services/api'
+import LoginSchema from 'validators/login'
 
 class Login extends React.Component {
   constructor (props) {
@@ -12,18 +13,8 @@ class Login extends React.Component {
     this.handleLogin = this.handleLogin.bind(this)
   }
 
-  handleLogin () {
-    const email = 'user@mail.com'
-    const password = 'test1234'
-    //const loginResponse = api.auth.login({ email, password })
-    //if (loginResponse.status === 'success') {
-      //this.props.dispatch(login(loginResponse.token))
-      this.props.dispatch(login('coba'))
-      logout()
-      this.props.history.push('/admin/campaigns/bulan-dana')
-    //} else {
-
-    //}
+  handleLogin (credentials) {
+    this.props.dispatch(login(credentials))
   }
 
   render () {
@@ -32,26 +23,54 @@ class Login extends React.Component {
         <div id='login'>
           <Container>
             <img src={require('assets/images/logo-pmi.svg')} className='rounded mx-auto d-block logo' alt='logo-pmi' />
-            <Form>
-              <FormGroup>
-                <Label for='exampleInputEmail1'>E-mail</Label>
-                <Input type='email' className='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Masukkan E-mail' />
-              </FormGroup>
-              <FormGroup>
-                <Label for='exampleInputPassword1'>Kata Sandi</Label>
-                <Input type='password' className='form-control' id='exampleInputPassword1' placeholder='Kata Sandi' />
-              </FormGroup>
-              <Row>
-                <div className='col-sm'>
-                  <a href='lupa-kata-sandi.html' className='forgot-pass'>Lupa Kata Sandi?</a>
-                </div>
-                <div className='col-sm'>
-                  <div className='float-right'>
-                    <Button color='success' onClick={this.handleLogin}>Masuk</Button>
-                  </div>
-                </div>
-              </Row>
-            </Form>
+            <Formik
+              initialValues={{ email: 'admin@mail.com', password: 'Open1234' }}
+              validationSchema={LoginSchema}
+              onSubmit={(values, { setSubmitting }) => {
+                this.handleLogin(values)
+                setSubmitting(false)
+              }}
+            >
+              {({
+                errors,
+                handleSubmit,
+                isSubmitting
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <FormGroup>
+                    <Label for='email'>E-mail</Label>
+                    <Field 
+                      name="email"
+                      render={({ field }) => (
+                        <Input {...field} type='email' id='email' placeholder='Masukkan E-mail' invalid={errors.email!==undefined} />
+                      )}
+                    />
+                    {errors.email!==undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for='password'>Kata Sandi</Label>
+                    <Field 
+                      name="password"
+                      render={({ field }) => (
+                        <Input {...field} type='password' id='password' placeholder='Kata Sandi' invalid={errors.password!==undefined} />
+                      )}
+                    />
+                    {errors.password!==undefined ? <FormFeedback>{errors.password}</FormFeedback> : ''}
+                  </FormGroup>
+                  <Row>
+                    <div className='col-sm'>
+                      <Link to='/forgot-password' className='forgot-pass'>Lupa Kata Sandi?</Link>
+                    </div>
+                    <div className='col-sm'>
+                      <div className='float-right'>
+                        <Button type='submit' color='success' disabled={isSubmitting}>Masuk</Button>
+                      </div>
+                    </div>
+                  </Row>
+                </Form>
+              )}
+
+            </Formik>
           </Container>
         </div>
       </div>

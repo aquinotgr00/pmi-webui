@@ -5,7 +5,8 @@ export function Tool (props) {
   return (
     <div>
       <Form className='form-inline my-2 mb-3'>
-        <Searchbar />
+        <Searchbar onChange={props.onSearch} />
+        {props.children}
       </Form>
     </div>
   )

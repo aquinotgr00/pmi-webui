@@ -2,14 +2,20 @@ import { setAuthToken } from 'utils/network'
 
 export default (store) => next => action => {
   switch (action['type']) {
-    case 'USER_LOGIN':
+    case 'LOGIN_SUCCESS':
       setAuthToken(action.token)
-      break
-    case 'USER_LOGOUT':
+      return next(action)
+    case 'persist/REHYDRATE':
+      let result = next(action)
+      const { token } = store.getState().user
+      if (token) {
+        setAuthToken(token)
+      }
+      return result
+    case 'LOGOUT_SUCCESS':
       setAuthToken(null)
-      break
+      return next(action)
     default:
+      return next(action)
   }
-
-  return next(action)
 }
