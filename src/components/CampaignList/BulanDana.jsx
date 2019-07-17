@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
+import { CampaignListActionButtons } from 'components/ActionButtons'
 import { formatCurrency } from 'utils/number'
 
 export function BulanDana (props) {
@@ -28,10 +28,8 @@ export function BulanDana (props) {
             <td>{ formatCurrency(campaign.amount_goal) }</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
             <td>
-              <Link
-                to={`/admin/campaigns/bulan-dana/${campaign.id}/edit`}
-                className='btn btn-table circle-table edit-table'
-                title='Edit'
+              <CampaignListActionButtons
+                editPath={`/admin/campaigns/bulan-dana/${campaign.id}/edit`}
               />
             </td>
           </tr>
