@@ -5,7 +5,7 @@ import { CampaignStatusDropdown, CampaignTypeDropdown } from './Dropdowns'
 import { BulanDana } from './BulanDana'
 import { DonasiDana } from './DonasiDana'
 import { DonasiBarang } from './DonasiBarang'
-import { listCampaignApi } from 'services/api'
+import { listCampaignApi, toggleCampaignApi } from 'services/api'
 
 export default class CampaignList extends Component {
   constructor (props) {
@@ -27,6 +27,7 @@ export default class CampaignList extends Component {
     this.goToPage = this.goToPage.bind(this)
     this.handleStatusChange = this.handleStatusChange.bind(this)
     this.handleCampaignTypeChange = this.handleCampaignTypeChange.bind(this)
+    this.handleToggleAttribute = this.handleToggleAttribute.bind(this)
   }
 
   componentDidMount () {
@@ -96,6 +97,19 @@ export default class CampaignList extends Component {
     })
   }
 
+  async handleToggleAttribute (id, attribute) {
+    this.setState({ isLoading: true, error: null })
+
+    const response = await toggleCampaignApi(id, attribute)
+    const { status } = response.data
+    if (status === 'success') {
+      const { data } = response.data
+      this.setState({ isLoading: false, campaignData: this.state.campaignData.map(item => item.id === data.id ? data : item) })
+    } else {
+      this.setState({ isLoading: false, error: null })
+    }
+  }
+
   renderCampaignList (campaign) {
     const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
     const { pathname } = this.props.location
@@ -109,9 +123,9 @@ export default class CampaignList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} path={pathname} /> }
-        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} path={pathname} /> }
-        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} path={pathname} /> }
+        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} path={pathname} toggle={this.handleToggleAttribute} /> }
+        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} path={pathname} toggle={this.handleToggleAttribute} /> }
+        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} path={pathname} toggle={this.handleToggleAttribute} /> }
       </>
     )
   }
