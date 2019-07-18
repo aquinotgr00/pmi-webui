@@ -1,9 +1,8 @@
 import React from 'react'
-import { DropdownToggle, DropdownMenu, DropdownItem, Input, UncontrolledDropdown } from 'reactstrap'
+import { DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown } from 'reactstrap'
 import FilterDropdownItem from './FilterDropdownItem'
 
 export function CampaignFilterDropdown (props) {
-  console.log(props.filters)
   return (
 
     <UncontrolledDropdown className='mr-4'>
@@ -21,7 +20,7 @@ export function CampaignFilterDropdown (props) {
         <FilterDropdownItem
           trueItem='Terpublikasi'
           falseItem='Draft'
-          onSelect={selected => {console.log(selected);props.onChange({ p: selected })}}
+          onSelect={selected => props.onChange({ p: selected })}
           selected={props.filters.p}
         />
 

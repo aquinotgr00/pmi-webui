@@ -33,12 +33,12 @@ var routes = [
     component: Donations
   },
   {
-    path: '/campaigns/:campaign/create',
+    path: '/campaigns/:campaignType/create',
     name: 'Create Campaign',
     component: CampaignEditor
   },
   {
-    path: '/campaigns/:campaign/:campaignId/edit',
+    path: '/campaigns/:campaignType/:campaignId/edit',
     name: 'Edit Campaign',
     component: CampaignEditor
   },

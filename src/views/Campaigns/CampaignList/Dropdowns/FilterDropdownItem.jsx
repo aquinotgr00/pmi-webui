@@ -24,11 +24,8 @@ export default class FilterDropdownItem extends Component {
 
   render () {
     const { selected } = this.props
-    console.log(selected)
     const trueIsChecked = (selected === undefined) || (selected === null) || (selected === '1')
-    console.log(trueIsChecked)
     const falseIsChecked = (selected === undefined) || (selected === null) || (selected === '0')
-    console.log(falseIsChecked)
     return (
     <>
       {this.props.divider && <DropdownItem divider />}

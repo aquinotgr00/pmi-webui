@@ -73,7 +73,6 @@ export default class CampaignList extends Component {
         const { data } = response.data
         const { current_page: currentPage, last_page: numberOfPages, data: campaignData, from, to, total: numberOfEntries } = data
         this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries, filters, campaignType, searchFor })
-        console.log(this.state.filters)
       } else {
         // TODO : handle error
         this.setState({ isLoading: false, error: null })

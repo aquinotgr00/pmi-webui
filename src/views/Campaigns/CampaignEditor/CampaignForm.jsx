@@ -9,7 +9,7 @@ export default class CampaignForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      campaign: {}
+      campaign: {title:''}
     }
     this.loadCampaign = this.loadCampaign.bind(this)
   }
@@ -21,7 +21,7 @@ export default class CampaignForm extends React.Component {
   loadCampaign () {
     setTimeout(
       () => this.setState({ campaign: { title: 'test' } }),
-      1000
+      5000
     )
   }
 
@@ -31,37 +31,26 @@ export default class CampaignForm extends React.Component {
     console.log(Object.keys(campaign).length)
     console.log(campaign.constructor === Object)
     return (
-      <>
-        { (Object.keys(campaign).length === 0 && campaign.constructor === Object)
-          ? <Formik
-            initialValues={this.state.campaign}
-            onSubmit={values =>
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2))
-              }, 500)
-            }
-            render={({ errors, values }) => {
-              console.log(values.title)
-              return (
-                <Form>
-                  <FormGroup>
-                    <label htmlFor='title'>Judul</label>
-                    {(Object.keys(campaign).length === 0 && campaign.constructor === Object) ? <Field
-                      name='title'
-                      render={({ field }) => (
-                        <Input {...field} id='title' invalid={errors.title !== undefined} />
-                      )}
-                    />:'tes'}
-                    {errors.title !== undefined ? <FormFeedback>{errors.title}</FormFeedback> : ''}
-                  </FormGroup>
-                  <div>
-                    <button type='submit'>Submit</button>
-                  </div>
-                </Form>
-              )
-            }}
-          /> : null }
-      </>
+      <Formik enableReinitialize initialValues={campaign}>
+      {({
+        errors,
+        handleSubmit,
+        isSubmitting
+      }) => (
+        <Form className='col-md-6 col-lg7 pl-0'>
+          <FormGroup>
+            <label htmlFor='title'>Judul</label>
+            <Field
+              name='title'
+              render={({ field }) => (
+                <Input {...field} id='title' invalid={errors.title !== undefined} />
+              )}
+            />
+            {errors.title !== undefined ? <FormFeedback>{errors.title}</FormFeedback> : ''}
+          </FormGroup>
+        </Form>
+      )}
+      </Formik>
     )
   }
 }
