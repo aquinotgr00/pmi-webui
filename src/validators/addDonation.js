@@ -11,5 +11,4 @@ export default Yup.object().shape({
   phone: Yup.number()
     .required('Required'),
   amount: Yup.number()
-    .required('Required'),
 })

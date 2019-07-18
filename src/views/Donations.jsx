@@ -7,27 +7,79 @@ import { Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback } from 'r
 
 import { Formik, Field } from 'formik'
 import DonationSchema from 'validators/addDonation'
-import { storeApi } from 'services/api'
+import { storeApi, getDonationList } from 'services/api'
 
 class Donations extends React.Component {
   constructor (props) {
     super(props)
-    this.handleStoreDonation = this.handleStoreDonation.bind(this)
-    this.triggerUploadFile   = this.triggerUploadFile  .bind(this)
-    this.uploadImage         =      React              .createRef()
-    this.submitButton        =      React              .createRef()
-    this.storeForm           =      React              .createRef()
-    this.submitForm          = this.submitForm         .bind(this)
-    this.onChangeFile        = this.onChangeFile       .bind(this)
-    this.state               = {    file               : null }
+    this.state = {
+      inputItems: 1,
+      file: null,
+      selectedType: 'undefined',
+      donations: [],
+      typeDonate:null
+    }
+
+    this.uploadImage           =      React                 .createRef(    )
+    this.submitButton          =      React                 .createRef(    )
+    this.storeForm             =      React                 .createRef(    )
+    this.handleStoreDonation   = this.handleStoreDonation   .bind     (this)
+    this.triggerUploadFile     = this.triggerUploadFile     .bind     (this)
+    this.submitForm            = this.submitForm            .bind     (this)
+    this.onChangeFile          = this.onChangeFile          .bind     (this)
+    this.loadDonationList      = this.loadDonationList      .bind     (this)
+    this.getDonationListByType = this.getDonationListByType .bind     (this)
+    this.addInputItem          = this.addInputItem          .bind     (this)
   }
 
   triggerUploadFile = () => {
     this.uploadImage.current.click()
   }
 
-  componentDidUpdate () {
-    console.log('updated.')
+  addInputItem = () => {
+    this.setState({
+      inputItems: this.state.inputItems + 1
+    })
+  }
+
+  async loadDonationList (type = null) {
+    if (type === null)
+      type = 3
+    const donationsList = await getDonationList(type)
+    const { data } = donationsList.data.data
+    let listFromApi = data.map(donation => {
+      return {value: donation.id, display: donation.title}
+    })
+    this.setState({ donations: [{value: '', display: 'Pilih Judul Donasi'}].concat(listFromApi) })
+  }
+
+  componentDidMount () {
+    if (this.props.match.params.donation === 'bulan-dana') {
+      this.loadDonationList()
+    }
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (this.props.match.params.donation !== 'bulan-dana'
+      && this.state.donations.length > 0
+      && this.state.typeDonate === null
+    ) {
+      this.setState({donations: []})
+    }
+    if (this.props.match.params.donation === 'bulan-dana') {
+      if(this.state.typeDonate !== null){
+        this.setState({typeDonate:null})
+        this.setState({donations: []})
+      }
+      if (this.state.donations.length === 0) {
+        this.loadDonationList()
+      }
+    }
+  }
+
+  getDonationListByType (ev) {
+    this.loadDonationList(ev.target.value)
+    this.setState({selectedType:ev.target.value,typeDonate:ev.target.value})
   }
 
   submitForm = (ev) => {
@@ -65,7 +117,7 @@ class Donations extends React.Component {
       name: '',
       email: '',
       phone: '',
-      amount: ''
+      amount: 0,
     }
 
     return (
@@ -94,7 +146,7 @@ class Donations extends React.Component {
                     <Field
                       name="category"
                       render={({ field }) => (
-                        <Input {...field} type='select' id='category' invalid={errors.category!==undefined}>
+                        <Input {...field} onChange={this.getDonationListByType} value={this.state.selectedType} type='select' id='category' invalid={errors.category!==undefined}>
                           <option>Pilih Tipe Donasi</option>
                           <option value='1'>Umum</option>
                           <option value='2'>Khusus</option>
@@ -110,9 +162,10 @@ class Donations extends React.Component {
                       name="campaign_id"
                       render={({ field }) => (
                         <Input {...field} type='select' id='campaign_id' invalid={errors.campaign_id!==undefined}>
-                          <option>Pilih Judul Donasi</option>
-                          <option value='1'>Donasi 1</option>
-                          <option value='2'>Donasi 2</option>
+                          {/* <option>Pilih Judul Donasi</option> */}
+                          {this.state.donations.map(donation =>
+                            <option key={donation.value} value={donation.value}>{donation.display}</option>
+                          )}
                         </Input>
                       )}
                     />
@@ -162,9 +215,16 @@ class Donations extends React.Component {
                   }
                   {itemDonation &&
                   <FormGroup>
-                    <InputItemsForm />
+                    <Label for='donationItemHeading'>Barang Donasi</Label>
+                    {/* {this.state.inputItems.length.map(item => {
+                      return <InputItemsForm item={item} />
+                    })} */}
+                    {Array.from(Array(this.state.inputItems)).map((_, i) => 
+                      // console.log(i)
+                      <InputItemsForm key={i} data={i} />
+                    )}
                     <div className='mt-4 link-tambah'>
-                      <Link to='#'>Tambah barang Donasi</Link>
+                      <Link to='#' onClick={this.addInputItem}>Tambah barang Donasi</Link>
                     </div>
                   </FormGroup>
                   }

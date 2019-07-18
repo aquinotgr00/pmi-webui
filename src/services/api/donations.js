@@ -9,5 +9,12 @@ export function storeApi (data) {
   formData.append('email', data.email)
   formData.append('phone', data.phone)
   formData.append('image_file', data.image_file)
+  data.donation_items.map((item, key) => {
+    formData.append('donation_items['+key+']', JSON.stringify(item))
+  })
   return authRequest().post('/donations/create', formData)
+}
+
+export function getDonationList (type, fund = 1) {
+  return authRequest().get('campaigns?f='+fund+'&t='+type)
 }
