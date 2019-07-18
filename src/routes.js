@@ -4,6 +4,7 @@ import Volunteers from 'views/Volunteers'
 import Campaigns from 'views/Campaigns'
 import CampaignEditor from 'views/Campaigns/CampaignEditor'
 import CampaignView from 'views/Campaigns/CampaignView'
+import Donations from 'views/Donations'
 
 var routes = [
   {
@@ -25,6 +26,11 @@ var routes = [
     path: '/campaigns/:campaign',
     name: 'Campaigns',
     component: Campaigns
+  },
+  {
+    path: '/donations/:donation',
+    name: 'Donations',
+    component: Donations
   },
   {
     path: '/campaigns/:campaign/create',

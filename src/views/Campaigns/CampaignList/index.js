@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { AddNewActionButton, PaginationLink, Tool } from 'components'
-import { CampaignStatusDropdown, CampaignTypeDropdown } from './Dropdowns'
+import { CampaignFilterDropdown, CampaignTypeDropdown } from './Dropdowns'
 import { BulanDana } from './BulanDana'
 import { DonasiDana } from './DonasiDana'
 import { DonasiBarang } from './DonasiBarang'
@@ -12,7 +12,7 @@ export default class CampaignList extends Component {
     super(props)
     this.state = {
       searchFor: '',
-      published: null,
+      filters: {},
       campaignType: null,
       tooltipOpen: false,
       isLoading: false,
@@ -25,7 +25,7 @@ export default class CampaignList extends Component {
     this.toggleTooltip = this.toggleTooltip.bind(this)
     this.renderCampaignList = this.renderCampaignList.bind(this)
     this.goToPage = this.goToPage.bind(this)
-    this.handleStatusChange = this.handleStatusChange.bind(this)
+    this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleCampaignTypeChange = this.handleCampaignTypeChange.bind(this)
     this.handleToggleAttribute = this.handleToggleAttribute.bind(this)
   }
@@ -34,7 +34,7 @@ export default class CampaignList extends Component {
     this.loadCampaign()
   }
 
-  async loadCampaign (page = 1, published = null, campaignType = null, searchFor = '') {
+  async loadCampaign (page = 1, filters = {}, campaignType = null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
     switch (campaign) {
@@ -49,8 +49,11 @@ export default class CampaignList extends Component {
     }
 
     campaignParams.append('page', page)
-    if (published !== null) {
-      campaignParams.append('p', published)
+
+    for (let param in filters) {
+      if (filters[param] !== null) {
+        campaignParams.append(param, filters[param])
+      }
     }
 
     if (campaignType !== null) {
@@ -63,32 +66,38 @@ export default class CampaignList extends Component {
 
     this.setState({ isLoading: true, error: null })
 
-    const response = await listCampaignApi(campaignParams)
-    const { status } = response.data
-    if (status === 'success') {
-      const { data } = response.data
-      const { current_page: currentPage, last_page: numberOfPages, data: campaignData, from, to, total: numberOfEntries } = data
-      this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries, published, campaignType, searchFor })
-    } else {
-      this.setState({ isLoading: false, error: null })
+    try {
+      const response = await listCampaignApi(campaignParams)
+      const { status } = response.data
+      if (status === 'success') {
+        const { data } = response.data
+        const { current_page: currentPage, last_page: numberOfPages, data: campaignData, from, to, total: numberOfEntries } = data
+        this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries, filters, campaignType, searchFor })
+        console.log(this.state.filters)
+      } else {
+        // TODO : handle error
+        this.setState({ isLoading: false, error: null })
+      }
+    } catch (error) {
+      // TODO : handle error
     }
   }
 
   handleSearch (event) {
     const searchKeyword = event.target.value
-    this.loadCampaign(this.state.page, this.state.published, this.state.campaignType, searchKeyword)
+    this.loadCampaign(this.state.page, this.state.filters, this.state.campaignType, searchKeyword)
   }
 
-  handleStatusChange (published) {
-    this.loadCampaign(this.state.page, published, this.state.campaignType, this.state.searchFor)
+  handleFilterChange (filters) {
+    this.loadCampaign(this.state.page, { ...this.state.filters, ...filters }, this.state.campaignType, this.state.searchFor)
   }
 
   handleCampaignTypeChange (campaignType) {
-    this.loadCampaign(this.state.page, this.state.published, campaignType, this.state.searchFor)
+    this.loadCampaign(this.state.page, this.state.filters, campaignType, this.state.searchFor)
   }
 
   goToPage (page) {
-    this.loadCampaign(page, this.state.published, this.state.campaignType, this.state.searchFor)
+    this.loadCampaign(page, this.state.filters, this.state.campaignType, this.state.searchFor)
   }
 
   toggleTooltip () {
@@ -137,7 +146,10 @@ export default class CampaignList extends Component {
       <>
         <Tool onSearch={this.handleSearch}>
           { (campaign !== 'bulan-dana') && <CampaignTypeDropdown onChange={this.handleCampaignTypeChange} campaignType={this.state.campaignType} /> }
-          <CampaignStatusDropdown onChange={this.handleStatusChange} published={this.state.published} />
+          <CampaignFilterDropdown
+            onChange={this.handleFilterChange}
+            filters={this.state.filters}
+          />
           <AddNewActionButton path={`${campaign}/create`} tooltipText={`Tambah ${title} Baru`} />
         </Tool>
         {error

@@ -11,7 +11,7 @@ export function CampaignTypeDropdown (props) {
         tag='button'
         type='button'
       >
-        {props.campaignType === null && 'Filter Tipe Donasi'}
+        {props.campaignType === null && 'Tipe Donasi'}
         {props.campaignType === 1 && 'Umum'}
         {props.campaignType === 2 && 'Khusus'}
 
