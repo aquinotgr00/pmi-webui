@@ -1,185 +1,222 @@
 import React, { Component } from 'react'
-import { Form, FormGroup, Input, Button } from 'reactstrap'
+import { Row, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap'
 import { Main, CollapsePrivilages } from 'components'
 import { detailsUserApi, storeUserApi } from 'services/api'
+import { Formik, Field } from 'formik'
+import { storeNewAdmin } from 'actions'
+import { withRouter } from 'react-router-dom'
+import AddUserSchema from 'validators/addUser'
 import ucwords from 'utils/string'
 
-import 'react-datepicker/dist/react-datepicker.css'
+class AdminForm extends Component {
+constructor (props) {
+super(props)
+this.loadUser           = this.loadUser.bind(this)
 
-export default class AdminForm extends Component {
-  constructor (props) {
-    super(props)
-    this.loadUser           = this.loadUser.bind(this)
-    this.onChangeName       = this.onChangeName.bind(this)
-    this.onChangeEmail      =  this.onChangeEmail.bind(this)
-    this.onChangePosition   = this.onChangePosition.bind(this)
-    this.handleSubmit       = this.handleSubmit.bind(this)
-
-    this.state = {
-      items: [],
-      roles: [],
-      privilages: [],
-      userData: {
-        name:'',
-        email:'',
-        role_id:'',
-        password:'',
-        password_confirmation: ''
-      },
-      name:'',
-      email:'',
-      role_id:'',
-      password:'',
-      password_confirmation: ''
-    }
-  }
-
-  componentDidMount () {
-    const { user, userId } = this.props.params
-    if (userId) {
-      this.loadUser(userId)
-    }
-    this.loadRoles()
-    this.loadPrivilages()
-  }
-
-  async loadUser (userId) {
-    const response = await detailsUserApi(userId)
-    const { status } = response.data
-    if(status === 'success'){
-      const { data } = response.data
-      const { user: userData } = data
-      this.setState({ userData ,name: userData.name, email: userData.email})
-
-    }
-
-  }
-
-  loadRoles(){
-    const roles = [
-    {
-      id:1,
-      text: 'Super Admin'
-    },
-    {
-      id:2,
-      text: 'Admin Donasi'
-    },
-    {
-      id:3,
-      text: 'Admin Relawan'
-    }
-    ]
-    this.setState({ roles: roles })
-  }
-
-  loadPrivilages(){
-    const privilages = [
-    {
-      id:1,
-      name: 'Administrator',
-      isOpen: false,
-      list: [
-      {
-        id:1,
-        text: 'Lihat Halaman Administrator'
-      },
-      {
-        id:2,
-        text: 'Buat Administrator'
-      },
-      ]
-    },
-    ]
-    this.setState({privilages: privilages})
-  }
-
-  onChangeName(event) {
-    this.setState({name: event.target.value});
-  }
-
-  onChangeEmail(event) {
-    this.setState({email: event.target.value});
-  }
-
-  onChangePosition(event) {
-    this.setState({role_id: event.target.value});
-  }
-
-  async handleSubmit(event) {
-    const { userData } = this.state
-    const response = await storeUserApi(userData)
-    const { status } = response.data
-    if(status === 'success'){
-      const { data } = response.data
-    }
-    event.preventDefault();
-  }
-
-  render () {
-    const { user, userId } = this.props.params
-    const userCategory = ucwords(user.split('-').join(' '))
-    const title = userId ? `Edit ${userCategory}` : `Tambah ${userCategory} Baru`
-    
-    return (
-      <Main title={title}>
-      <div className='row pl-3'>
-      <Form className='col-md-6 col-lg7 pl-0' onSubmit={this.handleSubmit}>
-      <FormGroup>
-            <label>Nama Lengkap</label>
-            <Input 
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.onChangeName}
-              />
-          </FormGroup>
-          <FormGroup>
-            <label>Email</label>
-            <Input 
-            type="email"
-            name="email"
-            value={this.state.email}
-            onChange={this.onChangeEmail}
-              />
-          </FormGroup>
-          <FormGroup>
-            <label>Posisi Admin</label>
-            <Input 
-            type="text"
-            name="role_id"
-            value={this.state.role_id}
-            onChange={this.onChangePosition}
-              />
-          </FormGroup>
-          <FormGroup>
-            <label>Kata Sandi</label>
-            <Input 
-            type="password"
-            name="password" />
-          </FormGroup>
-          <FormGroup>
-            <label>Ulangi Kata Sandi</label>
-            <Input 
-            type="password"
-            name="password_confirmation" />
-          </FormGroup>
-      <div className="float-right">
-      <Button type="submit" color="success">Simpan</Button>
-      </div>
-      </Form>
-      <div className='col-md-4 col-lg-5 pl-5 grs'>
-      <div className='mb-4'>
-      <label>Pengaturan Hak Istimewa</label>
-      <Input type="select">
-      <option key="0" value="0">Pilih Hak</option>
-      {this.state.roles.map(role => <option key={role.id} value={role.id}>{role.text}</option>)}
-      </Input>
-      <CollapsePrivilages privilages={this.state.privilages} />
-      </div>
-      </div>
-      </div>
-      </Main>
-      )
-  }
+this.state = {
+  items: [],
+  roles: [],
+  privilages: [],
+  name:'',
+  email:'',
+  role_id:'',
+  password:'',
+  password_confirmation: ''
 }
+}
+
+componentDidMount () {
+const { user, userId } = this.props.params
+if (userId) {
+this.loadUser(userId)
+}
+
+this.loadRoles()
+this.loadPrivilages()
+}
+
+async loadUser (userId) {
+
+const response = await detailsUserApi(userId)
+const { status } = response.data
+if(status === 'success'){
+const { data } = response.data
+const { name, email } = data.user
+
+this.setState({ name, email })
+
+}
+
+}
+
+loadRoles(){
+const roles = [
+{
+  id:1,
+  text: 'Super Admin'
+},
+{
+  id:2,
+  text: 'Admin Donasi'
+},
+{
+  id:3,
+  text: 'Admin Relawan'
+}
+]
+this.setState({ roles: roles })
+}
+
+loadPrivilages(){
+const privilages = [
+{
+  id:1,
+  name: 'Administrator',
+  isOpen: false,
+  list: [
+  {
+    id:1,
+    text: 'Lihat Halaman Administrator'
+  },
+  {
+    id:2,
+    text: 'Buat Administrator'
+  },
+  ]
+},
+]
+this.setState({privilages: privilages})
+}
+
+
+async handleStoreUser(values) {    
+  try{
+    const storeResponse = await storeUserApi(values)
+    const { data, status } = storeResponse.data
+    if (status == 'success') {
+      alert('Berhasil! data tersimpan')
+      this.props.history.push('/admin/users/admin')
+    }else{
+      console.log(data)
+    }
+  }catch(e){
+    console.log(e)
+  }
+  
+}
+
+render () {
+const { user, userId } = this.props.params
+const userCategory = ucwords(user.split('-').join(' '))
+const title = userId ? `Edit ${userCategory}` : `Tambah ${userCategory} Baru`
+const { name,email } = this.state
+let initialValues = { name, email,  password:'', password_confirmation:'' }
+
+return(
+<Main title={title}>
+  <Row className="pl-3">
+
+    <Formik
+    initialValues={initialValues}
+    validationSchema={AddUserSchema}
+    onSubmit={(values, { setSubmitting }) => {
+      this.handleStoreUser(values)
+    setSubmitting(false)
+  }}
+  >
+  {({
+    errors,
+    handleSubmit,
+    isSubmitting
+  }) => (
+
+  <Form onSubmit={handleSubmit} className='col-md-6 col-lg7 pl-0'>
+
+    <FormGroup>
+      <label>Nama Lengkap</label>
+      <Field
+      name="name"
+      render={({ field }) => (
+      <Input {...field} 
+      type="text"
+      invalid={errors.name!==undefined}
+      />
+      )} />
+
+      {errors.name!==undefined ? <FormFeedback>{errors.name}</FormFeedback> : ''}
+    </FormGroup>
+
+    <FormGroup>
+      <label>Email</label>
+      <Field
+      name="email"
+      render={({ field }) => (
+      <Input {...field} 
+      type="email"
+      invalid={errors.email!==undefined}
+      />
+      )} />
+
+      {errors.email!==undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
+    </FormGroup>
+
+    <FormGroup>
+      <label>Posisi</label>
+      <Input type="text" />
+    </FormGroup>
+
+    <FormGroup>
+      <label>Kata Sandi</label>
+      <Field
+      name="password"
+      render={({ field }) => (
+      <Input {...field} 
+      type="password"
+      invalid={errors.password!==undefined}
+      />
+      )} />
+
+      {errors.password!==undefined ? <FormFeedback>{errors.password}</FormFeedback> : ''}
+    </FormGroup>
+
+    <FormGroup>
+      <label>Ulangi Kata Sandi</label>
+      <Field
+      name="password_confirmation"
+      render={({ field }) => (
+      <Input {...field} 
+      type="password"
+      invalid={errors.password_confirmation!==undefined}
+      />
+      )} />
+
+      {errors.password_confirmation!==undefined ? <FormFeedback>{errors.password_confirmation}</FormFeedback> : ''}
+    </FormGroup>
+    <div className='float-right'>
+      <Button type='submit' color='success' disabled={isSubmitting}>Simpan</Button>
+    </div>
+
+
+  </Form>
+
+  )}
+
+</Formik>
+
+<div className='form-group col-md-4 col-lg-5 pl-5 grs'>
+  <div className='mb-4'>
+    <label>Pengaturan Hak Istimewa</label>
+    <Input type="select">
+    <option key="0" value="0">Pilih Hak</option>
+    {this.state.roles.map(role => <option key={role.id} value={role.id}>{role.text}</option>)}
+  </Input>
+  <CollapsePrivilages privilages={this.state.privilages} />
+</div>
+</div>
+</Row>
+</Main>
+) 
+}
+}
+
+export default withRouter(AdminForm)

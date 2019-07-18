@@ -24,10 +24,5 @@ export function detailsUserApi(userId){
 }
 
 export function storeUserApi(params){
-  cancel && cancel()
-    return authRequest().post('/users', { params, 
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })  
+  return authRequest().post('/users', params) 
 }
