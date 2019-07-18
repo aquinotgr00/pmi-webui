@@ -24,7 +24,7 @@ export function storeApi (data) {
   formData.append('phone', data.phone)
   formData.append('image_file', data.image_file)
   data.donation_items.map((item, key) => {
-    formData.append('donation_items['+key+']', JSON.stringify(item))
+    return formData.append('donation_items['+key+']', JSON.stringify(item))
   })
   return authRequest().post('/donations/create', formData)
 }

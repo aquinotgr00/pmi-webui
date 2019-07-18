@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Main, InputItemsForm } from 'components'
 import ucwords from 'utils/string'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap'
 
 import { Formik, Field } from 'formik'
@@ -17,20 +17,21 @@ class Donations extends React.Component {
       file: null,
       selectedType: 'undefined',
       donations: [],
+      redirect: false,
       typeDonate:null
     }
 
-    this.uploadImage           =      React                 .createRef(    )
-    this.submitButton          =      React                 .createRef(    )
-    this.storeForm             =      React                 .createRef(    )
-    this.handleStoreDonation   = this.handleStoreDonation   .bind     (this)
-    this.triggerUploadFile     = this.triggerUploadFile     .bind     (this)
-    this.submitForm            = this.submitForm            .bind     (this)
-    this.onChangeFile          = this.onChangeFile          .bind     (this)
-    this.loadDonationList      = this.loadDonationList      .bind     (this)
-    this.getDonationListByType = this.getDonationListByType .bind     (this)
-    this.addInputItem          = this.addInputItem          .bind     (this)
-  }
+    this.uploadImage = React.createRef( )
+    this.submitButton = React.createRef( )
+    this.storeForm = React.createRef( )
+    this.handleStoreDonation = this.handleStoreDonation.bind (this)
+    this.triggerUploadFile = this.triggerUploadFile.bind (this)
+    this.submitForm = this.submitForm.bind (this)
+    this.onChangeFile = this.onChangeFile.bind (this)
+    this.loadDonationList = this.loadDonationList.bind (this)
+    this.getDonationListByType = this.getDonationListByType.bind (this)
+    this.addInputItem = this.addInputItem.bind (this)
+    }
 
   triggerUploadFile = () => {
     this.uploadImage.current.click()
@@ -99,12 +100,12 @@ class Donations extends React.Component {
     value.category = 1
     value.image_file = this.state.file
     const storeResponse = await storeApi(value)
-    // const { status, data } = storeResponse.data
-    // if (status === 'success') {
-    //   const { message } = data
-    // } else {
-    //   const { message } = data
-    // }
+    const { status } = storeResponse.data
+    if (status === 'success') {
+      this.setState({redirect: true})
+    } else {
+      alert('oops, something wrong.')
+    }
   }
 
   render () {
@@ -118,6 +119,9 @@ class Donations extends React.Component {
       email: '',
       phone: '',
       amount: 0,
+    }
+    if (this.state.redirect) {
+      return <Redirect to='/admin/transactions'/>;
     }
 
     return (
