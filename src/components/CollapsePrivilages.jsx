@@ -1,10 +1,10 @@
 import React from 'react'
-import CollapsePrivilagesItem from './CollapsePrivilagesItem'
+import { CollapsePrivilagesItem } from 'components'
 
 export function CollapsePrivilages(props) {
 	return (
 		<ul className="flex-column privilage-item">
-			{this.props.privilages.map((values, index) => <CollapsePrivilagesItem key={index} name={values.name} list={values.list} />)}
+			{props.privilages.map((privilage, index) => <CollapsePrivilagesItem key={index} name={privilage.name} list={privilage.list} isOpen={privilage.isOpen} />)}
 		</ul>
 	)
 }

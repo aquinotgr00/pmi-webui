@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
 
-export function Administrator (props) {
+export function BulanDana (props) {
   return (
     <Table hover>
       <thead>
@@ -24,7 +24,7 @@ export function Administrator (props) {
           <td>Mark</td>
           <td>Otto</td>
           <td>@mdo</td>
-          <td><Link to='/admin/users/admin/3/edit'>@mdo</Link></td>
+          <td><Link to='/admin/campaigns/bulan-dana/3/edit'>@mdo</Link></td>
         </tr>
       </tbody>
     </Table>

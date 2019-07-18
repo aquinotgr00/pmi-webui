@@ -38,24 +38,24 @@ class Login extends React.Component {
               }) => (
                 <Form onSubmit={handleSubmit}>
                   <FormGroup>
-                    <Label for='email'>E-mail</Label>
-                    <Field 
-                      name="email"
+                    <Label htmlFor='email'>E-mail</Label>
+                    <Field
+                      name='email'
                       render={({ field }) => (
-                        <Input {...field} type='email' id='email' placeholder='Masukkan E-mail' invalid={errors.email!==undefined} />
+                        <Input {...field} type='email' id='email' placeholder='Masukkan E-mail' invalid={errors.email !== undefined} />
                       )}
                     />
-                    {errors.email!==undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
+                    {errors.email !== undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
                   </FormGroup>
                   <FormGroup>
-                    <Label for='password'>Kata Sandi</Label>
-                    <Field 
-                      name="password"
+                    <Label htmlFor='password'>Kata Sandi</Label>
+                    <Field
+                      name='password'
                       render={({ field }) => (
-                        <Input {...field} type='password' id='password' placeholder='Kata Sandi' invalid={errors.password!==undefined} />
+                        <Input {...field} type='password' id='password' placeholder='Kata Sandi' invalid={errors.password !== undefined} />
                       )}
                     />
-                    {errors.password!==undefined ? <FormFeedback>{errors.password}</FormFeedback> : ''}
+                    {errors.password !== undefined ? <FormFeedback>{errors.password}</FormFeedback> : ''}
                   </FormGroup>
                   <Row>
                     <div className='col-sm'>

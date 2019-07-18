@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import { CampaignStatusDropdown, PaginationLink, Tool } from 'components'
-import { AddNewActionButton } from 'components/ActionButtons'
+import { AddNewActionButton, PaginationLink, Tool } from 'components'
+import { CampaignStatusDropdown, CampaignTypeDropdown } from './Dropdowns'
 import { BulanDana } from './BulanDana'
 import { DonasiDana } from './DonasiDana'
 import { DonasiBarang } from './DonasiBarang'
@@ -13,6 +13,7 @@ export default class CampaignList extends Component {
     this.state = {
       searchFor: '',
       published: null,
+      campaignType: null,
       tooltipOpen: false,
       isLoading: false,
       data: [],
@@ -25,13 +26,14 @@ export default class CampaignList extends Component {
     this.renderCampaignList = this.renderCampaignList.bind(this)
     this.goToPage = this.goToPage.bind(this)
     this.handleStatusChange = this.handleStatusChange.bind(this)
+    this.handleCampaignTypeChange = this.handleCampaignTypeChange.bind(this)
   }
 
   componentDidMount () {
     this.loadCampaign()
   }
 
-  async loadCampaign (page = 1, published = null, searchFor = '') {
+  async loadCampaign (page = 1, published = null, campaignType = null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
     switch (campaign) {
@@ -50,6 +52,10 @@ export default class CampaignList extends Component {
       campaignParams.append('p', published)
     }
 
+    if (campaignType !== null) {
+      campaignParams.append('t', campaignType)
+    }
+
     if (searchFor) {
       campaignParams.append('s', searchFor)
     }
@@ -61,7 +67,7 @@ export default class CampaignList extends Component {
     if (status === 'success') {
       const { data } = response.data
       const { current_page: currentPage, last_page: numberOfPages, data: campaignData, from, to, total: numberOfEntries } = data
-      this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries, published, searchFor })
+      this.setState({ isLoading: false, campaignData, currentPage, numberOfPages, from, to, numberOfEntries, published, campaignType, searchFor })
     } else {
       this.setState({ isLoading: false, error: null })
     }
@@ -69,15 +75,19 @@ export default class CampaignList extends Component {
 
   handleSearch (event) {
     const searchKeyword = event.target.value
-    this.loadCampaign(this.state.page, this.state.published, searchKeyword)
+    this.loadCampaign(this.state.page, this.state.published, this.state.campaignType, searchKeyword)
   }
 
   handleStatusChange (published) {
-    this.loadCampaign(this.state.page, published, this.state.searchFor)
+    this.loadCampaign(this.state.page, published, this.state.campaignType, this.state.searchFor)
+  }
+
+  handleCampaignTypeChange (campaignType) {
+    this.loadCampaign(this.state.page, this.state.published, campaignType, this.state.searchFor)
   }
 
   goToPage (page) {
-    this.loadCampaign(page, this.state.published, this.state.searchFor)
+    this.loadCampaign(page, this.state.published, this.state.campaignType, this.state.searchFor)
   }
 
   toggleTooltip () {
@@ -88,6 +98,7 @@ export default class CampaignList extends Component {
 
   renderCampaignList (campaign) {
     const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
+    const { pathname } = this.props.location
     return (
       <>
         <PaginationLink
@@ -98,9 +109,9 @@ export default class CampaignList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} /> }
-        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} /> }
-        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} /> }
+        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} path={pathname} /> }
+        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} path={pathname} /> }
+        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} path={pathname} /> }
       </>
     )
   }
@@ -111,6 +122,7 @@ export default class CampaignList extends Component {
     return (
       <>
         <Tool onSearch={this.handleSearch}>
+          { (campaign !== 'bulan-dana') && <CampaignTypeDropdown onChange={this.handleCampaignTypeChange} campaignType={this.state.campaignType} /> }
           <CampaignStatusDropdown onChange={this.handleStatusChange} published={this.state.published} />
           <AddNewActionButton path={`${campaign}/create`} tooltipText={`Tambah ${title} Baru`} />
         </Tool>

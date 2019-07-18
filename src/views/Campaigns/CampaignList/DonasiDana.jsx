@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import ActionButtons from './ActionButtons'
 import { Table } from 'reactstrap'
 import { formatCurrency } from 'utils/number'
 
 export function DonasiDana (props) {
-  const { data } = props
+  const { data, path } = props
   return (
     <Table hover>
       <thead>
@@ -30,9 +30,10 @@ export function DonasiDana (props) {
             <td>{ formatCurrency(campaign.amount_goal) }</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
             <td>
-              <Link
-                to={`/admin/campaigns/donasi-dana/${campaign.id}/edit`}
-                className='btn btn-table circle-table edit-table'
+              <ActionButtons
+                editPath={`${path}/${campaign.id}/edit`}
+                isClosed={campaign.closed}
+                isHidden={campaign.hidden}
               />
             </td>
           </tr>
