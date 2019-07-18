@@ -32,8 +32,8 @@ export default class CampaignList extends Component {
   componentDidMount () {
     this.loadCampaign()
   }
-
-  async loadCampaign (page = 1, published = null, campaignType = null, searchFor = '') {
+  
+  async loadCampaign (page = 1, published = null, campaignType=null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
     switch (campaign) {

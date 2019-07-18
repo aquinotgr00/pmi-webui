@@ -62,7 +62,18 @@ export function Sidebar() {
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <SubMenu href='#'>Manual Transaksi</SubMenu>
+            <NavLink to='#' className='nav-link' id='manual-input'>Manual Transaksi</NavLink>
+            <UncontrolledCollapse toggler='#manual-input' tag='ul' className='list-unstyled'>
+              <NavItem>
+                <NavLink exact={true} activeClassName='active' to='/admin/donations/bulan-dana'>Bulan Dana</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/donations/donasi-dana'>Donasi Dana</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/donations/donasi-barang'>Donasi Barang</NavLink>
+              </NavItem>
+            </UncontrolledCollapse>
           </NavItem>
         </Nav>
       </div>

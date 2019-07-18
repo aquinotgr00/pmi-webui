@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Form, FormGroup, Input, Button } from 'reactstrap'
 import { Main, CollapsePrivilages } from 'components'
-import { detailsUserApi } from 'services/api'
+import { detailsUserApi, storeUserApi } from 'services/api'
 import ucwords from 'utils/string'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-export default class UserForm extends Component {
+export default class AdminForm extends Component {
   constructor (props) {
     super(props)
     this.loadUser           = this.loadUser.bind(this)
@@ -19,15 +19,23 @@ export default class UserForm extends Component {
       items: [],
       roles: [],
       privilages: [],
-      userData: [],
+      userData: {
+        name:'',
+        email:'',
+        role_id:'',
+        password:'',
+        password_confirmation: ''
+      },
       name:'',
       email:'',
-      role_id:''
+      role_id:'',
+      password:'',
+      password_confirmation: ''
     }
   }
 
   componentDidMount () {
-    const { user, userId } = this.props.match.params
+    const { user, userId } = this.props.params
     if (userId) {
       this.loadUser(userId)
     }
@@ -41,7 +49,8 @@ export default class UserForm extends Component {
     if(status === 'success'){
       const { data } = response.data
       const { user: userData } = data
-      this.setState({ name: userData.name, email: userData.email})
+      this.setState({ userData ,name: userData.name, email: userData.email})
+
     }
 
   }
@@ -97,14 +106,18 @@ export default class UserForm extends Component {
     this.setState({role_id: event.target.value});
   }
 
-  handleSubmit(event) {
-    console.log(this.state)
+  async handleSubmit(event) {
+    const { userData } = this.state
+    const response = await storeUserApi(userData)
+    const { status } = response.data
+    if(status === 'success'){
+      const { data } = response.data
+    }
     event.preventDefault();
   }
 
-
   render () {
-    const { user, userId } = this.props.match.params
+    const { user, userId } = this.props.params
     const userCategory = ucwords(user.split('-').join(' '))
     const title = userId ? `Edit ${userCategory}` : `Tambah ${userCategory} Baru`
     
