@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormGroup, Label, Input } from 'reactstrap'
+import { Label, Input } from 'reactstrap'
 import { Field } from 'formik'
 
 export function InputItemsForm (props) {
