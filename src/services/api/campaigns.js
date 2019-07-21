@@ -13,3 +13,11 @@ export function listCampaignApi (params) {
     })
   })
 }
+
+export function viewCampaignApi (campaignId) {
+  return authRequest().get(`/campaigns/${campaignId}`)
+}
+
+export function toggleCampaignApi (campaignId, attribute) {
+  return authRequest().put(`/campaigns/${campaignId}/toggle/${attribute}`)
+}

@@ -1,9 +1,10 @@
 import React from 'react'
-import { CampaignListActionButtons } from 'components/ActionButtons'
+import ActionButtons from './ActionButtons'
 import { Table } from 'reactstrap'
+import { ViewActionButton } from './ActionButtons/ViewActionButton'
 
 export function DonasiBarang (props) {
-  const { data } = props
+  const { data, path } = props
   return (
     <Table hover>
       <thead>
@@ -20,13 +21,17 @@ export function DonasiBarang (props) {
         {data && data.map((campaign, key) => (
           <tr key={key}>
             <th><img src={campaign.image} alt='' /></th>
-            <td>{campaign.formatted_title}</td>
+            <td><ViewActionButton path={`${path}/${campaign.id}`} title={campaign.formatted_title} /></td>
             <td>{campaign.get_type.name}</td>
             <td>{campaign.ranges_donation}</td>
             <td>{campaign.publish ? 'Terpublikasi' : 'Draft'}</td>
             <td>
-              <CampaignListActionButtons
-                editPath={`/admin/campaigns/donasi-barang/${campaign.id}/edit`}
+              <ActionButtons
+                campaignId={campaign.id}
+                toggleAttribute={props.toggle}
+                editPath={`${path}/${campaign.id}/edit`}
+                isClosed={campaign.closed}
+                isHidden={campaign.hidden}
               />
             </td>
           </tr>

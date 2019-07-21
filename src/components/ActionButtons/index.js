@@ -1,3 +1,3 @@
 export { AddNewActionButton } from './AddNewActionButton'
-export { EditActionButton } from './EditActionButton.jsx'
-export { CampaignListActionButtons } from './CampaignListActionButtons'
+export { EditActionButton } from './EditActionButton'
+export { ActionButton } from './ActionButton'

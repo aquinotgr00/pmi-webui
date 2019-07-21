@@ -1,12 +1,11 @@
-function ActionButton(props) {
+import React from 'react'
+
+export function ActionButton (props) {
   return (
-    <a
-      href="#" 
-      className={"btn btn-table circle-table " + props.class} 
-      data-toggle="tooltip" 
-      data-placement="top" 
-      title={props.title} 
-      data-original-title={props.title}>
-    </a>
+    <button
+      className={`btn btn-table circle-table ${props.className}`}
+      title={props.title}
+      onClick={props.onClick}
+    />
   )
 }

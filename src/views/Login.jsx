@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import { Button, Container, Form, FormFeedback, FormGroup, Label, Input, Row } from 'reactstrap'
+import { Alert, Button, Container, Form, FormFeedback, FormGroup, Label, Input, Row } from 'reactstrap'
 import { Formik, Field } from 'formik'
 import { login } from 'actions'
 import LoginSchema from 'validators/login'
@@ -18,17 +18,23 @@ class Login extends React.Component {
   }
 
   render () {
+    const { user } = this.props
+    let initialValues = {}
+    if (process.env.NODE_ENV === 'development') {
+      initialValues = { email: 'admin@mail.com', password: 'Open1234' }
+    }
     return (
       <div className='log-in'>
         <div id='login'>
           <Container>
             <img src={require('assets/images/logo-pmi.svg')} className='rounded mx-auto d-block logo' alt='logo-pmi' />
+            {user.loginError && <Alert color='danger'>{user.loginError}</Alert>}
             <Formik
-              initialValues={{ email: 'admin@mail.com', password: 'Open1234' }}
+              initialValues={initialValues}
               validationSchema={LoginSchema}
               onSubmit={(values, { setSubmitting }) => {
                 this.handleLogin(values)
-                setSubmitting(false)
+                // setSubmitting(false)
               }}
             >
               {({
@@ -63,7 +69,7 @@ class Login extends React.Component {
                     </div>
                     <div className='col-sm'>
                       <div className='float-right'>
-                        <Button type='submit' color='success' disabled={isSubmitting}>Masuk</Button>
+                        <Button type='submit' color='success' disabled={user.isLoggingIn}>Masuk</Button>
                       </div>
                     </div>
                   </Row>
@@ -78,4 +84,6 @@ class Login extends React.Component {
   }
 }
 
-export default connect()(withRouter(Login))
+export default connect(state => ({
+  user: state.user
+}))(withRouter(Login))

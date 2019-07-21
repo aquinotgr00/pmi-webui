@@ -11,13 +11,13 @@ export function CampaignTypeDropdown (props) {
         tag='button'
         type='button'
       >
-        {props.campaignType === null && 'Filter Tipe Donasi'}
+        {props.campaignType === null && 'Tipe Donasi'}
         {props.campaignType === 1 && 'Umum'}
         {props.campaignType === 2 && 'Khusus'}
 
       </DropdownToggle>
       <DropdownMenu>
-        {props.campaignType !== null &&  <DropdownItem onClick={() => props.onChange(null)}>Semua</DropdownItem> }
+        {props.campaignType !== null && <DropdownItem onClick={() => props.onChange(null)}>Semua</DropdownItem> }
         <DropdownItem onClick={() => props.onChange(1)} active={props.campaignType === 1}>Umum</DropdownItem>
         <DropdownItem onClick={() => props.onChange(2)} active={props.campaignType === 2}>Khusus</DropdownItem>
       </DropdownMenu>
