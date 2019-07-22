@@ -43,10 +43,10 @@ class Donations extends React.Component {
     })
   }
 
-  async loadDonationList (type = null) {
+  async loadDonationList (type = null, fund = 1) {
     if (type === null)
       type = 3
-    const donationsList = await getDonationList(type)
+    const donationsList = await getDonationList(type, fund)
     const { data } = donationsList.data.data
     let listFromApi = data.map(donation => {
       return {value: donation.id, display: donation.title}
@@ -79,7 +79,11 @@ class Donations extends React.Component {
   }
 
   getDonationListByType (ev) {
-    this.loadDonationList(ev.target.value)
+    let fund = 1
+    if (this.props.match.params.donation === 'donasi-barang') {
+      fund = 0
+    }
+    this.loadDonationList(ev.target.value, fund)
     this.setState({selectedType:ev.target.value,typeDonate:ev.target.value})
   }
 
@@ -121,7 +125,8 @@ class Donations extends React.Component {
       amount: 0,
     }
     if (this.state.redirect) {
-      return <Redirect to='/admin/transactions'/>;
+      const url = '/admin/transactions/'+this.props.match.params.donation
+      return <Redirect to={url} />;
     }
 
     return (
