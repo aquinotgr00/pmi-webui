@@ -8,20 +8,27 @@ export function login (credentials) {
       credentials
     })
 
-    const loginResponse = await loginApi(credentials)
+    try {
+      const loginResponse = await loginApi(credentials)
 
-    const { status, data } = loginResponse.data
-    if (status === 'success') {
-      const { token } = data
-      dispatch({
-        type: 'LOGIN_SUCCESS',
-        token
-      })
-    } else {
-      const { account } = data
+      const { status, data } = loginResponse.data
+      if (status === 'success') {
+        const { token } = data
+        dispatch({
+          type: 'LOGIN_SUCCESS',
+          token
+        })
+      } else {
+        const { account } = data
+        dispatch({
+          type: 'LOGIN_FAILURE',
+          account
+        })
+      }
+    } catch (error) {
       dispatch({
         type: 'LOGIN_FAILURE',
-        account
+        account: 'Server Error'
       })
     }
   }
@@ -34,10 +41,10 @@ export function logout () {
     })
 
     const logoutResponse = await logoutApi()
-    const { status } = logoutResponse
+    const { status } = logoutResponse.data
+    console.log(status)
     if (status === 'success') {
       persistor.purge()
-
       dispatch({
         type: 'LOGOUT_SUCCESS'
       })

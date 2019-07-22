@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { ExportButton, FilterDropdown, PaginationLink, Tool } from 'components'
+import { PaginationLink } from 'components'
 import { Row, Col, Button, ButtonGroup, FormGroup, Input } from 'reactstrap'
 import { listTransactionApi } from 'services/api'
 import { TransactionTable } from './TransactionTable'
+import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 
 export default class TransactionList extends Component {
   constructor(props) {
@@ -13,25 +14,27 @@ export default class TransactionList extends Component {
       statusFilter: null,
       title: null,
       startDate: null,
-      endDate: null,
+      finishDate:null,
+      date: [new Date(), new Date()],
       goodItems: [],
       isLoading: false,
       data: [],
       error: null
     }
 
-    this.loadTransaction = this.loadTransaction.bind(this)
-    this.handleSearch = this.handleSearch.bind(this)
-    this.handleSearchTitle = this.handleSearchTitle.bind(this)
+    this.loadTransaction    = this.loadTransaction.bind(this)
+    this.handleSearch       = this.handleSearch.bind(this)
+    this.handleSearchTitle  = this.handleSearchTitle.bind(this)
     this.handleFilterStatus = this.handleFilterStatus.bind(this)
-
+    this.handleDateRanges   = this.handleDateRanges.bind(this)
+    
   }
 
   componentDidMount() {
     this.loadTransaction()
   }
 
-  async loadTransaction(page = 1, searchFor = '', title = '', statusFilter = '') {
+  async loadTransaction(page = 1, searchFor = '', title = '', statusFilter = '',startDate='',finishDate='') {
     const transactionParams = new URLSearchParams()
     const { transaction } = this.props
     switch (transaction) {
@@ -59,6 +62,11 @@ export default class TransactionList extends Component {
       transactionParams.append('st', statusFilter)
     }
 
+    if (startDate && finishDate) {
+      transactionParams.append('from', startDate)
+      transactionParams.append('to', finishDate)
+    }
+
     this.setState({ isLoading: true, error: null })
 
     const response = await listTransactionApi(transactionParams)
@@ -74,12 +82,12 @@ export default class TransactionList extends Component {
 
   handleSearch(event) {
     const searchKeyword = event.target.value
-    this.loadTransaction(this.state.page, searchKeyword, this.state.title, this.state.statusFilter)
+    this.loadTransaction(this.state.page, searchKeyword, this.state.title, this.state.statusFilter,this.state.startDate,this.state.finishDate)
   }
 
   handleSearchTitle(event) {
     const searchKeyword = event.target.value
-    this.loadTransaction(this.state.page, this.state.searchFor, searchKeyword, this.state.statusFilter)
+    this.loadTransaction(this.state.page, this.state.searchFor, searchKeyword, this.state.statusFilter,this.state.startDate,this.state.finishDate)
   }
 
   handleFilterStatus(event) {
@@ -87,13 +95,30 @@ export default class TransactionList extends Component {
     if (filterStatus == 0) {
       filterStatus = null;
     }
-    this.loadTransaction(this.state.page, this.state.searchFor, this.state.title, filterStatus)
+    this.loadTransaction(this.state.page, this.state.searchFor, this.state.title, filterStatus,this.state.startDate,this.state.finishDate)
 
   }
 
-  handleStartDate(){
-
+  handleDateRanges(date) {
     
+    this.setState({ date })
+
+    let start   = new Date(date[0])
+    let finish  = new Date(date[1])
+
+    let startMonthAdd  = parseInt(start.getMonth() + 1)
+    let finishMonthAdd = parseInt(finish.getMonth() + 1)
+
+    let startMonth  = (startMonthAdd < 10)? '0'+startMonthAdd : startMonthAdd
+    let finishMonth = (finishMonthAdd < 10)? '0'+finishMonthAdd : finishMonthAdd
+    
+    let startDate   = (start.getDate() < 10)? '0'+start.getDate() : start.getDate()
+    let finishDate  = (finish.getDate() < 10)? '0'+finish.getDate() : finish.getDate()
+
+    let startFrom  = this.state.date[0].getFullYear() + "-" + startMonth + "-" + startDate
+    let finishTo = this.state.date[1].getFullYear() + "-" + finishMonth + "-" + finishDate
+
+    this.loadTransaction(this.state.page, this.state.searchFor, this.state.title, this.state.statusFilter,startFrom,finishTo)
   }
 
   goToPage(page) {
@@ -120,14 +145,17 @@ export default class TransactionList extends Component {
   render() {
     const { transaction } = this.props
     const { error } = this.state
-    console.log(transaction)
+    
     return (
       <>
         <Row>
           <Col md="2">
             <FormGroup >
               <label >Rentang Waktu</label>
-              <Input type="date" />
+              <DateRangePicker
+                onChange={this.handleDateRanges}
+                value={this.state.date}
+              />
             </FormGroup>
           </Col>
           <Col md="2">

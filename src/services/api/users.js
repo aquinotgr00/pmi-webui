@@ -26,3 +26,11 @@ export function detailsUserApi(userId){
 export function storeUserApi(params){
   return authRequest().post('/users', params) 
 }
+
+export function updateActiveUserApi(userId,status){
+  return authRequest().put('users/'+userId+'/'+status) 
+}
+
+export function updateUserApi(userId,params){
+  return authRequest().put('/users/'+userId+'/edit', params) 
+}

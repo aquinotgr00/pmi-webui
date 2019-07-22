@@ -1,2 +1,2 @@
-export { CampaignStatusDropdown } from './CampaignStatusDropdown'
+export { CampaignFilterDropdown } from './CampaignFilterDropdown'
 export { CampaignTypeDropdown } from './CampaignTypeDropdown'

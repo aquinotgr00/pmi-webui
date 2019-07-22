@@ -7,25 +7,15 @@ export function Donator (props) {
     <Table hover>
       <thead>
         <tr>
-          <th>Gambar</th>
-          <th>Judul</th>
-          <th>Rentang Waktu Donasi</th>
-          <th>Donasi Terkumpul</th>
-          <th>Target Donasi</th>
-          <th>Status</th>
-          <th>Aksi</th>
+          <th>Nama</th>
+          <th>E-mail</th>
+          <th>No.Tlp</th>
+          <th>Tanggal Daftar</th>
+          <th>Waktu Donasi Terakhir</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td><Link to='/admin/users/donator/3/edit'>@mdo</Link></td>
-        </tr>
+        
       </tbody>
     </Table>
   )
