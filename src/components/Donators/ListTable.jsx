@@ -24,7 +24,7 @@ export function ListTable (props) {
                     <td>{donator.user.email}</td>
                     <td>{donator.phone}</td>
                     <td>{donator.created_at}</td>
-                    <td>{donator.donations[0].created_at}</td>
+                    <td>{donator.donations.length > 0 && donator.donations[0].created_at }</td>
                   </tr>
                 )
               })}
