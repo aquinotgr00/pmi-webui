@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Row, Form, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
+import { Row, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
 import { Main, CollapsePrivilages } from 'components'
 import { detailsUserApi, storeUserApi, updateUserApi } from 'services/api'
-import { Formik, Field } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import { withRouter } from 'react-router-dom'
 import AddUserSchema from 'validators/addUser'
 import UpdateUserSchema from 'validators/updateUser'
@@ -133,12 +133,13 @@ class AdminForm extends Component {
 
     const { name, email, password, password_confirmation } = this.state
     let initialValues = { name, email, password, password_confirmation }
-
+    console.log(initialValues)
     return (
       <Main title={title}>
         <Row className="pl-3">
 
           <Formik
+            enableReinitialize={true} 
             initialValues={initialValues}
             validationSchema={ this.state.userId > 0 ? UpdateUserSchema : AddUserSchema}
             onSubmit={(values, { setSubmitting }) => {
@@ -180,8 +181,6 @@ class AdminForm extends Component {
                       render={({ field }) => (
                         <Input {...field}
                           type="email"
-                          value={this.state.email}
-                          onChange={this.onChangeEmail}
                           invalid={errors.email !== undefined}
                         />
                       )} />

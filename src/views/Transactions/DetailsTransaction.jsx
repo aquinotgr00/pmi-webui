@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Main, InformationCard } from 'components'
 import { Row, Col, Table, Card, CardBody, CardTitle, FormGroup } from 'reactstrap'
 import { showTransaction } from 'services/api'
+import { FundraisingTable } from './FundraisingTable'
+import { NonFundraisingTable } from './NonFundraisingTable'
 
 export default class DetailsTransaction extends Component {
 
@@ -112,48 +114,11 @@ export default class DetailsTransaction extends Component {
 					</Row>
 					<Row>
 						<Col>
-							<Table>
-								<thead>
-									<tr>
-										<th>Gambar</th>
-										<th>Judul</th>
-										<th>Tipe Donasi</th>
-										<th>Metode Transfer</th>
-										<th>Subtotal</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<th>
-											{typeof this.state.data.campaign !== 'undefined' &&
-												<img src={this.state.data.campaign.image} alt="poster donasi" />
-											}
-										</th>
-										<td>
-											{typeof this.state.data.campaign !== 'undefined' &&
-												<p>{this.state.data.campaign.title}</p>
-											}
-										</td>
-										<td>
-											{typeof this.state.data.campaign !== 'undefined' &&
-												<p>{this.state.data.campaign.get_type.name}</p>
-											}
-
-										</td>
-										<td></td>
-										<td>{amount}</td>
-									</tr>
-									<tr>
-										<th><h1>Total :</h1></th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td>
-											<h1>{amount}</h1>
-										</td>
-									</tr>
-								</tbody>
-							</Table>
+						 {typeof this.state.data.campaign !== 'undefined' && this.state.data.campaign.fundraising === 1 ? (
+        <FundraisingTable data={this.state.data} amount={amount} />
+      ) : (
+        <NonFundraisingTable data={this.state.data} amount={amount} />
+      )}
 						</Col>
 					</Row>
 				</Main>

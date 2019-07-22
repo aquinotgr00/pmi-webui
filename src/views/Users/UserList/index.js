@@ -88,7 +88,7 @@ export default class UserList extends Component {
       onPageChange={this.goToPage}
       />
       { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
-      { (user === 'donator') && <Donator /> }
+      { (user === 'donator') && <Donator data={userData} path={pathname} /> }
       { (user === 'volunteer') && <Volunteer /> }
       </>
       )
@@ -100,7 +100,9 @@ export default class UserList extends Component {
     return (
       <>
       <Tool onSearch={this.handleSearch}>
+      {user !== 'donator' &&
       <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
+      }
       </Tool>
       {error
         ? <div>Error</div>

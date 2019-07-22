@@ -32,5 +32,5 @@ export function updateActiveUserApi(userId,status){
 }
 
 export function updateUserApi(userId,params){
-  return authRequest().put('/users/'+userId+'/edit', params) 
+  return authRequest().put('/users/'+userId, params) 
 }
