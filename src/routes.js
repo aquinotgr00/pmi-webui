@@ -2,14 +2,28 @@ import Users from 'views/Users'
 import Donators from 'views/Donators'
 import Volunteers from 'views/Volunteers'
 import Campaigns from 'views/Campaigns'
+import Transactions from 'views/Transactions'
+import DetailsTransaction from 'views/Transactions/DetailsTransaction'
+import UserForm from 'views/Users/UserForm'
+import CampaignEditor from 'views/Campaigns/CampaignEditor'
+import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
-import CampaignForm from 'views/CampaignForm'
 
 var routes = [
   {
-    path: '/users',
+    path: '/users/:user',
     name: 'Users',
     component: Users
+  },
+  {
+    path: '/users/:user/create',
+    name: 'Create User',
+    component: UserForm
+  },
+  {
+    path: '/users/:user/:userId/edit',
+    name: 'Create User',
+    component: UserForm
   },
   {
     path: '/donators',
@@ -29,18 +43,32 @@ var routes = [
   {
     path: '/donations/:donation',
     name: 'Donations',
-    component:Donations
+    component: Donations
   },
   {
-    path: '/campaigns/:campaign/create',
+    path: '/campaigns/:campaignType/create',
     name: 'Create Campaign',
-    component: CampaignForm
+    component: CampaignEditor
   },
   {
-    path: '/campaigns/:campaign/:campaignId/edit',
+    path: '/campaigns/:campaignType/:campaignId/edit',
     name: 'Edit Campaign',
-    component: CampaignForm
+    component: CampaignEditor
+  },
+  {
+    path: '/transactions/:transaction',
+    name: 'Transactions',
+    component: Transactions
+  },
+  {
+    path: '/transactions/:transaction/:transactionId',
+    name: 'Details Transactions',
+    component: DetailsTransaction
+  },
+  {
+    path: '/campaigns/:campaign/:campaignId',
+    name: 'View Campaign',
+    component: CampaignView
   }
-
 ]
 export default routes

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 import { Nav, Navbar, NavItem, NavLink as SubMenu, UncontrolledCollapse } from 'reactstrap'
 
-export function Sidebar () {
+export function Sidebar() {
   return (
     <Navbar className='col-md-2 d-none d-md-block sidebar'>
       <div className='sidebar-sticky'>
@@ -11,7 +11,18 @@ export function Sidebar () {
         <hr />
         <Nav className='flex-column'>
           <NavItem>
-            <SubMenu href='#'>User Management</SubMenu>
+            <SubMenu href='#' id='toggler-user' className='side'>User Management</SubMenu>
+            <UncontrolledCollapse toggler='#toggler-user' tag='ul' className='list-unstyled'>
+              <NavItem>
+                <NavLink to='/admin/users/admin'>Administrator</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/users/donator'>Donatur</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/users/volunteer'>Relawan</NavLink>
+              </NavItem>
+            </UncontrolledCollapse>
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
@@ -33,7 +44,20 @@ export function Sidebar () {
         </Nav>
         <Nav className='flex-column'>
           <NavItem>
-            <SubMenu href='#'>Transaksi Management</SubMenu>
+            <SubMenu href='#' id='toggler-transaction' className='side'>Transaksi Management</SubMenu>
+
+            <UncontrolledCollapse toggler='#toggler-transaction' tag='ul' className='list-unstyled'>
+              <NavItem>
+                <NavLink to='/admin/transactions/bulan-dana'>Bulan Dana</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/transactions/donasi-dana'>Donasi Dana</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/transactions/donasi-barang'>Donasi Barang</NavLink>
+              </NavItem>
+            </UncontrolledCollapse>
+
           </NavItem>
         </Nav>
         <Nav className='flex-column'>
