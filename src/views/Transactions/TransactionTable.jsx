@@ -1,8 +1,9 @@
 import React from 'react'
 import { Table, Input } from 'reactstrap'
+import { Link } from 'react-router-dom'
 
-export function DonasiBarang(props) {
-
+export function TransactionTable(props) {
+  
   let headings = [
     'Tanggal Donasi',
     'ID-Transaksi',
@@ -11,7 +12,8 @@ export function DonasiBarang(props) {
     'Tipe Donasi',
     'Status'
   ]
-  const { data } = props
+  const { data, transaction } = props
+  
   return (
     <Table hover>
       <thead>
@@ -30,10 +32,15 @@ export function DonasiBarang(props) {
                 <Input type="checkbox" id="{item.id}" />
               </td>
               <td>{item.created_at}</td>
-              <td>{item.transaction_id}</td>
+              <td>
+                <Link to={`/admin/transactions/${transaction}/${item.id}`}>
+                {item.invoice_id}
+                </Link>
+              </td>
               <td>{item.name}</td>
               <td>{item.campaign.title}</td>
-              <td>{item.status}</td>
+              <td>{item.campaign.get_type.name}</td>
+              <td>{item.status_text}</td>
             </tr>
           )
         })}

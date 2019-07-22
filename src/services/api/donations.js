@@ -32,3 +32,7 @@ export function storeApi (data) {
 export function getDonationList (type, fund = 1) {
   return authRequest().get('campaigns?f='+fund+'&t='+type)
 }
+
+export function showTransaction(transactionId){
+  return authRequest().get('/reports/'+transactionId,)
+}

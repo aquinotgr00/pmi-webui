@@ -2,19 +2,19 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { Main } from 'components'
 import ucwords from 'utils/string'
-import CampaignList from './CampaignList'
+import TransactionList from './TransactionList'
 
-export default function Campaigns (props) {
-  const { campaign } = props.match.params
-  const title = ucwords(campaign.split('-').join(' '))
+export default function Transactions (props) {
+  const { transaction } = props.match.params
+  const title = ucwords(transaction.split('-').join(' '))
   return (
     <Main title={title}>
-      {['bulan-dana', 'donasi-dana', 'donasi-barang'].map(function (c, key) {
+      {['bulan-dana', 'donasi-dana', 'donasi-barang'].map(function (c,index) {
         return (
           <Route
-            path={`/admin/campaigns/${c}`}
-            render={(props) => <CampaignList {...props} campaign={campaign} title={title} />}
-            key={key}
+            key={index}
+            path={`/admin/transactions/${c}`}
+            render={(props) => <TransactionList {...props} transaction={transaction} title={title} />}
           />
         )
       })}
