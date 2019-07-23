@@ -555,6 +555,9 @@ footer p {
     width: 1px;
     height: 1px;
 }
+.react-daterange-picker__wrapper {
+    border: none!important;
+}
 
 
 
