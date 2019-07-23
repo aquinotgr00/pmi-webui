@@ -23,7 +23,7 @@ export function toggleCampaignApi (campaignId, attribute) {
 }
 
 export function createCampaignApi (campaign) {
-  const formData = new window.FormData()
+  const formData = new FormData()
   formData.append('title', campaign.title)
   formData.append('description', campaign.description)
   return authRequest().post('/campaigns', formData)

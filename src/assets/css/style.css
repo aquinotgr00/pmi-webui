@@ -555,7 +555,25 @@ footer p {
     width: 1px;
     height: 1px;
 }
+    
+.date-range-input {
+    font-weight: 300;
+    font-size: 0.8em;
+    width: 100%;
+    border: 1px solid #DFDFDB;
+    height: 2.5em;
+    padding-left:1em;
+}
 
+.date-range-input .react-daterange-picker__range-divider {
+    align-self: center;
+    font-weight: bold;
+    margin: 0.5em;
+}
+
+.react-daterange-picker__wrapper {
+    border: none;
+}
 
 
 
