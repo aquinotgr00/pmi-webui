@@ -24,7 +24,16 @@ export function toggleCampaignApi (campaignId, attribute) {
 
 export function createCampaignApi (campaign) {
   const formData = new FormData()
+  formData.append('type_id', campaign.type_id)
+  formData.append('fundraising', campaign.fundraising ? 1 : 0)
   formData.append('title', campaign.title)
   formData.append('description', campaign.description)
-  return authRequest().post('/campaigns', formData)
+  formData.append('image_file', campaign.image_file)
+  formData.append('publish', campaign.publish)
+  formData.append('amount_goal', campaign.amount_goal)
+  return authRequest().post('/campaign', formData)
+}
+
+export function updateCampaignApi (campaignId, campaign) {
+  return authRequest().put(`/campaigns/${campaignId}`, campaign)
 }

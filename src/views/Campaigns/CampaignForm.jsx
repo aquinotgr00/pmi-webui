@@ -8,7 +8,7 @@ import Faker from 'faker'
 import { Main } from 'components'
 import ucwords from 'utils/string'
 import CampaignSchema from 'validators/campaign'
-import { getCampaignApi } from 'services/api'
+import { createCampaignApi, getCampaignApi, updateCampaignApi } from 'services/api'
 
 function generatePreviewImgUrl (file, callback) {
   const reader = new FileReader()
@@ -22,10 +22,11 @@ class CampaignForm extends Component {
     this.state = {
       campaign: {
         title: '',
+        type_id: 1,
+        fundraising: 0,
         description: '',
         amount_goal: 0,
         publish: 0
-
       },
       dateRange: [new Date(), new Date()],
       previewImgUrl: require('assets/images/image-plus.svg')
@@ -36,14 +37,15 @@ class CampaignForm extends Component {
   }
 
   componentDidMount () {
-    const { campaign, campaignId } = this.props.match.params
-
+    const { campaignType, campaignId } = this.props.match.params
     if (campaignId) {
       this.loadCampaign(campaignId)
     } else {
       if (process.env.NODE_ENV === 'development') {
         this.setState({ campaign: {
-          title: Faker.lorem.sentences(),
+          title: Faker.lorem.sentences().substring(0, 255),
+          type_id: campaignType === 'bulan-dana' ? 3 : 1,
+          fundraising: campaignType !== 'donasi-barang',
           description: Faker.lorem.paragraphs(),
           amount_goal: Faker.random.number({ min: 10000000, max: 200000000 }),
           publish: 0
@@ -58,7 +60,6 @@ class CampaignForm extends Component {
     try {
       const response = await getCampaignApi(campaignId)
       const { status } = response.data
-      console.log(response.data)
       if (status === 'success') {
         const { data: campaign } = response.data
         if (campaign.amount_goal === null) {
@@ -82,20 +83,32 @@ class CampaignForm extends Component {
     }
   }
 
-  handleSaveCampaign (campaign) {
-    console.log(campaign)
-    const { campaignType } = this.props.match.params
-    const { history } = this.props
+  async handleSaveCampaign (campaign) {
+    this.setState({ isLoading: true, error: null })
+    try {
+      const response = await createCampaignApi(campaign)
+      const { status } = response.data
+      if (status === 'success') {
+        this.setState({ isLoading: false, error: null })
+        const { campaignType } = this.props.match.params
+        const { history } = this.props
 
-    // history.replace(`/admin/campaigns/${campaignType}`)
+        history.push(`/admin/campaigns/${campaignType}`)
+      } else {
+        // TODO : handle errors
+        this.setState({ isLoading: false, error: null })
+      }
+    } catch (error) {
+      // TODO : handle errors
+      this.setState({ isLoading: false, error: null })
+    }
   }
 
   render () {
     const { campaignType, campaignId } = this.props.match.params
     const campaignCategory = ucwords(campaignType.split('-').join(' '))
     const title = campaignId ? `Edit ${campaignCategory}` : `Tambah ${campaignCategory} Baru`
-    const { campaign } = this.state
-    const { previewImgUrl } = this.state
+    const { campaign, previewImgUrl } = this.state
     return (
       <Main title={title}>
         <div className='row pl-3'>
@@ -105,10 +118,10 @@ class CampaignForm extends Component {
             initialValues={campaign}
             onSubmit={(values, { setSubmitting }) => {
               this.handleSaveCampaign(values)
-              // setSubmitting(false)
             }}
           >
             {({
+              values,
               errors,
               setFieldValue,
               handleSubmit,
@@ -121,11 +134,30 @@ class CampaignForm extends Component {
                     <Field
                       name='title'
                       render={({ field }) => (
-                        <Input {...field} id='title' invalid={errors.title !== undefined} />
+                        <Input {...field} id='title' maxLength={255} invalid={errors.title !== undefined} />
                       )}
                     />
                     {errors.title !== undefined ? <FormFeedback>{errors.title}</FormFeedback> : ''}
                   </FormGroup>
+
+                  {(campaignType !== 'bulan-dana') &&
+                    (
+                      <FormGroup>
+                        <label htmlFor='title'>Tipe Donasi</label>
+                        <Field
+                          name='type_id'
+                          render={({ field }) => (
+                            <select {...field} id='type_id' className='form-control' value={values.type_id}>
+                              <option value={1} checked>Umum</option>
+                              <option value={2}>Khusus</option>
+                            </select>
+                          )}
+                        />
+                        {errors.type_id !== undefined ? <FormFeedback>{errors.type_id}</FormFeedback> : ''}
+                      </FormGroup>
+                    )
+                  }
+
                   <FormGroup>
                     <label htmlFor='description'>Deskripsi</label>
 
@@ -134,7 +166,7 @@ class CampaignForm extends Component {
                       render={({ field }) => (
                         <Editor
                           apiKey='jv18ld1zfu6vffpxf0ofb72orrp8ulyveyyepintrvlwdarp'
-                          initialValue={campaign.description}
+                          initialValue={values.description}
                           init={{
                             plugins: 'link image code',
                             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code',
@@ -146,6 +178,7 @@ class CampaignForm extends Component {
                     />
                     {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
                   </FormGroup>
+
                   <FormGroup>
                     <label htmlFor='amount_goal'>Target Dana Donasi</label>
                     <Field
@@ -186,7 +219,7 @@ class CampaignForm extends Component {
                       const file = event.target.files[0]
 
                       if (file) {
-                        setFieldValue('image', file)
+                        setFieldValue('image_file', file)
                         generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
                       }
                     }}
@@ -232,8 +265,7 @@ class CampaignForm extends Component {
                   </div>
                 </div>
               </>
-            )
-            }
+            )}
           </Formik>
         </div>
       </Main>

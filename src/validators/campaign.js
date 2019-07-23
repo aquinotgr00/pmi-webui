@@ -5,6 +5,6 @@ export default Yup.object().shape({
     .required('Required'),
   description: Yup.string()
     .required('Required'),
-  image: Yup.mixed()
+  image_file: Yup.mixed()
     .required()
 })
