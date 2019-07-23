@@ -13,6 +13,7 @@ export default class UserForm extends Component {
   		return (
       	<>
         	{ (user === 'admin') && <AdminForm params={this.props.match.params} /> }
+        	{ (user === 'donator') && <DonatorForm params={this.props.match.params} /> }
         	{ (user === 'volunteer') && <VolunteerForm /> }
       	</>
   		)
