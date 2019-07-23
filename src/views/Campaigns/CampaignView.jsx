@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Main } from 'components'
-import { viewCampaignApi } from 'services/api'
+import { getCampaignApi } from 'services/api'
 import { formatCurrency } from 'utils/number'
 
 export default class CampaignView extends Component {
@@ -25,7 +25,7 @@ export default class CampaignView extends Component {
   async loadCampaign (campaignId) {
     this.setState({ isLoading: true, error: null })
 
-    const response = await viewCampaignApi(campaignId)
+    const response = await getCampaignApi(campaignId)
     const { status } = response.data
 
     if (status === 'success') {
@@ -37,7 +37,7 @@ export default class CampaignView extends Component {
   }
 
   render () {
-    const { type_id, title, description, image, ranges_donation, amount_goal, amount_real } = this.state.campaign
+    const { type_id, title, description, image, ranges_donation: rangeDonation, amount_goal: goal, amount_real: realAmount } = this.state.campaign
 
     let donationType = '-'
     switch (type_id) {
@@ -52,7 +52,7 @@ export default class CampaignView extends Component {
     return (
       <Main title={title}>
         <div className='row pl-3'>
-          <form class="col-md-6 col-lg7 pl-0">
+          <form className='col-md-6 col-lg7 pl-0'>
             <div className='form-group'>
               <label>Deskripsi</label>
               <p className='mb-5'>{description}</p>
@@ -60,20 +60,20 @@ export default class CampaignView extends Component {
 
             <div className='row mb-4'>
               <div className='col-sm-2 form-group'>
-                <label for='#'>Tipe Donasi</label>
+                <label>Tipe Donasi</label>
                 <p>{donationType}</p>
               </div>
               <div className='col-sm-4 form-group'>
                 <label>Rentang Waktu</label>
-                <p>{ranges_donation}</p>
+                <p>{rangeDonation}</p>
               </div>
               <div className='col-sm-3 form-group'>
                 <label>Donasi Terkumpul</label>
-                <p>{amount_real?formatCurrency(amount_real):'-'}</p>
+                <p>{realAmount ? formatCurrency(realAmount) : '-'}</p>
               </div>
               <div className='col-sm-3 form-group'>
                 <label>Target Donasi</label>
-                <p>{amount_goal?formatCurrency(amount_goal):'-'}</p>
+                <p>{goal ? formatCurrency(goal) : '-'}</p>
               </div>
             </div>
 
@@ -107,7 +107,7 @@ export default class CampaignView extends Component {
             <div className='mb-4'>
               <label>Gambar Utama</label>
               <div className='mb-2 hovereffect'>
-                <img className='img-fluid img-thumbnail img-featured-size' src={ image } alt='' />
+                <img className='img-fluid img-thumbnail img-featured-size' src={image} alt='' />
                 <div className='overlay btn-img'>
                   <span>
                     <a href='#' className='btn btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />

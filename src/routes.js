@@ -5,7 +5,7 @@ import Campaigns from 'views/Campaigns'
 import Transactions from 'views/Transactions'
 import DetailsTransaction from 'views/Transactions/DetailsTransaction'
 import UserForm from 'views/Users/UserForm'
-import CampaignEditor from 'views/Campaigns/CampaignEditor'
+import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 
@@ -48,12 +48,12 @@ var routes = [
   {
     path: '/campaigns/:campaignType/create',
     name: 'Create Campaign',
-    component: CampaignEditor
+    component: CampaignForm
   },
   {
     path: '/campaigns/:campaignType/:campaignId/edit',
     name: 'Edit Campaign',
-    component: CampaignEditor
+    component: CampaignForm
   },
   {
     path: '/transactions/:transaction',
