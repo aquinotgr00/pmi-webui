@@ -14,10 +14,17 @@ export function listCampaignApi (params) {
   })
 }
 
-export function viewCampaignApi (campaignId) {
+export function getCampaignApi (campaignId) {
   return authRequest().get(`/campaigns/${campaignId}`)
 }
 
 export function toggleCampaignApi (campaignId, attribute) {
   return authRequest().put(`/campaigns/${campaignId}/toggle/${attribute}`)
+}
+
+export function createCampaignApi (campaign) {
+  const formData = new window.FormData()
+  formData.append('title', campaign.title)
+  formData.append('description', campaign.description)
+  return authRequest().post('/campaigns', formData)
 }
