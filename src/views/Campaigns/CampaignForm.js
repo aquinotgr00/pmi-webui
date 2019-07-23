@@ -2,15 +2,14 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import { Button, Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
 import { Formik, Form, Field } from 'formik'
-import DatePicker from 'react-datepicker'
 import { Editor } from '@tinymce/tinymce-react'
+import DateRangePicker from '@wojtekmaj/react-daterange-picker/dist/entry.nostyle'
 import Faker from 'faker'
 import moment from 'moment'
 import { Main } from 'components'
 import ucwords from 'utils/string'
 import CampaignSchema from 'validators/campaign'
-
-import 'react-datepicker/dist/react-datepicker.css'
+import { getCampaignApi } from 'services/api'
 
 function generatePreviewImgUrl (file, callback) {
   const reader = new window.FileReader()
@@ -53,8 +52,26 @@ class CampaignForm extends Component {
     }
   }
 
-  loadCampaign (campaignId) {
+  async loadCampaign (campaignId) {
+    this.setState({ isLoading: true, error: null })
 
+    try {
+      const response = await getCampaignApi(campaignId)
+      const { status } = response.data
+      console.log(response.data)
+      if (status === 'success') {
+        const { data: campaign } = response.data
+        if (campaign.amount_goal === null) {
+          campaign.amount_goal = 0
+        }
+        this.setState({ isLoading: false, campaign })
+      } else {
+        // TODO : handle error
+        this.setState({ isLoading: false, error: null })
+      }
+    } catch (error) {
+      // TODO : handle error
+    }
   }
 
   handleFileUpload (event) {
@@ -120,7 +137,8 @@ class CampaignForm extends Component {
                           init={{
                             plugins: 'link image code',
                             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code',
-                            min_height: 270
+                            min_height: 270,
+                            content_style: 'p {font-weight:400, font-size:8}'
                           }}
                         />
                       )}
@@ -139,25 +157,15 @@ class CampaignForm extends Component {
                   </FormGroup>
                   <FormGroup className='form-group'>
                     <label htmlFor='duration'>Rentang Waktu Donasi</label>
+                    <Field
+                      name='duration'
+                      render={({ field }) => (
+                        <DateRangePicker />
+                      )}
+                    />
+                    {errors.amount_goal !== undefined ? <FormFeedback>{errors.amount_goal}</FormFeedback> : ''}
+                    
 
-                    <Row form>
-                      <Col md={6}>
-                        <DatePicker
-                          selectsStart
-                          startDate={moment()}
-                          className='form-control'
-                        />
-
-                      </Col>
-                      <Col md={6}>
-                        <DatePicker
-                          selectsEnd
-                          startDate={moment()}
-                          minDate={moment()}
-                          className='form-control'
-                        />
-                      </Col>
-                    </Row>
 
                   </FormGroup>
 
