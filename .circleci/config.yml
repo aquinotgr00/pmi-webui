@@ -29,7 +29,7 @@ workflows:
   version: 2
   build_and_deploy_develop:
     jobs:
-      - deploy-staging:
+      - deploy-develop:
           filters:
             branches:
               only: develop
