@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
 
 export function Donator (props) {
+  const { path } = props
   return (
     <Table hover>
       <thead>
@@ -19,7 +20,7 @@ export function Donator (props) {
                 return (
                   <tr key={key}>
                     <th>
-                      <a href="detail-donatur.html">{donator.name}</a>
+                      <Link to={`${path}/${donator.id}/edit`}>{donator.name}</Link>
                     </th>
                     <td>{donator.user.email}</td>
                     <td>{donator.phone}</td>

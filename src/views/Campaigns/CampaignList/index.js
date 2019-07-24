@@ -33,6 +33,7 @@ export default class CampaignList extends Component {
   componentDidMount () {
     this.loadCampaign()
   }
+
   async loadCampaign (page = 1, filters = {}, campaignType = null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
@@ -49,7 +50,7 @@ export default class CampaignList extends Component {
 
     campaignParams.append('page', page)
 
-    for (let param in filters) {
+    for (const param in filters) {
       if (filters[param] !== null) {
         campaignParams.append(param, filters[param])
       }

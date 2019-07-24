@@ -14,6 +14,20 @@ export function listTransactionApi (params) {
   })
 }
 
+export function listDonationByStatus (id, status = null, startFrom = null, finishTo = null) {
+  let params = new URLSearchParams()
+  let url = `donations/list-by-donator/${id}`
+
+  if (status !== null)
+    params.append('status', status)
+
+  if (startFrom && finishTo)
+    params.append('startFrom', startFrom)
+    params.append('finishTo', finishTo)
+
+  return authRequest().get(url, { params })
+}
+
 export function storeApi (data) {
   let formData = new FormData()
   formData.append('name', data.name)
