@@ -8,6 +8,7 @@ import UserForm from 'views/Users/UserForm'
 import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
+import Dashboard from 'views/Dashboard'
 
 var routes = [
   {
@@ -69,6 +70,12 @@ var routes = [
     path: '/campaigns/:campaign/:campaignId',
     name: 'View Campaign',
     component: CampaignView
+  },
+  {
+    path: '/',
+    name: 'Dashboard',
+    component: Dashboard
   }
+
 ]
 export default routes
