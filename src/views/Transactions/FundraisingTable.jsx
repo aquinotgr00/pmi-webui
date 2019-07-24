@@ -32,7 +32,7 @@ export function FundraisingTable(props){
 											}
 
 										</td>
-										<td></td>
+										<td>{props.data.payment_method_text}</td>
 										<td>{props.amount}</td>
 									</tr>
 									<tr>

@@ -28,7 +28,7 @@ export default class DetailsTransaction extends Component {
 	}
 
 	render() {
-		const { id,name, email, phone, invoice_id, amount, payment_method, status_text, image } = this.state.data
+		const { id,name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, notes } = this.state.data
 		const { address } = this.state.data.donator || {}
 		
 		const details = [
@@ -64,7 +64,7 @@ export default class DetailsTransaction extends Component {
 					},
 					{
 						label: 'Metode Transfer',
-						text: payment_method
+						text: payment_method_text
 					},
 					{
 						label: 'Status Donasi',
@@ -72,7 +72,7 @@ export default class DetailsTransaction extends Component {
 					},
 					{
 						label: 'Catatan',
-						text: ''
+						text: notes
 					}
 				]
 			}

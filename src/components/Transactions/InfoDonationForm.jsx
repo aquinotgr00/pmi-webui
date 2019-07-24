@@ -8,12 +8,6 @@ export class InfoDonationForm extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = {
-			name: '',
-			address: '',
-			phone:'',
-			email:''
-		}
 
 		this.handleSubmitInfo = this.handleSubmitInfo.bind(this)
 	}
@@ -23,8 +17,9 @@ export class InfoDonationForm extends Component {
       		const response = await updateInfoTransaction(id,values)
       		const { status } = response.data
       		if (status === 'success') {
-
-        		console.log(status)
+				let close = document.getElementById('btn-cancel')
+				close.click()
+				window.location.reload()
       		}
     	} catch (e) {
       		console.log(e)
@@ -115,6 +110,7 @@ export class InfoDonationForm extends Component {
 									</FormGroup>
 
 									<div className='float-right'>
+										<Button type='button' color='secondary' onClick={this.props.toggle} id="btn-cancel">Batal</Button>
 										<Button type='submit' color='success' disabled={isSubmitting}>Simpan</Button>
 									</div>
 								</Form>

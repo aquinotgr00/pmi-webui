@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { PaginationLink } from 'components'
 import { Row, Col, Button, ButtonGroup, FormGroup, Input } from 'reactstrap'
-import { listTransactionApi } from 'services/api'
+import { listTransactionApi, exportToExcel, exportToPdf } from 'services/api'
 import { TransactionTable } from './TransactionTable'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 
@@ -27,6 +27,8 @@ export default class TransactionList extends Component {
     this.handleSearchTitle  = this.handleSearchTitle.bind(this)
     this.handleFilterStatus = this.handleFilterStatus.bind(this)
     this.handleDateRanges   = this.handleDateRanges.bind(this)
+    this.handleReset        = this.handleReset.bind(this)
+    this.handleExportExcel  = this.handleExportExcel.bind(this) 
     
   }
 
@@ -142,6 +144,37 @@ export default class TransactionList extends Component {
     )
   }
 
+  handleReset(){
+    let filter_status = document.getElementById('filter-status')
+    let filter_name   = document.getElementById('filter-name')
+    let filter_title  = document.getElementById('filter-title')
+    let date = [new Date(), new Date()]
+    this.setState({ date })
+    
+    filter_status.value = ''
+    filter_name.value = ''
+    filter_title.value = ''    
+
+    this.loadTransaction()
+  }
+
+  async handleExportExcel(){
+    const exportParams = new URLSearchParams()
+    const { transaction } = this.props
+    switch(transaction){
+      case 'donasi-barang':
+      exportParams.append('f',0)
+      break
+      case 'donasi-dana':
+      exportParams.append('f',1)
+      break
+      default:
+      exportParams.append('t',3)
+      break
+    }
+    let response = await exportToExcel(exportParams)
+  }
+
   render() {
     const { transaction } = this.props
     const { error } = this.state
@@ -161,7 +194,7 @@ export default class TransactionList extends Component {
           <Col md="2">
             <FormGroup >
               <label >Status</label>
-              <Input type="select" onChange={this.handleFilterStatus}>
+              <Input id="filter-status" type="select" onChange={this.handleFilterStatus}>
                 <option value="0">Semua Status</option>
                 <option value="1">Pending</option>
                 <option value="2">Menunggu</option>
@@ -174,13 +207,13 @@ export default class TransactionList extends Component {
           <Col md="2">
             <FormGroup >
               <label >ID-Transaksi / Nama</label>
-              <Input type="text" onChange={this.handleSearch} />
+              <Input id="filter-name" type="text" onChange={this.handleSearch} />
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup >
               <label >Judul Donasi</label>
-              <Input type="text" onChange={this.handleSearchTitle} />
+              <Input id="filter-title" type="text" onChange={this.handleSearchTitle} />
             </FormGroup>
           </Col>
           <Col md="3">
@@ -188,11 +221,11 @@ export default class TransactionList extends Component {
               <div className="label-export">
                 <label>Export Data</label>
               </div>
-              <button className="circle-table btn-wrapper-reset btn-reset" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reset" >
+              <button onClick={this.handleReset} className="circle-table btn-wrapper-reset btn-reset" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reset" >
               </button>
               <ButtonGroup>
                 <Button className="btn btn-line" >PDF</Button>
-                <Button className="btn btn-line" >Excel</Button>
+                <Button className="btn btn-line" onClick={this.handleExportExcel}>Excel</Button>
                 <Button className="btn btn-line" >Print</Button>
               </ButtonGroup>
             </FormGroup>

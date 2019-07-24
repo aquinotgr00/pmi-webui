@@ -11,22 +11,24 @@ export class DetailsDonationForm extends Component {
 		this.state = {
 			payment_method: '',
 			status: '',
-			notes:''
+			notes: ''
 		}
 
 		this.handleSubmitDetails = this.handleSubmitDetails.bind(this)
 	}
 
-	async handleSubmitDetails(id,values) {
+	async handleSubmitDetails(id, values) {
 		try {
-      		const response = await updateTransaction(id,values)
-      		const { status } = response.data
-      		if (status === 'success') {
-        		console.log(status)
-      		}
-    	} catch (e) {
-      		console.log(e)
-    	}
+			const response = await updateTransaction(id, values)
+			const { status } = response.data
+			if (status === 'success') {
+				let close = document.getElementById('btn-cancel')
+				close.click()
+				window.location.reload()
+			}
+		} catch (e) {
+			console.log(e)
+		}
 	}
 
 	render() {
@@ -44,7 +46,7 @@ export class DetailsDonationForm extends Component {
 						initialValues={initialValues}
 						validationSchema={detailsDonationSchema}
 						onSubmit={(values, { setSubmitting }) => {
-							this.handleSubmitDetails(this.props.id,values)
+							this.handleSubmitDetails(this.props.id, values)
 							setSubmitting(false)
 						}}
 					>
@@ -82,7 +84,7 @@ export class DetailsDonationForm extends Component {
 													{...field}
 													type="select" id="status"
 													invalid={errors.status !== undefined}
-													 >
+												>
 													<option value="">Pilih Status</option>
 													<option value="1">Pending</option>
 													<option value="2">Menunggu</option>
@@ -104,13 +106,14 @@ export class DetailsDonationForm extends Component {
 													{...field}
 													type="textarea" id="notes"
 													invalid={errors.notes !== undefined}
-													 />
+												/>
 											)} />
 
 										{errors.notes !== undefined ? <FormFeedback>{errors.notes}</FormFeedback> : ''}
 									</FormGroup>
 
 									<div className='float-right'>
+										<Button type='button' color='secondary' onClick={this.props.toggle} id="btn-cancel">Batal</Button>
 										<Button type='submit' color='success' disabled={isSubmitting}>Simpan</Button>
 									</div>
 								</Form>
