@@ -163,9 +163,11 @@ export default class TransactionList extends Component {
               <label >Status</label>
               <Input type="select" onChange={this.handleFilterStatus}>
                 <option value="0">Semua Status</option>
-                <option value="1">Menunggu</option>
-                <option value="2">Sukses</option>
-                <option value="3">Dibatalkan</option>
+                <option value="1">Pending</option>
+                <option value="2">Menunggu</option>
+                <option value="3">Berhasil</option>
+                <option value="4">Dibatalkan</option>
+                <option value="5">Selesai</option>
               </Input>
             </FormGroup >
           </Col>

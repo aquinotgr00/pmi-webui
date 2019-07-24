@@ -34,5 +34,13 @@ export function getDonationList (type, fund = 1) {
 }
 
 export function showTransaction(transactionId){
-  return authRequest().get('/reports/'+transactionId,)
+  return authRequest().get('/reports/'+transactionId)
+}
+
+export function updateTransaction(transactionId,data){
+  return authRequest().post('/donations/update-details/'+transactionId, data);
+}
+
+export function updateInfoTransaction(transactionId,data){
+  return authRequest().post('/donations/update-info/'+transactionId, data);
 }
