@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Main, InformationCard } from 'components'
-import { Row, Col, Card, CardBody, CardTitle } from 'reactstrap'
+import { Row, Col, Card, CardBody, CardTitle, Modal, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { showTransaction } from 'services/api'
 import { FundraisingTable } from './FundraisingTable'
 import { NonFundraisingTable } from './NonFundraisingTable'
@@ -10,8 +10,10 @@ export default class DetailsTransaction extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			data: []
+			data: [],
+			isOpen: false,
 		}
+		this.toggleImage = this.toggleImage.bind(this)
 	}
 
 	componentDidMount() {
@@ -27,8 +29,17 @@ export default class DetailsTransaction extends Component {
 		}
 	}
 
+
+	toggleImage() {
+
+		this.setState(prevState => ({
+			isOpen: !prevState.isOpen
+		}))
+		console.log(this.state.isOpen)
+	}
+
 	render() {
-		const { id,name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, notes } = this.state.data
+		const { id, name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, notes } = this.state.data
 		const { address } = this.state.data.donator || {}
 		
 		const details = [
@@ -99,7 +110,7 @@ export default class DetailsTransaction extends Component {
 											<img src={image} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
 											<div className="overlay-kwitansi btn-kwitansi">
 												<span>
-													<a href="#" className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></a>
+													<a href="#" onClick={this.toggleImage} className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></a>
 												</span>
 												<span data-toggle="modal" role="button" data-target="#ModalMediaLibrary">
 													<a href="#" className="btn btn-table circle-table edit-table" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ubah Gambar"></a>
@@ -124,8 +135,20 @@ export default class DetailsTransaction extends Component {
 								)}
 						</Col>
 					</Row>
+					<Row>
+						<Col>
+							<Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
+								<ModalBody className="mb-0 p-0">
+									<img src={image} style={{ width:'100%' }}  />
+									</ModalBody>
+									<ModalFooter>
+										<Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}
+									</ModalFooter>
+							</Modal>
+						</Col>
+					</Row>
 				</Main>
 			</>
-		)
-	}
+				)
+			}
 }
