@@ -1,22 +1,41 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Card, CardBody, CardTitle, FormGroup } from 'reactstrap'
+import { DetailsDonationForm } from 'components/Transactions/DetailsDonationForm'
+import { InfoDonationForm } from 'components/Transactions/InfoDonationForm'
 
-export function InformationCard(props) {
-	return (
-		<Card className="card-transaction">
+export class InformationCard extends Component {
+
+	constructor(props){
+		super(props)
+		this.state = {
+			isOpen: false
+		}
+		this.toggle = this.toggle.bind(this)
+	}
+
+	toggle(){
+		this.setState(prevState => ({
+			isOpen: !prevState.isOpen
+		}));
+	}
+
+	render(){
+		return (
+			<>
+			<Card className="card-transaction">
 			<CardBody>
 				<CardTitle className="row">
 					<div className="col-md">
-						<label>{props.title}</label>
+						<label>{this.props.title}</label>
 					</div>
 					<div className="col-md mt-1">
-						<span data-toggle="modal" role="button" data-target="#EditCustomerInfo">
-							<button className="btn btn-edit-frm float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Info Donatur"></button>
-						</span>
+						<button className="btn btn-edit-frm float-right"
+						onClick={this.toggle}
+						data-original-title="Edit Info Donatur"></button>
 					</div>
 				</CardTitle>
 				<hr className="mt-1 mb-1" />
-				{props.items.map((item, index) => {
+				{this.props.items.map((item, index) => {
 					return (
 						<FormGroup key={index}>
 							<label>{item.label}</label>
@@ -26,5 +45,13 @@ export function InformationCard(props) {
 				})}
 			</CardBody>
 		</Card>
-	)
+		{this.props.index === 1 &&
+			<InfoDonationForm toggle={this.toggle} isOpen={this.state.isOpen} items={this.props.items} id={this.props.id} data={this.props.data} />
+		}
+		{this.props.index === 2 &&
+			<DetailsDonationForm toggle={this.toggle} isOpen={this.state.isOpen} items={this.props.items} id={this.props.id} data={this.props.data} />
+		}
+			</>
+		)
+	}
 }

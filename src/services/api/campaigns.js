@@ -35,5 +35,5 @@ export function createCampaignApi (campaign) {
 }
 
 export function updateCampaignApi (campaignId, campaign) {
-  return authRequest().put(`/campaigns/${campaignId}`, campaign)
+  return authRequest().put(`/campaigns/${campaignId}?id=${campaignId}`, campaign)
 }

@@ -22,7 +22,7 @@ export function Donator (props) {
                     <th>
                       <Link to={`${path}/${donator.id}/edit`}>{donator.name}</Link>
                     </th>
-                    <td>{donator.user.email}</td>
+                    <td>{ (donator.user === null) ? '' : donator.user.email }</td>
                     <td>{donator.phone}</td>
                     <td>{donator.created_at}</td>
                     <td>{donator.donations.length > 0 && donator.donations[0].created_at }</td>

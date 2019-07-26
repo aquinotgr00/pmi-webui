@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Main, InformationCard } from 'components'
-import { Row, Col, Table, Card, CardBody, CardTitle, FormGroup } from 'reactstrap'
+import { Row, Col, Card, CardBody, CardTitle } from 'reactstrap'
 import { showTransaction } from 'services/api'
 import { FundraisingTable } from './FundraisingTable'
 import { NonFundraisingTable } from './NonFundraisingTable'
@@ -28,10 +28,12 @@ export default class DetailsTransaction extends Component {
 	}
 
 	render() {
-		const { name, email, phone, invoice_id, amount, payment_method, status_text, image } = this.state.data
-
+		const { id,name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, notes } = this.state.data
+		const { address } = this.state.data.donator || {}
+		
 		const details = [
 			{
+				index: 1,
 				title: 'Info Donatur',
 				items: [
 					{
@@ -40,7 +42,7 @@ export default class DetailsTransaction extends Component {
 					},
 					{
 						label: 'Alamat',
-						text: ''
+						text: address
 					},
 					{
 						label: 'No Tlp',
@@ -53,6 +55,7 @@ export default class DetailsTransaction extends Component {
 				]
 			},
 			{
+				index: 2,
 				title: 'Detail Donasi',
 				items: [
 					{
@@ -61,7 +64,7 @@ export default class DetailsTransaction extends Component {
 					},
 					{
 						label: 'Metode Transfer',
-						text: payment_method
+						text: payment_method_text
 					},
 					{
 						label: 'Status Donasi',
@@ -69,7 +72,7 @@ export default class DetailsTransaction extends Component {
 					},
 					{
 						label: 'Catatan',
-						text: ''
+						text: notes
 					}
 				]
 			}
@@ -81,7 +84,7 @@ export default class DetailsTransaction extends Component {
 						{details.map((detail, index) => {
 							return (
 								<Col md="4" key={index}>
-									<InformationCard title={detail.title} items={detail.items} />
+									<InformationCard title={detail.title} items={detail.items} index={detail.index} id={id} data={this.state.data} />
 								</Col>
 							)
 						})}
@@ -90,20 +93,20 @@ export default class DetailsTransaction extends Component {
 								<CardBody>
 									<CardTitle>
 										<label>Bukti Pembayaran</label>
-										<hr  className="mt-1 mb-1" />
+										<hr className="mt-1 mb-1" />
 										<div className="mb-2 hovereffect mt-3">
-                      
-											<img src={image} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size"/>
-                      <div className="overlay-kwitansi btn-kwitansi">
-                        <span>
-                          <a href="#" className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></a>
-                        </span>
-                        <span data-toggle="modal" role="button" data-target="#ModalMediaLibrary">
-                          <a href="#" className="btn btn-table circle-table edit-table" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ubah Gambar"></a>
-                        </span>
-                      </div>
-                    </div>
-										
+
+											<img src={image} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
+											<div className="overlay-kwitansi btn-kwitansi">
+												<span>
+													<a href="#" className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></a>
+												</span>
+												<span data-toggle="modal" role="button" data-target="#ModalMediaLibrary">
+													<a href="#" className="btn btn-table circle-table edit-table" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ubah Gambar"></a>
+												</span>
+											</div>
+										</div>
+
 									</CardTitle>
 								</CardBody>
 							</Card>
@@ -114,11 +117,11 @@ export default class DetailsTransaction extends Component {
 					</Row>
 					<Row>
 						<Col>
-						 {typeof this.state.data.campaign !== 'undefined' && this.state.data.campaign.fundraising === 1 ? (
-        <FundraisingTable data={this.state.data} amount={amount} />
-      ) : (
-        <NonFundraisingTable data={this.state.data} amount={amount} />
-      )}
+							{typeof this.state.data.campaign !== 'undefined' && this.state.data.campaign.fundraising === 1 ? (
+								<FundraisingTable data={this.state.data} amount={amount} />
+							) : (
+									<NonFundraisingTable data={this.state.data} amount={amount} />
+								)}
 						</Col>
 					</Row>
 				</Main>
