@@ -125,12 +125,12 @@ class Donations extends React.Component {
 		const { previewImgUrl } = this.state
 
 		const initialValues = {
-			category: 1,
-			campaign_id: 1,
-			name: 'wokwok',
-			email: 'firmawaneiwan@gmail.com',
-			phone: '03498249',
-			amount: 10000,
+			category: '',
+			campaign_id: '',
+			name: '',
+			email: '',
+			phone: '',
+			amount: '',
 		}
 		if (this.state.redirect) {
 			const url = '/admin/transactions/' + this.props.match.params.donation
