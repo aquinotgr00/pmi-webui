@@ -22,7 +22,7 @@ var routes = [
   },
   {
     path: '/users/:user/:userId/edit',
-    name: 'Create User',
+    name: 'Edit User',
     component: UserForm
   },
   {

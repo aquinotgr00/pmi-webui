@@ -6,7 +6,7 @@ import { formatDate } from 'utils/number'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 
 export class DonatorForm extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.state = {
 			userId: '',
@@ -30,7 +30,7 @@ export class DonatorForm extends Component {
 		const { userId } = this.props.params
 		if (userId) {
 			this.loadDonator(userId)
-			this.setState({userId})
+			this.setState({ userId })
 		}
 	}
 
@@ -56,7 +56,7 @@ export class DonatorForm extends Component {
 		const { status } = response.data
 		if (status === 'success') {
 			const { data } = response.data
-			this.setState({donations: data, donationStatus})
+			this.setState({ donations: data, donationStatus })
 		}
 	}
 
@@ -67,24 +67,24 @@ export class DonatorForm extends Component {
 	handleRangeDateChange(rangeDate, donationStatus = null) {
 		if (rangeDate === null)
 			rangeDate = [new Date(), new Date()]
-		this.setState({rangeDate})
+		this.setState({ rangeDate })
 
 		if (donationStatus === null)
 			donationStatus = this.state.donationStatus
 
-		let start   = new Date(rangeDate[0])
-		let finish  = new Date(rangeDate[1])
+		let start = new Date(rangeDate[0])
+		let finish = new Date(rangeDate[1])
 
-		let startMonthAdd  = parseInt(start.getMonth() + 1)
+		let startMonthAdd = parseInt(start.getMonth() + 1)
 		let finishMonthAdd = parseInt(finish.getMonth() + 1)
 
-		let startMonth  = (startMonthAdd < 10)? '0'+startMonthAdd : startMonthAdd
-		let finishMonth = (finishMonthAdd < 10)? '0'+finishMonthAdd : finishMonthAdd
-	
-		let startDate   = (start.getDate() < 10)? '0'+start.getDate() : start.getDate()
-		let finishDate  = (finish.getDate() < 10)? '0'+finish.getDate() : finish.getDate()
+		let startMonth = (startMonthAdd < 10) ? '0' + startMonthAdd : startMonthAdd
+		let finishMonth = (finishMonthAdd < 10) ? '0' + finishMonthAdd : finishMonthAdd
 
-		let startFrom  = this.state.rangeDate[0].getFullYear() + "-" + startMonth + "-" + startDate
+		let startDate = (start.getDate() < 10) ? '0' + start.getDate() : start.getDate()
+		let finishDate = (finish.getDate() < 10) ? '0' + finish.getDate() : finish.getDate()
+
+		let startFrom = this.state.rangeDate[0].getFullYear() + "-" + startMonth + "-" + startDate
 		let finishTo = this.state.rangeDate[1].getFullYear() + "-" + finishMonth + "-" + finishDate
 
 		this.loadDonationByStatus(donationStatus, startFrom, finishTo)
@@ -151,7 +151,7 @@ export class DonatorForm extends Component {
 								<DonationStatusDropdown onChange={this.handleDonationStatusChange} donationStatus={this.state.donationStatus} />
 							</Col>
 						</Row>
-							
+
 						<Row>
 							<div className="table-responsive ml-4">
 								<Table hover>
@@ -167,7 +167,13 @@ export class DonatorForm extends Component {
 										{this.state.donations.map(donation => (
 											<tr key={donation.id}>
 												<th>
-													{formatDate(donation.created_at, 'DD-mm-YYYY')}
+													
+													{new Intl.DateTimeFormat('en-GB', {
+														year: 'numeric',
+														month: 'numeric',
+														day: '2-digit'
+													}).format(new Date(donation.created_at))}
+
 													<br /><small>
 														{formatDate(donation.created_at, 'HH:mm:ss')}
 													</small>
@@ -179,7 +185,7 @@ export class DonatorForm extends Component {
 										))}
 									</tbody>
 								</Table>
-							</div> 
+							</div>
 						</Row>
 					</Col>
 				</Row>
