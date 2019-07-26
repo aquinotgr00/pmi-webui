@@ -130,6 +130,7 @@ a:hover {
     padding: 0;
     background: #131927;
     padding: 23px 0 0 27px;
+    overflow-y: auto;
 }
 .logo-nav {
     margin-bottom: 4px;
@@ -575,8 +576,9 @@ footer p {
     border: none;
 }
 
-
-
-
-
-
+.react-daterange-picker {
+    display: inline-flex;
+    position: relative;
+    width: 200px;
+    font-size: 12px;
+}

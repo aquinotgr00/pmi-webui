@@ -40,7 +40,7 @@ export class DonatorForm extends Component {
 		if (status === 'success') {
 			const { data } = response.data
 			const { name, address, postal_code, phone, donations } = data
-			const { email } = data.user
+			const { email } = data.user || {}
 			this.setState({ name, address, phone, postalCode: postal_code, email, donations })
 		}
 	}

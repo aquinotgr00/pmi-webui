@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Main, InformationCard } from 'components'
-import { Row, Col, Table, Card, CardBody, CardTitle, FormGroup } from 'reactstrap'
+import { Row, Col, Card, CardBody, CardTitle } from 'reactstrap'
 import { showTransaction } from 'services/api'
 import { FundraisingTable } from './FundraisingTable'
 import { NonFundraisingTable } from './NonFundraisingTable'

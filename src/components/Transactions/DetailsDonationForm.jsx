@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, FormGroup, Input, Button, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { FormGroup, Input, Button, FormFeedback, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Formik, Form, Field } from 'formik'
 import detailsDonationSchema from 'validators/detailsDonation'
 import { updateTransaction } from 'services/api'
@@ -37,7 +37,7 @@ export class DetailsDonationForm extends Component {
 		return (
 			<Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
 				<ModalHeader>
-					<h1 className="modal-title" >Edit Info Donatur</h1>
+					<div className="modal-title" >Edit Info Donatur</div>
 				</ModalHeader>
 				<ModalBody className="container">
 

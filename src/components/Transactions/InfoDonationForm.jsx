@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, FormGroup, Input, Button, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { FormGroup, Input, Button, FormFeedback, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Formik, Form, Field } from 'formik'
 import infoDonationSchema from 'validators/infoDonation'
 import { updateInfoTransaction } from 'services/api'
@@ -27,13 +27,15 @@ export class InfoDonationForm extends Component {
 	}
 
 	render() {
-		const { name, address, phone, email } = this.props.data || {}
+		const { name, phone, email } = this.props.data || {}
+		const { address } = this.props.data.donator || {}
+
 		let initialValues = { name, address, phone, email }
 		
 		return (
 			<Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
 				<ModalHeader>
-					<h1 className="modal-title" >Edit Info Donatur</h1>
+					<div className="modal-title">Edit Info Donatur</div>
 				</ModalHeader>
 				<ModalBody className="container">
 

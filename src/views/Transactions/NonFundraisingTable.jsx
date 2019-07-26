@@ -2,7 +2,6 @@ import React from 'react'
 import { Table } from 'reactstrap'
 
 export function NonFundraisingTable(props) {
-	console.log(props.data)
 	return (
 		<div>
 			{typeof props.data.campaign !== "undefined" &&
