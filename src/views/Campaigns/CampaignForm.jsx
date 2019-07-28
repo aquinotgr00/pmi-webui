@@ -28,18 +28,15 @@ class CampaignForm extends Component {
         fundraising: 0,
         description: '',
         amount_goal: 0,
+        start_campaign: new Date(),
+        finish_campaign: new Date(),
         publish: 0
       },
-      dateRange: [new Date(), new Date()],
-      previewImgUrl: require('assets/images/image-plus.svg'),
-      startDate: new Date(),
-      finishDate: new Date()
+      previewImgUrl: require('assets/images/image-plus.svg')
     }
     this.loadCampaign = this.loadCampaign.bind(this)
     this.handleSaveCampaign = this.handleSaveCampaign.bind(this)
     this.handleFileUpload = this.handleFileUpload.bind(this)
-    this.handleStartDate = this.handleStartDate.bind(this)
-    this.handleFinishDate = this.handleFinishDate.bind(this)
   }
 
   componentDidMount () {
@@ -54,7 +51,8 @@ class CampaignForm extends Component {
           fundraising: campaignType !== 'donasi-barang',
           description: Faker.lorem.paragraphs(),
           amount_goal: Faker.random.number({ min: 10000000, max: 200000000 }),
-          dateRange: [new Date(), new Date()],
+          start_campaign: new Date(),
+          finish_campaign: new Date(),
           publish: 0
         } })
       }
@@ -109,18 +107,6 @@ class CampaignForm extends Component {
       // TODO : handle errors
       this.setState({ isLoading: false, error: null })
     }
-  }
-
-  handleStartDate (date) {
-    this.setState({
-      startDate: date
-    })
-  }
-
-  handleFinishDate (date) {
-    this.setState({
-      finishDate: date
-    })
   }
 
   render () {
@@ -213,15 +199,15 @@ class CampaignForm extends Component {
                         <div className='col-md'>
 
                           <DatePicker
-                            selected={this.state.startDate}
-                            onChange={this.handleStartDate}
+                            selected={values.start_campaign}
+                            onChange={date => setFieldValue('start_campaign', date)}
                             className='form-control' placeholder='Tanggal Mulai'
                           />
                         </div>
                         <div className='col-md'>
                           <DatePicker
-                            selected={this.state.finishDate}
-                            onChange={this.handleFinishDate}
+                            selected={values.finish_campaign}
+                            onChange={date => setFieldValue('finish_campaign', date)}
                             className='form-control' placeholder='Tanggal Selesai' />
                         </div>
                       </div>
@@ -277,17 +263,13 @@ class CampaignForm extends Component {
                         <span>Image size must be 1920x600 with maximum file size</span>
                         <span>400 kb</span>
                       </small>
-                    </div>
-                    <small>
-                      <span>Image size must be 1920x600 with maximum file size</span>
-                      <span>400 kb</span>
-                    </small>
-                    <div className='is-invalid form-control d-none' />
-                    <div className='invalid-feedback'>
-                      {connect(function (props) {
-                        const error = getIn(props.formik.errors, props.name)
-                        return error.image_file || null
-                      })()}
+                      <div className='is-invalid form-control d-none' />
+                      <div className='invalid-feedback'>
+                        {connect(function (props) {
+                          const error = getIn(props.formik.errors, props.name)
+                          return error.image_file || null
+                        })()}
+                      </div>
                     </div>
                   </div>
                 </>
