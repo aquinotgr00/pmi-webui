@@ -37,9 +37,11 @@ export function storeApi (data) {
   formData.append('email', data.email)
   formData.append('phone', data.phone)
   formData.append('image_file', data.image_file)
-  data.donation_items.map((item, key) => {
-    return formData.append('donation_items['+key+']', JSON.stringify(item))
-  })
+  if (typeof data.donation_items !== 'undefined') {
+    data.donation_items.map((item, key) => {
+      return formData.append('donation_items['+key+']', JSON.stringify(item))
+    })
+  }
   return authRequest().post('/donations/create', formData)
 }
 
@@ -48,5 +50,21 @@ export function getDonationList (type, fund = 1) {
 }
 
 export function showTransaction(transactionId){
-  return authRequest().get('/reports/'+transactionId,)
+  return authRequest().get('/reports/'+transactionId)
+}
+
+export function updateTransaction(transactionId,data){
+  return authRequest().post('/donations/update-details/'+transactionId, data);
+}
+
+export function updateInfoTransaction(transactionId,data){
+  return authRequest().post('/donations/update-info/'+transactionId, data);
+}
+
+export function exportToExcel(params){
+  return authRequest().get('/reports/export/excel', { params })
+}
+
+export function exportToPdf(params){
+  return authRequest().get('/reports/export/pdf', { params })
 }

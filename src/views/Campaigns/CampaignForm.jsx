@@ -3,12 +3,14 @@ import { withRouter } from 'react-router'
 import { Button, FormFeedback, FormGroup, Input } from 'reactstrap'
 import { Formik, Form, Field, connect, getIn } from 'formik'
 import { Editor } from '@tinymce/tinymce-react'
-import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 import Faker from 'faker'
 import { Main } from 'components'
 import ucwords from 'utils/string'
 import CampaignSchema from 'validators/campaign'
-import { createCampaignApi, getCampaignApi, updateCampaignApi } from 'services/api'
+import { createCampaignApi, getCampaignApi } from 'services/api'
+import DatePicker from 'react-datepicker'
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 function generatePreviewImgUrl (file, callback) {
   const reader = new FileReader()
@@ -29,11 +31,15 @@ class CampaignForm extends Component {
         publish: 0
       },
       dateRange: [new Date(), new Date()],
-      previewImgUrl: require('assets/images/image-plus.svg')
+      previewImgUrl: require('assets/images/image-plus.svg'),
+      startDate: new Date(),
+      finishDate: new Date()
     }
     this.loadCampaign = this.loadCampaign.bind(this)
     this.handleSaveCampaign = this.handleSaveCampaign.bind(this)
     this.handleFileUpload = this.handleFileUpload.bind(this)
+    this.handleStartDate = this.handleStartDate.bind(this)
+    this.handleFinishDate = this.handleFinishDate.bind(this)
   }
 
   componentDidMount () {
@@ -105,6 +111,18 @@ class CampaignForm extends Component {
     }
   }
 
+  handleStartDate (date) {
+    this.setState({
+      startDate: date
+    })
+  }
+
+  handleFinishDate (date) {
+    this.setState({
+      finishDate: date
+    })
+  }
+
   render () {
     const { campaignType, campaignId } = this.props.match.params
     const campaignCategory = ucwords(campaignType.split('-').join(' '))
@@ -126,130 +144,139 @@ class CampaignForm extends Component {
               handleSubmit,
               isSubmitting
             }) => (
-              <>
-                <Form className='col-md-6 col-lg7 pl-0' onSubmit={handleSubmit}>
-                  <FormGroup>
-                    <label htmlFor='title'>Judul</label>
-                    <Field
-                      name='title'
-                      render={({ field }) => (
-                        <Input {...field} id='title' maxLength={255} invalid={errors.title !== undefined} />
-                      )}
-                    />
-                    {errors.title !== undefined ? <FormFeedback>{errors.title}</FormFeedback> : ''}
-                  </FormGroup>
+                <>
+                  <Form className='col-md-6 col-lg7 pl-0' onSubmit={handleSubmit}>
+                    <FormGroup>
+                      <label htmlFor='title'>Judul</label>
+                      <Field
+                        name='title'
+                        render={({ field }) => (
+                          <Input {...field} id='title' maxLength={255} invalid={errors.title !== undefined} />
+                        )}
+                      />
+                      {errors.title !== undefined ? <FormFeedback>{errors.title}</FormFeedback> : ''}
+                    </FormGroup>
 
-                  {(campaignType !== 'bulan-dana') &&
-                    (
-                      <FormGroup>
-                        <label htmlFor='title'>Tipe Donasi</label>
-                        <Field
-                          name='type_id'
-                          render={({ field }) => (
-                            <select {...field} id='type_id' className='form-control' value={values.type_id}>
-                              <option value={1} checked>Umum</option>
-                              <option value={2}>Khusus</option>
-                            </select>
-                          )}
-                        />
-                        {errors.type_id !== undefined ? <FormFeedback>{errors.type_id}</FormFeedback> : ''}
-                      </FormGroup>
-                    )
-                  }
+                    {(campaignType !== 'bulan-dana') &&
+                      (
+                        <FormGroup>
+                          <label htmlFor='title'>Tipe Donasi</label>
+                          <Field
+                            name='type_id'
+                            render={({ field }) => (
+                              <select {...field} id='type_id' className='form-control' value={values.type_id}>
+                                <option value={1} checked>Umum</option>
+                                <option value={2}>Khusus</option>
+                              </select>
+                            )}
+                          />
+                          {errors.type_id !== undefined ? <FormFeedback>{errors.type_id}</FormFeedback> : ''}
+                        </FormGroup>
+                      )
+                    }
 
-                  <FormGroup>
-                    <label htmlFor='description'>Deskripsi</label>
+                    <FormGroup>
+                      <label htmlFor='description'>Deskripsi</label>
 
-                    <Field
-                      name='description'
-                      render={({ field }) => (
-                        <Editor
-                          apiKey='jv18ld1zfu6vffpxf0ofb72orrp8ulyveyyepintrvlwdarp'
-                          initialValue={values.description}
-                          init={{
-                            plugins: 'link image code',
-                            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code',
-                            height: 250,
-                            content_style: 'p {font-size:0.8em; font-weight:300}'
-                          }}
-                        />
-                      )}
-                    />
-                    {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
-                  </FormGroup>
+                      <Field
+                        name='description'
+                        render={({ field }) => (
+                          <Editor
+                            apiKey='jv18ld1zfu6vffpxf0ofb72orrp8ulyveyyepintrvlwdarp'
+                            initialValue={values.description}
+                            init={{
+                              plugins: 'link image code',
+                              toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code',
+                              height: 250,
+                              content_style: 'p {font-size:0.8em; font-weight:300}'
+                            }}
+                          />
+                        )}
+                      />
+                      {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
+                    </FormGroup>
 
-                  <FormGroup>
-                    <label htmlFor='amount_goal'>Target Dana Donasi</label>
-                    <Field
-                      name='amount_goal'
-                      render={({ field }) => (
-                        <Input {...field} type='number' id='amount_goal' invalid={errors.amount_goal !== undefined} />
-                      )}
-                    />
-                    {errors.amount_goal !== undefined ? <FormFeedback>{errors.amount_goal}</FormFeedback> : ''}
-                  </FormGroup>
-                  <FormGroup className='form-group'>
-                    <label htmlFor='duration'>Rentang Waktu Donasi</label>
-                    <Field
-                      name='duration'
-                      render={({ field }) => (
-                        <DateRangePicker {...field}
-                          calendarIcon={null}
-                          clearIcon={null}
-                          className='date-range-input'
-                          onChange={dateRange => setFieldValue('dateRange', dateRange)}
-                          value={values.dateRange}
-                          format='d-MMM-y'
-                        />
-                      )}
-                    />
-                    {errors.duration !== undefined ? <FormFeedback>{errors.duration}</FormFeedback> : ''}
-                  </FormGroup>
+                    <FormGroup>
+                      <label htmlFor='amount_goal'>Target Dana Donasi</label>
+                      <Field
+                        name='amount_goal'
+                        render={({ field }) => (
+                          <Input {...field} type='number' id='amount_goal' invalid={errors.amount_goal !== undefined} />
+                        )}
+                      />
+                      {errors.amount_goal !== undefined ? <FormFeedback>{errors.amount_goal}</FormFeedback> : ''}
+                    </FormGroup>
+                    <FormGroup className='form-group'>
+                      <label htmlFor='duration'>Rentang Waktu Donasi</label>
+                      <div className='form-row'>
 
-                  <Input name='image' type='file' id='file-input'
-                    className='hidden-file-input'
-                    onChange={event => {
-                      const file = event.target.files[0]
+                        <div className='col-md'>
 
-                      if (file) {
-                        setFieldValue('image_file', file)
-                        generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
-                      }
-                    }}
-                  />
+                          <DatePicker
+                            selected={this.state.startDate}
+                            onChange={this.handleStartDate}
+                            className='form-control' placeholder='Tanggal Mulai'
+                          />
+                        </div>
+                        <div className='col-md'>
+                          <DatePicker
+                            selected={this.state.finishDate}
+                            onChange={this.handleFinishDate}
+                            className='form-control' placeholder='Tanggal Selesai' />
+                        </div>
+                      </div>
 
-                  <div className='d-flex flex-row-reverse mt-4'>
-                    <Button type='button'
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        setFieldValue('publish', 1, false)
-                        handleSubmit()
+                    </FormGroup>
+
+                    <Input name='image' type='file' id='file-input'
+                      className='hidden-file-input'
+                      onChange={event => {
+                        const file = event.target.files[0]
+
+                        if (file) {
+                          setFieldValue('image_file', file)
+                          generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
+                        }
                       }}
-                      className='btn btn-success ml-4'
-                    >
+                    />
+
+                    <div className='d-flex flex-row-reverse mt-4'>
+                      <Button type='button'
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          setFieldValue('publish', 1, false)
+                          handleSubmit()
+                        }}
+                        className='btn btn-success ml-4'
+                      >
                         Publish
-                    </Button>
+                      </Button>
 
-                    <Button type='button'
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        setFieldValue('publish', 0, false)
-                        handleSubmit()
-                      }}
-                      className='btn btn-outline-secondary'>
-                          Simpan ke Draft
-                    </Button>
-                  </div>
+                      <Button type='button'
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          setFieldValue('publish', 0, false)
+                          handleSubmit()
+                        }}
+                        className='btn btn-outline-secondary'>
+                        Simpan ke Draft
+                      </Button>
+                    </div>
 
-                </Form>
+                  </Form>
 
-                <div className='col-md-4 col-lg-5 pl-5 grs'>
-                  <div className='mb-4'>
-                    <label>Gambar Utama</label>
-                    <div className='mb-2'>
-                      <label htmlFor='file-input' >
-                        <img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
-                      </label>
+                  <div className='col-md-4 col-lg-5 pl-5 grs'>
+                    <div className='mb-4'>
+                      <label>Gambar Utama</label>
+                      <div className='mb-2'>
+                        <label htmlFor='file-input' >
+                          <img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
+                        </label>
+                      </div>
+                      <small>
+                        <span>Image size must be 1920x600 with maximum file size</span>
+                        <span>400 kb</span>
+                      </small>
                     </div>
                     <small>
                       <span>Image size must be 1920x600 with maximum file size</span>
@@ -263,8 +290,7 @@ class CampaignForm extends Component {
                       })()}
                     </div>
                   </div>
-                </div>
-              </>
+                </>
             )}
           </Formik>
         </div>
