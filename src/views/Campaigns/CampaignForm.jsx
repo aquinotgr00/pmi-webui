@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import { Button, Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
+import { Button, FormFeedback, FormGroup, Input } from 'reactstrap'
 import { Formik, Form, Field, connect, getIn } from 'formik'
 import { Editor } from '@tinymce/tinymce-react'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
@@ -48,6 +48,7 @@ class CampaignForm extends Component {
           fundraising: campaignType !== 'donasi-barang',
           description: Faker.lorem.paragraphs(),
           amount_goal: Faker.random.number({ min: 10000000, max: 200000000 }),
+          dateRange: [new Date(), new Date()],
           publish: 0
         } })
       }
@@ -116,9 +117,7 @@ class CampaignForm extends Component {
             enableReinitialize
             validationSchema={CampaignSchema}
             initialValues={campaign}
-            onSubmit={(values, { setSubmitting }) => {
-              this.handleSaveCampaign(values)
-            }}
+            onSubmit={(values, { setSubmitting }) => this.handleSaveCampaign(values)}
           >
             {({
               values,
@@ -191,25 +190,20 @@ class CampaignForm extends Component {
                   </FormGroup>
                   <FormGroup className='form-group'>
                     <label htmlFor='duration'>Rentang Waktu Donasi</label>
-                    <Row>
-                      <Col>
-                        <Field
-                          name='duration'
-                          render={({ field }) => (
-                            <DateRangePicker {...field}
-                              calendarIcon={null}
-                              clearIcon={null}
-                              className='date-range-input'
-                              onChange={dateRange => this.setState({ dateRange })}
-                              value={this.state.dateRange}
-                              format='d-MMM-y'
-                            />
-                          )}
+                    <Field
+                      name='duration'
+                      render={({ field }) => (
+                        <DateRangePicker {...field}
+                          calendarIcon={null}
+                          clearIcon={null}
+                          className='date-range-input'
+                          onChange={dateRange => setFieldValue('dateRange', dateRange)}
+                          value={values.dateRange}
+                          format='d-MMM-y'
                         />
-                        {errors.duration !== undefined ? <FormFeedback>{errors.duration}</FormFeedback> : ''}
-                      </Col>
-                    </Row>
-
+                      )}
+                    />
+                    {errors.duration !== undefined ? <FormFeedback>{errors.duration}</FormFeedback> : ''}
                   </FormGroup>
 
                   <Input name='image' type='file' id='file-input'
