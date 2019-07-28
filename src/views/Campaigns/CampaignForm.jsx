@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import { Button, Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, connect, getIn } from 'formik'
 import { Editor } from '@tinymce/tinymce-react'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 import Faker from 'faker'
@@ -208,7 +208,6 @@ class CampaignForm extends Component {
                         />
                         {errors.duration !== undefined ? <FormFeedback>{errors.duration}</FormFeedback> : ''}
                       </Col>
-
                     </Row>
 
                   </FormGroup>
@@ -262,6 +261,13 @@ class CampaignForm extends Component {
                       <span>Image size must be 1920x600 with maximum file size</span>
                       <span>400 kb</span>
                     </small>
+                    <div className='is-invalid form-control d-none' />
+                    <div className='invalid-feedback'>
+                      {connect(function (props) {
+                        const error = getIn(props.formik.errors, props.name)
+                        return error.image_file || null
+                      })()}
+                    </div>
                   </div>
                 </div>
               </>
