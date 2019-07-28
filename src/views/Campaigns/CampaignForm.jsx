@@ -1,26 +1,25 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import { Button, Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
-import { Formik, Form, Field } from 'formik'
+import { Button, FormFeedback, FormGroup, Input } from 'reactstrap'
+import { Formik, Form, Field, connect, getIn } from 'formik'
 import { Editor } from '@tinymce/tinymce-react'
-import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 import Faker from 'faker'
 import { Main } from 'components'
 import ucwords from 'utils/string'
 import CampaignSchema from 'validators/campaign'
-import { createCampaignApi, getCampaignApi, updateCampaignApi } from 'services/api'
-import DatePicker from "react-datepicker"
+import { createCampaignApi, getCampaignApi } from 'services/api'
+import DatePicker from 'react-datepicker'
 
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css'
 
-function generatePreviewImgUrl(file, callback) {
+function generatePreviewImgUrl (file, callback) {
   const reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onloadend = e => callback(reader.result)
 }
 
 class CampaignForm extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       campaign: {
@@ -29,41 +28,38 @@ class CampaignForm extends Component {
         fundraising: 0,
         description: '',
         amount_goal: 0,
+        start_campaign: new Date(),
+        finish_campaign: new Date(),
         publish: 0
       },
-      dateRange: [new Date(), new Date()],
-      previewImgUrl: require('assets/images/image-plus.svg'),
-      startDate: new Date(),
-      finishDate: new Date()
+      previewImgUrl: require('assets/images/image-plus.svg')
     }
-    this.loadCampaign       = this.loadCampaign.bind(this)
+    this.loadCampaign = this.loadCampaign.bind(this)
     this.handleSaveCampaign = this.handleSaveCampaign.bind(this)
-    this.handleFileUpload   = this.handleFileUpload.bind(this)
-    this.handleStartDate    = this.handleStartDate.bind(this)
-    this.handleFinishDate   = this.handleFinishDate.bind(this)
+    this.handleFileUpload = this.handleFileUpload.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { campaignType, campaignId } = this.props.match.params
     if (campaignId) {
       this.loadCampaign(campaignId)
     } else {
       if (process.env.NODE_ENV === 'development') {
-        this.setState({
-          campaign: {
-            title: Faker.lorem.sentences().substring(0, 255),
-            type_id: campaignType === 'bulan-dana' ? 3 : 1,
-            fundraising: campaignType !== 'donasi-barang',
-            description: Faker.lorem.paragraphs(),
-            amount_goal: Faker.random.number({ min: 10000000, max: 200000000 }),
-            publish: 0
-          }
-        })
+        this.setState({ campaign: {
+          title: Faker.lorem.sentences().substring(0, 255),
+          type_id: campaignType === 'bulan-dana' ? 3 : 1,
+          fundraising: campaignType !== 'donasi-barang',
+          description: Faker.lorem.paragraphs(),
+          amount_goal: Faker.random.number({ min: 10000000, max: 200000000 }),
+          start_campaign: new Date(),
+          finish_campaign: new Date(),
+          publish: 0
+        } })
       }
     }
   }
 
-  async loadCampaign(campaignId) {
+  async loadCampaign (campaignId) {
     this.setState({ isLoading: true, error: null })
 
     try {
@@ -84,7 +80,7 @@ class CampaignForm extends Component {
     }
   }
 
-  handleFileUpload(event) {
+  handleFileUpload (event) {
     const file = event.target.files[0]
 
     if (file) {
@@ -92,7 +88,7 @@ class CampaignForm extends Component {
     }
   }
 
-  async handleSaveCampaign(campaign) {
+  async handleSaveCampaign (campaign) {
     this.setState({ isLoading: true, error: null })
     try {
       const response = await createCampaignApi(campaign)
@@ -113,19 +109,7 @@ class CampaignForm extends Component {
     }
   }
 
-  handleStartDate(date) {
-    this.setState({
-      startDate: date
-    });
-  }
-
-  handleFinishDate(date) {
-    this.setState({
-      finishDate: date
-    });
-  }
-
-  render() {
+  render () {
     const { campaignType, campaignId } = this.props.match.params
     const campaignCategory = ucwords(campaignType.split('-').join(' '))
     const title = campaignId ? `Edit ${campaignCategory}` : `Tambah ${campaignCategory} Baru`
@@ -137,9 +121,7 @@ class CampaignForm extends Component {
             enableReinitialize
             validationSchema={CampaignSchema}
             initialValues={campaign}
-            onSubmit={(values, { setSubmitting }) => {
-              this.handleSaveCampaign(values)
-            }}
+            onSubmit={(values, { setSubmitting }) => this.handleSaveCampaign(values)}
           >
             {({
               values,
@@ -212,24 +194,23 @@ class CampaignForm extends Component {
                     </FormGroup>
                     <FormGroup className='form-group'>
                       <label htmlFor='duration'>Rentang Waktu Donasi</label>
-                      <div className="form-row">
-              
-                        <div className="col-md">
+                      <div className='form-row'>
+
+                        <div className='col-md'>
 
                           <DatePicker
-                            selected={this.state.startDate}
-                            onChange={this.handleStartDate}
-                            className="form-control" id="exampleInputdate" placeholder="Tanggal Mulai"
+                            selected={values.start_campaign}
+                            onChange={date => setFieldValue('start_campaign', date)}
+                            className='form-control' placeholder='Tanggal Mulai'
                           />
                         </div>
-                        <div className="col-md">
-                          <DatePicker 
-                          selected={this.state.finishDate}
-                          onChange={this.handleFinishDate}
-                          className="form-control" id="exampleInputdate" placeholder="Tanggal Selesai" />
+                        <div className='col-md'>
+                          <DatePicker
+                            selected={values.finish_campaign}
+                            onChange={date => setFieldValue('finish_campaign', date)}
+                            className='form-control' placeholder='Tanggal Selesai' />
                         </div>
                       </div>
-
 
                     </FormGroup>
 
@@ -255,7 +236,7 @@ class CampaignForm extends Component {
                         className='btn btn-success ml-4'
                       >
                         Publish
-                    </Button>
+                      </Button>
 
                       <Button type='button'
                         disabled={isSubmitting}
@@ -265,7 +246,7 @@ class CampaignForm extends Component {
                         }}
                         className='btn btn-outline-secondary'>
                         Simpan ke Draft
-                    </Button>
+                      </Button>
                     </div>
 
                   </Form>
@@ -282,10 +263,17 @@ class CampaignForm extends Component {
                         <span>Image size must be 1920x600 with maximum file size</span>
                         <span>400 kb</span>
                       </small>
+                      <div className='is-invalid form-control d-none' />
+                      <div className='invalid-feedback'>
+                        {connect(function (props) {
+                          const error = getIn(props.formik.errors, props.name)
+                          return error.image_file || null
+                        })()}
+                      </div>
                     </div>
                   </div>
                 </>
-              )}
+            )}
           </Formik>
         </div>
       </Main>
