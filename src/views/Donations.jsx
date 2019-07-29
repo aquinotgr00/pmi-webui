@@ -130,7 +130,7 @@ class Donations extends React.Component {
 			name: '',
 			email: '',
 			phone: '',
-			amount: '',
+			amount: 0,
 		}
 		if (this.state.redirect) {
 			const url = '/admin/transactions/' + this.props.match.params.donation
@@ -144,7 +144,7 @@ class Donations extends React.Component {
 					enableReinitialize={true}
 					validationSchema={DonationSchema}
 					onSubmit={(values, { setSubmitting, resetForm }) => {
-						console.log(values)
+						
 						this.handleStoreDonation(values)
 						setSubmitting(false)
 						resetForm(initialValues)

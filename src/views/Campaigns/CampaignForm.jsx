@@ -73,11 +73,13 @@ class CampaignForm extends Component {
         if (campaign.amount_goal === null) {
           campaign.amount_goal = 0
         }
-        //campaign.start_campaign = moment(campaign.start_campaign)
-        //campaign.finish_campaign = moment(campaign.finish_campaign)
+        let start_date    = (campaign.start_campaign === null)? new Date() : campaign.start_campaign
+        let finish_date   = (campaign.finish_campaign === null)? new Date() : campaign.finish_campaign
+        let previewImage  = (campaign.image === null)? require('assets/images/image-plus.svg') : campaign.image 
         this.setState({ 
           isLoading: false, 
-          campaign: { ...campaign, start_campaign: moment(campaign.start_campaign).toDate(), finish_campaign: moment(campaign.finish_campaign).toDate() }
+          campaign: { ...campaign, start_campaign: moment(start_date).toDate(), finish_campaign: moment(finish_date).toDate() },
+          previewImgUrl: previewImage
         })
 
       } else {
