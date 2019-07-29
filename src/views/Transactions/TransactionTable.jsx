@@ -6,12 +6,12 @@ export class TransactionTable extends Component {
 
   constructor(props) {
     super(props)
-    
+
   }
 
   render() {
     let check = document.getElementsByClassName('check')
-    
+
     let headings = [
       'Tanggal Donasi',
       'ID-Transaksi',
@@ -46,7 +46,11 @@ export class TransactionTable extends Component {
                     {item.invoice_id}
                   </Link>
                 </td>
-                <td>{item.name}</td>
+                <td>
+                  <Link to={`/admin/transactions/${transaction}/${item.id}`}>
+                    {item.name}
+                  </Link>
+                </td>
                 <td>{item.campaign.title}</td>
                 <td>{item.campaign.get_type.name}</td>
                 <td>{item.status_text}</td>
