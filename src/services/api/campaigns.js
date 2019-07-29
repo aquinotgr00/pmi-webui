@@ -31,9 +31,21 @@ export function createCampaignApi (campaign) {
   formData.append('image_file', campaign.image_file)
   formData.append('publish', campaign.publish)
   formData.append('amount_goal', campaign.amount_goal)
+  formData.append('start_campaign', campaign.start_campaign)
+  formData.append('finish_campaign', campaign.finish_campaign)
   return authRequest().post('/campaign', formData)
 }
 
 export function updateCampaignApi (campaignId, campaign) {
-  return authRequest().put(`/campaigns/${campaignId}?id=${campaignId}`, campaign)
+  const formData = new FormData()
+  formData.append('type_id', campaign.type_id)
+  formData.append('fundraising', campaign.fundraising ? 1 : 0)
+  formData.append('title', campaign.title)
+  formData.append('description', campaign.description)
+  formData.append('image_file', campaign.image_file)
+  formData.append('publish', campaign.publish)
+  formData.append('amount_goal', campaign.amount_goal)
+  formData.append('start_campaign', campaign.start_campaign)
+  formData.append('finish_campaign', campaign.finish_campaign)
+  return authRequest().post(`/campaigns/${campaignId}`, formData)//?id=${campaignId}
 }

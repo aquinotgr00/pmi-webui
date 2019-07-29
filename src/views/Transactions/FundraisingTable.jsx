@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table } from 'reactstrap'
+import { formatCurrency } from 'utils/number'
 
 export function FundraisingTable(props) {
 
@@ -33,22 +34,15 @@ export function FundraisingTable(props) {
 
 					</td>
 					<td>{props.data.payment_method_text}</td>
-					<td>{new Intl.NumberFormat('en-ID', {
-							style: 'currency',
-							currency: 'IDR'
-						}).format(props.amount)
-						}</td>
+					<td>{formatCurrency(props.amount)
+}</td>
 				</tr>
 				<tr>
 					<th><h1>Total :</h1></th>
 					<td colSpan="3"></td>
 
 					<td>
-						<h1>{new Intl.NumberFormat('en-ID', {
-							style: 'currency',
-							currency: 'IDR'
-						}).format(props.amount)
-						}</h1>
+						<h1>{formatCurrency(props.amount)}</h1>
 					</td>
 				</tr>
 			</tbody>

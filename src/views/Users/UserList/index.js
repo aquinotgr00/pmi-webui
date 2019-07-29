@@ -33,7 +33,7 @@ export default class UserList extends Component {
     userParams.append('page', page)
     userParams.append('s',searchFor)
     this.setState({ isLoading:true, error: null })
-    let response = null
+    let response = { data: null}
     switch (user) {
       case 'admin':
       response = await listUserApi(userParams)
