@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 
-import { AddNewActionButton, PaginationLink, Tool } from 'components'
+import { AddNewActionButton, PaginationLink, Tool, CampaignDurationModal } from 'components'
 import { CampaignFilterDropdown, CampaignTypeDropdown } from './Dropdowns'
 import { BulanDana } from './BulanDana'
 import { DonasiDana } from './DonasiDana'
 import { DonasiBarang } from './DonasiBarang'
-import { listCampaignApi, toggleCampaignApi } from 'services/api'
+import { listCampaignApi, toggleCampaignApi, getCampaignApi, updateFinishCampaignApi } from 'services/api'
+
+import moment from 'moment'
 
 export default class CampaignList extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       searchFor: '',
@@ -17,7 +19,9 @@ export default class CampaignList extends Component {
       tooltipOpen: false,
       isLoading: false,
       data: [],
-      error: null
+      error: null,
+      durationOpen: false,
+      initialCampaign: []
     }
 
     this.loadCampaign = this.loadCampaign.bind(this)
@@ -28,13 +32,15 @@ export default class CampaignList extends Component {
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleCampaignTypeChange = this.handleCampaignTypeChange.bind(this)
     this.handleToggleAttribute = this.handleToggleAttribute.bind(this)
+    this.handleToggleDuration = this.handleToggleDuration.bind(this)
+    this.handleSubmitFinishCampaign = this.handleSubmitFinishCampaign.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.loadCampaign()
   }
 
-  async loadCampaign (page = 1, filters = {}, campaignType = null, searchFor = '') {
+  async loadCampaign(page = 1, filters = {}, campaignType = null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
     switch (campaign) {
@@ -82,30 +88,48 @@ export default class CampaignList extends Component {
     }
   }
 
-  handleSearch (event) {
+  handleSearch(event) {
     const searchKeyword = event.target.value
     this.loadCampaign(this.state.page, this.state.filters, this.state.campaignType, searchKeyword)
   }
 
-  handleFilterChange (filters) {
+  handleFilterChange(filters) {
     this.loadCampaign(this.state.page, { ...this.state.filters, ...filters }, this.state.campaignType, this.state.searchFor)
   }
 
-  handleCampaignTypeChange (campaignType) {
+  handleCampaignTypeChange(campaignType) {
     this.loadCampaign(this.state.page, this.state.filters, campaignType, this.state.searchFor)
   }
 
-  goToPage (page) {
+  goToPage(page) {
     this.loadCampaign(page, this.state.filters, this.state.campaignType, this.state.searchFor)
   }
 
-  toggleTooltip () {
+  toggleTooltip() {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
     })
   }
 
-  async handleToggleAttribute (id, attribute) {
+  async handleToggleDuration(id) {
+    const response = await getCampaignApi(id)
+    const { status, data } = response.data
+    if (status === "success") {
+
+      let finish_date = (data.finish_campaign === null) ? new Date() : data.finish_campaign
+      this.setState({
+        initialCampaign: { ...data, finish_campaign: moment(finish_date).toDate() },
+      })
+
+      this.setState(prevState => ({
+        durationOpen: !prevState.durationOpen
+      }));
+    }
+
+  }
+
+
+  async handleToggleAttribute(id, attribute) {
     this.setState({ isLoading: true, error: null })
 
     const response = await toggleCampaignApi(id, attribute)
@@ -118,9 +142,20 @@ export default class CampaignList extends Component {
     }
   }
 
-  renderCampaignList (campaign) {
-    const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
+  async handleSubmitFinishCampaign(id, attribute) {
+    const response = await updateFinishCampaignApi(id, attribute)
+    const { status } = response.data
+    if (status === "success") {
+      let btnClose = document.getElementById('btn-close-campaign')
+      this.loadCampaign()
+      btnClose.click()
+    }
+  }
+
+  renderCampaignList(campaign) {
+    const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries, initialCampaign } = this.state
     const { pathname } = this.props.location
+
     return (
       <>
         <PaginationLink
@@ -131,20 +166,29 @@ export default class CampaignList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        { (campaign === 'bulan-dana') && <BulanDana data={campaignData} path={pathname} toggle={this.handleToggleAttribute} /> }
-        { (campaign === 'donasi-dana') && <DonasiDana data={campaignData} path={pathname} toggle={this.handleToggleAttribute} /> }
-        { (campaign === 'donasi-barang') && <DonasiBarang data={campaignData} path={pathname} toggle={this.handleToggleAttribute} /> }
+        {(campaign === 'bulan-dana') && <BulanDana data={campaignData} path={pathname} toggle={this.handleToggleAttribute} duration={this.handleToggleDuration} />}
+        {(campaign === 'donasi-dana') && <DonasiDana data={campaignData} path={pathname} toggle={this.handleToggleAttribute} duration={this.handleToggleDuration} />}
+        {(campaign === 'donasi-barang') && <DonasiBarang data={campaignData} path={pathname} toggle={this.handleToggleAttribute} duration={this.handleToggleDuration} />}
+
+        <CampaignDurationModal
+          durationOpen={this.state.durationOpen}
+          handleToggleDuration={this.handleToggleDuration}
+          initialCampaign={initialCampaign}
+          onClick={this.handleToggleDuration}
+          handleSubmitFinishCampaign={this.handleSubmitFinishCampaign}
+           />
+
       </>
     )
   }
 
-  render () {
+  render() {
     const { campaign, title } = this.props
     const { error } = this.state
     return (
       <>
         <Tool onSearch={this.handleSearch}>
-          { (campaign !== 'bulan-dana') && <CampaignTypeDropdown onChange={this.handleCampaignTypeChange} campaignType={this.state.campaignType} /> }
+          {(campaign !== 'bulan-dana') && <CampaignTypeDropdown onChange={this.handleCampaignTypeChange} campaignType={this.state.campaignType} />}
           <CampaignFilterDropdown
             onChange={this.handleFilterChange}
             filters={this.state.filters}

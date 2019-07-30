@@ -4,9 +4,10 @@ import { EditActionButton } from 'components/ActionButtons/EditActionButton'
 import { ToggleActionButtons } from './ToggleActionButtons'
 
 export default function CampaignListActionButtons (props) {
+  
   return (
     <>
-      <DurationActionButton />
+      <DurationActionButton duration={props.duration} campaignId={props.campaignId} />
       <EditActionButton path={props.editPath} />
 
       <ToggleActionButtons

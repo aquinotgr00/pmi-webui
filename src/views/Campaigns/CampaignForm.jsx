@@ -18,6 +18,15 @@ function generatePreviewImgUrl(file, callback) {
   reader.onloadend = e => callback(reader.result)
 }
 
+function dataURLtoFile(dataurl, filename) {
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, {type:mime});
+}
+
 class CampaignForm extends Component {
   constructor(props) {
     super(props)
@@ -26,7 +35,7 @@ class CampaignForm extends Component {
         title: '',
         type_id: 1,
         fundraising: 0,
-        description: '',
+        description: 's',
         amount_goal: 0,
         start_campaign: new Date(),
         finish_campaign: new Date(),
@@ -34,10 +43,10 @@ class CampaignForm extends Component {
       },
       previewImgUrl: require('assets/images/image-plus.svg')
     }
-    this.loadCampaign = this.loadCampaign.bind(this)
-    this.handleSaveCampaign = this.handleSaveCampaign.bind(this)
+    this.loadCampaign             = this.loadCampaign.bind(this)
+    this.handleSaveCampaign       = this.handleSaveCampaign.bind(this)
     this.handleSaveUpdateCampaign = this.handleSaveUpdateCampaign.bind(this)
-    this.handleFileUpload = this.handleFileUpload.bind(this)
+    this.handleFileUpload         = this.handleFileUpload.bind(this)
   }
 
   componentDidMount() {
@@ -78,7 +87,7 @@ class CampaignForm extends Component {
         let previewImage  = (campaign.image === null)? require('assets/images/image-plus.svg') : campaign.image 
         this.setState({ 
           isLoading: false, 
-          campaign: { ...campaign, start_campaign: moment(start_date).toDate(), finish_campaign: moment(finish_date).toDate() },
+          campaign: { ...campaign, start_campaign: moment(start_date).toDate(), finish_campaign: moment(finish_date).toDate(), image_file: dataURLtoFile(campaign.image_encode,campaign.image_file_name) },
           previewImgUrl: previewImage
         })
 
@@ -272,7 +281,7 @@ class CampaignForm extends Component {
                       className='hidden-file-input'
                       onChange={event => {
                         const file = event.target.files[0]
-
+                        
                         if (file) {
                           setFieldValue('image_file', file)
                           generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
