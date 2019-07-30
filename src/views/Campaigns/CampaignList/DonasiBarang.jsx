@@ -32,6 +32,7 @@ export function DonasiBarang (props) {
                 editPath={`${path}/${campaign.id}/edit`}
                 isClosed={campaign.closed}
                 isHidden={campaign.hidden}
+                duration={props.duration}
               />
             </td>
           </tr>
