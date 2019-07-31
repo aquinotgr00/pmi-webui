@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Table, Button } from 'reactstrap'
 import { EditActionButton } from 'components/ActionButtons/EditActionButton'
+import { Link } from 'react-router-dom'
+import ucwords from 'utils/string'
 
 export class Administrator extends Component {
 
@@ -21,7 +23,11 @@ export class Administrator extends Component {
         <tbody>
           {data && data.map((user, key) => (
             <tr key={key}>
-              <td>{user.name}</td>
+              <td>
+                <Link to={`${path}/${user.id}/edit`}>
+                {ucwords(user.name)}
+                </Link>
+              </td>
               <td>{user.email}</td>
               <td>{user.role_id}</td>
               <td>

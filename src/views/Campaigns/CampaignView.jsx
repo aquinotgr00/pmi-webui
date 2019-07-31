@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Main } from 'components'
 import { getCampaignApi,geyDonatorByCampaignApi } from 'services/api'
-import { formatCurrency } from 'utils/number'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
+import moment from 'moment'
+import { formatCurrency } from 'utils/number'
+import ucwords from 'utils/string'
 
 export default class CampaignView extends Component {
   constructor(props) {
@@ -147,9 +149,9 @@ export default class CampaignView extends Component {
                     {Object.values(list_donators).map((donator, index) => {
                       return (
                         <tr key={index}>
-                          <td>{donator.created_at}</td>
-                          <td>{donator.name}</td>
-                          <td>{donator.amount}</td>
+                          <td>{ moment(donator.created_at).format("YYYY-MM-DD") }</td>
+                          <td>{ ucwords(donator.name) }</td>
+                          <td>{donator.campaign.fundraising === 1 ? formatCurrency(donator.amount) : donator.amount }</td>
                         </tr>
                       )
                     })}

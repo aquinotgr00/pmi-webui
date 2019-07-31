@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Table, Input } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import ucwords from 'utils/string'
 
 export class TransactionTable extends Component {
 
@@ -48,7 +49,7 @@ export class TransactionTable extends Component {
                 </td>
                 <td>
                   <Link to={`/admin/transactions/${transaction}/${item.id}`}>
-                    {item.name}
+                    {ucwords(item.name)}
                   </Link>
                 </td>
                 <td>{item.campaign.title}</td>
