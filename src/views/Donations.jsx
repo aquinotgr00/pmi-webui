@@ -28,7 +28,7 @@ class Donations extends React.Component {
 			previewImgUrl: require('assets/images/image-plus.svg'),
 		}
 
-		this.uploadImage = React.createRef()
+		this.uploadImage  = React.createRef()
 		this.submitButton = React.createRef()
 		this.storeForm = React.createRef()
 		this.handleStoreDonation = this.handleStoreDonation.bind(this)

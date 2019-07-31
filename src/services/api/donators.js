@@ -7,3 +7,7 @@ export function getDonator(donatorId) {
 export function getDonatorList (params) {
   return authRequest().get('donators',{params})
 }
+
+export function postUpdateDonator (donatorId,params) {
+  return authRequest().post(`donators/update/${donatorId}`, params )
+}

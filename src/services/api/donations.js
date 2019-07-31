@@ -68,3 +68,7 @@ export function exportToExcel(params){
 export function exportToPdf(params){
   return authRequest().get('/reports/export/pdf', { params })
 }
+
+export function geyDonatorByCampaignApi(campaignId,params){
+  return authRequest().get(`/donations/list/${campaignId}`, { params })
+}
