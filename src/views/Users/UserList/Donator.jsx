@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
+import ucwords from 'utils/string'
 
 export function Donator (props) {
   const { path } = props
@@ -20,7 +21,7 @@ export function Donator (props) {
                 return (
                   <tr key={key}>
                     <th>
-                      <Link to={`${path}/${donator.id}/edit`}>{donator.name}</Link>
+                      <Link to={`${path}/${donator.id}/edit`}>{ ucwords(donator.name) }</Link>
                     </th>
                     <td>{ (donator.user === null) ? '' : donator.user.email }</td>
                     <td>{donator.phone}</td>

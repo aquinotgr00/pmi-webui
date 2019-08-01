@@ -66,11 +66,9 @@ export default class DetailsTransaction extends Component {
   }
 
   toggleImage() {
-
     this.setState(prevState => ({
       isOpen: !prevState.isOpen
     }))
-    console.log(this.state.isOpen)
   }
 
   render() {

@@ -20,11 +20,11 @@ function generatePreviewImgUrl(file, callback) {
 
 function dataURLtoFile(dataurl, filename) {
   var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-  while(n--){
-      u8arr[n] = bstr.charCodeAt(n);
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
   }
-  return new File([u8arr], filename, {type:mime});
+  return new File([u8arr], filename, { type: mime });
 }
 
 class CampaignForm extends Component {
@@ -43,10 +43,10 @@ class CampaignForm extends Component {
       },
       previewImgUrl: require('assets/images/image-plus.svg')
     }
-    this.loadCampaign             = this.loadCampaign.bind(this)
-    this.handleSaveCampaign       = this.handleSaveCampaign.bind(this)
+    this.loadCampaign = this.loadCampaign.bind(this)
+    this.handleSaveCampaign = this.handleSaveCampaign.bind(this)
     this.handleSaveUpdateCampaign = this.handleSaveUpdateCampaign.bind(this)
-    this.handleFileUpload         = this.handleFileUpload.bind(this)
+    this.handleFileUpload = this.handleFileUpload.bind(this)
   }
 
   componentDidMount() {
@@ -82,12 +82,12 @@ class CampaignForm extends Component {
         if (campaign.amount_goal === null) {
           campaign.amount_goal = 0
         }
-        let start_date    = (campaign.start_campaign === null)? new Date() : campaign.start_campaign
-        let finish_date   = (campaign.finish_campaign === null)? new Date() : campaign.finish_campaign
-        let previewImage  = (campaign.image === null)? require('assets/images/image-plus.svg') : campaign.image 
-        this.setState({ 
-          isLoading: false, 
-          campaign: { ...campaign, start_campaign: moment(start_date).toDate(), finish_campaign: moment(finish_date).toDate(), image_file: dataURLtoFile(campaign.image_encode,campaign.image_file_name) },
+        let start_date = (campaign.start_campaign === null) ? new Date() : campaign.start_campaign
+        let finish_date = (campaign.finish_campaign === null) ? new Date() : campaign.finish_campaign
+        let previewImage = (campaign.image === null) ? require('assets/images/image-plus.svg') : campaign.image
+        this.setState({
+          isLoading: false,
+          campaign: { ...campaign, start_campaign: moment(start_date).toDate(), finish_campaign: moment(finish_date).toDate(), image_file: dataURLtoFile(campaign.image_encode, campaign.image_file_name) },
           previewImgUrl: previewImage
         })
 
@@ -231,17 +231,20 @@ class CampaignForm extends Component {
                       />
                       {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
                     </FormGroup>
+                    
+                    {values.fundraising === 1 &&
+                      <FormGroup>
+                        <label htmlFor='amount_goal'>Target Dana Donasi</label>
+                        <Field
+                          name='amount_goal'
+                          render={({ field }) => (
+                            <Input {...field} type='number' id='amount_goal' invalid={errors.amount_goal !== undefined} />
+                          )}
+                        />
+                        {errors.amount_goal !== undefined ? <FormFeedback>{errors.amount_goal}</FormFeedback> : ''}
+                      </FormGroup>
+                    }
 
-                    <FormGroup>
-                      <label htmlFor='amount_goal'>Target Dana Donasi</label>
-                      <Field
-                        name='amount_goal'
-                        render={({ field }) => (
-                          <Input {...field} type='number' id='amount_goal' invalid={errors.amount_goal !== undefined} />
-                        )}
-                      />
-                      {errors.amount_goal !== undefined ? <FormFeedback>{errors.amount_goal}</FormFeedback> : ''}
-                    </FormGroup>
                     <FormGroup className='form-group'>
                       <label htmlFor='duration'>Rentang Waktu Donasi</label>
                       <div className='form-row'>
@@ -281,7 +284,7 @@ class CampaignForm extends Component {
                       className='hidden-file-input'
                       onChange={event => {
                         const file = event.target.files[0]
-                        
+
                         if (file) {
                           setFieldValue('image_file', file)
                           generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
