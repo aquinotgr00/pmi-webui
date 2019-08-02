@@ -2,9 +2,9 @@ import * as Yup from 'yup'
 
 export default Yup.object().shape({
   title: Yup.string()
-    .required('Required'),
+    .required('Judul harus diisi'),
   description: Yup.string()
-    .required('Required'),
+    .required('Deskripsi harus diisi'),
   image_file: Yup.mixed()
-    .required()
+    .required('Harap upload gambar')
 })

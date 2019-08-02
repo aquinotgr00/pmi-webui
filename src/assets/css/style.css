@@ -583,6 +583,10 @@ footer p {
     font-size: 12px;
 }
 
-.react-datepicker{
-    width: 300px;
+.react-datepicker {
+    width: 100%;
+}
+
+.form-row div.date > div:first-child, .form-row div.date > div > div {
+    width: 100%;
 }
