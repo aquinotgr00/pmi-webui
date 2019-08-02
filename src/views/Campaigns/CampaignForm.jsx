@@ -86,12 +86,14 @@ class CampaignForm extends Component {
         if (campaign.amount_goal === null) {
           campaign.amount_goal = 0
         }
-        const startDate = (campaign.start_campaign === null) ? new Date() : campaign.start_campaign
-        const finishDate = (campaign.finish_campaign === null) ? new Date() : campaign.finish_campaign
         const previewImage = (campaign.image === null) ? require('assets/images/image-plus.svg') : campaign.image
         this.setState({
           isLoading: false,
-          campaign: { ...campaign, start_campaign: moment(startDate).toDate(), finish_campaign: moment(finishDate).toDate() },
+          campaign: {
+            ...campaign,
+            start_campaign: campaign.start_campaign ? moment(campaign.start_campaign).toDate() : '',
+            finish_campaign: campaign.start_campaign ? moment(campaign.finish_campaign).toDate() : ''
+          },
           previewImgUrl: previewImage
         })
       } else {
@@ -116,8 +118,8 @@ class CampaignForm extends Component {
     try {
       campaign = {
         ...campaign,
-        start_campaign: campaign.start_campaign ? moment(campaign.start_campaign).format('YYYY-MM-DD') : undefined,
-        finish_campaign: campaign.finish_campaign ? moment(campaign.finish_campaign).format('YYYY-MM-DD') : undefined
+        start_campaign: campaign.start_campaign ? moment(campaign.start_campaign).format('YYYY-MM-DD') : '',
+        finish_campaign: campaign.finish_campaign ? moment(campaign.finish_campaign).format('YYYY-MM-DD') : ''
       }
 
       const { campaignId } = this.props.match.params
