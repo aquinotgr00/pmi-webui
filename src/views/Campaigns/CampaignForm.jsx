@@ -37,7 +37,7 @@ class CampaignForm extends Component {
     this.state = {
       campaign: {
         title: '',
-        type_id: 1,
+        type_id: campaignType === 'bulan-dana' ? 3 : 1,
         fundraising: campaignType !== 'donasi-barang',
         description: '',
         amount_goal: 0,
