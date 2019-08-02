@@ -40,7 +40,7 @@ function buildCampaignFormData (campaign) {
 export function createCampaignApi (campaign) {
   const formData = buildCampaignFormData(campaign)
 
-  return authRequest().post('/campaign', formData)
+  return authRequest().post('/campaigns', formData)
 }
 
 export function updateCampaignApi (campaignId, campaign) {
