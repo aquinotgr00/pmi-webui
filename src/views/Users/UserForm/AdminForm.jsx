@@ -133,7 +133,6 @@ class AdminForm extends Component {
 
     const { name, email, password, password_confirmation } = this.state
     let initialValues = { name, email, password, password_confirmation }
-    console.log(initialValues)
     return (
       <Main title={title}>
         <Row className="pl-3">
@@ -143,7 +142,6 @@ class AdminForm extends Component {
             initialValues={initialValues}
             validationSchema={ this.state.userId > 0 ? UpdateUserSchema : AddUserSchema}
             onSubmit={(values, { setSubmitting }) => {
-              console.log(values)
               if (this.state.userId > 0) {
                 this.handleUpdateUser(this.state.userId,values)
               }else{

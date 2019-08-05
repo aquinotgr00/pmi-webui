@@ -31,10 +31,15 @@ export default class TransactionList extends Component {
     this.handleReset = this.handleReset.bind(this)
     this.handleExportExcel = this.handleExportExcel.bind(this)
     this.handleExportPdf = this.handleExportPdf.bind(this)
+    this.goToPage = this.goToPage.bind(this)
   }
 
   componentDidMount() {
     this.loadTransaction()
+  }
+
+  goToPage(page) {
+    this.loadTransaction(page, this.state.searchFor)
   }
 
   async loadTransaction(page = 1, searchFor = '', title = '', statusFilter = '', startDate = '', finishDate = '') {
@@ -122,10 +127,6 @@ export default class TransactionList extends Component {
       this.loadTransaction(this.state.page, this.state.searchFor, this.state.title, this.state.statusFilter, startFrom, finishTo)
     }
 
-  }
-
-  goToPage(page) {
-    this.loadTransaction(page, this.state.searchFor)
   }
 
   handleReset() {

@@ -52,6 +52,6 @@ export function updateCampaignApi (campaignId, campaign) {
   return authRequest().post(`/campaigns/${campaignId}`, formData)// ?id=${campaignId}
 }
 
-export function updateFinishCampaignApi (campaignId, params) {
-  return authRequest().post(`/campaign/update/finish/${campaignId}`, params)
+export function updateFinishCampaignApi(campaignId,params){
+  return authRequest().post( `/campaigns/update/finish/${campaignId}`, params) 
 }
