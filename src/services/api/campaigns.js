@@ -33,7 +33,7 @@ export function createCampaignApi (campaign) {
   formData.append('amount_goal', campaign.amount_goal)
   formData.append('start_campaign', campaign.start_campaign)
   formData.append('finish_campaign', campaign.finish_campaign)
-  return authRequest().post('/campaign', formData)
+  return authRequest().post('/campaigns', formData)
 }
 
 export function updateCampaignApi (campaignId, campaign) {
@@ -47,9 +47,10 @@ export function updateCampaignApi (campaignId, campaign) {
   formData.append('amount_goal', campaign.amount_goal)
   formData.append('start_campaign', campaign.start_campaign)
   formData.append('finish_campaign', campaign.finish_campaign)
+  formData.append('_method','PUT')
   return authRequest().post(`/campaigns/${campaignId}`, formData)//?id=${campaignId}
 }
 
 export function updateFinishCampaignApi(campaignId,params){
-  return authRequest().post( `/campaign/update/finish/${campaignId}`, params) 
+  return authRequest().post( `/campaigns/update/finish/${campaignId}`, params) 
 }

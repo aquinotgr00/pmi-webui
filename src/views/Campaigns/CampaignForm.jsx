@@ -47,6 +47,7 @@ class CampaignForm extends Component {
     this.handleSaveCampaign = this.handleSaveCampaign.bind(this)
     this.handleSaveUpdateCampaign = this.handleSaveUpdateCampaign.bind(this)
     this.handleFileUpload = this.handleFileUpload.bind(this)
+    this.handleEditorChange = this.handleEditorChange.bind(this)
   }
 
   componentDidMount() {
@@ -106,6 +107,10 @@ class CampaignForm extends Component {
     if (file) {
       generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
     }
+  }
+
+  handleEditorChange(content) {
+    this.setState({ campaign: { description: content } })
   }
 
   async handleSaveCampaign(campaign) {
@@ -176,6 +181,7 @@ class CampaignForm extends Component {
             {({
               values,
               errors,
+              touched,
               setFieldValue,
               handleSubmit,
               isSubmitting
@@ -190,7 +196,9 @@ class CampaignForm extends Component {
                           <Input {...field} id='title' maxLength={255} invalid={errors.title !== undefined} />
                         )}
                       />
-                      {errors.title !== undefined ? <FormFeedback>{errors.title}</FormFeedback> : ''}
+                      {errors.title && touched.title ? (
+                        <FormFeedback>{errors.title}</FormFeedback>
+                      ) : null}
                     </FormGroup>
 
                     {(campaignType !== 'bulan-dana') &&
@@ -206,7 +214,10 @@ class CampaignForm extends Component {
                               </select>
                             )}
                           />
-                          {errors.type_id !== undefined ? <FormFeedback>{errors.type_id}</FormFeedback> : ''}
+
+                          {errors.type_id && touched.type_id ? (
+                            <FormFeedback>{errors.type_id}</FormFeedback>
+                          ) : null}
                         </FormGroup>
                       )
                     }
@@ -219,6 +230,7 @@ class CampaignForm extends Component {
                         render={({ field }) => (
                           <Editor
                             apiKey='jv18ld1zfu6vffpxf0ofb72orrp8ulyveyyepintrvlwdarp'
+                            initialized="true"
                             initialValue={values.description}
                             init={{
                               plugins: 'link image code',
@@ -229,9 +241,12 @@ class CampaignForm extends Component {
                           />
                         )}
                       />
-                      {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
+
+                      {errors.description && touched.description ? (
+                        <FormFeedback>{errors.description}</FormFeedback>
+                      ) : null}
                     </FormGroup>
-                    
+
                     {values.fundraising === 1 &&
                       <FormGroup>
                         <label htmlFor='amount_goal'>Target Dana Donasi</label>
@@ -241,7 +256,9 @@ class CampaignForm extends Component {
                             <Input {...field} type='number' id='amount_goal' invalid={errors.amount_goal !== undefined} />
                           )}
                         />
-                        {errors.amount_goal !== undefined ? <FormFeedback>{errors.amount_goal}</FormFeedback> : ''}
+                        {errors.amount_goal && touched.amount_goal ? (
+                          <FormFeedback>{errors.amount_goal}</FormFeedback>
+                        ) : null}
                       </FormGroup>
                     }
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Main } from 'components'
-import { getCampaignApi,geyDonatorByCampaignApi } from 'services/api'
+import { getCampaignApi, geyDonatorByCampaignApi } from 'services/api'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 import moment from 'moment'
 import { formatCurrency } from 'utils/number'
 import ucwords from 'utils/string'
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 export default class CampaignView extends Component {
   constructor(props) {
@@ -14,12 +15,20 @@ export default class CampaignView extends Component {
       error: null,
       campaign: {},
       date: [new Date(), new Date()],
-      donators: []
+      donators: [],
+      isOpen: false
     }
 
-    this.loadCampaign     = this.loadCampaign.bind(this)
+    this.loadCampaign = this.loadCampaign.bind(this)
     this.handleDateRanges = this.handleDateRanges.bind(this)
-    this.loadDonators     = this.loadDonators.bind(this)
+    this.loadDonators = this.loadDonators.bind(this)
+    this.toggleImage = this.toggleImage.bind(this)
+  }
+
+  toggleImage() {
+    this.setState(prevState => ({
+      isOpen: !prevState.isOpen
+    }))
   }
 
   handleDateRanges(date) {
@@ -41,7 +50,7 @@ export default class CampaignView extends Component {
 
       const { id: campaignId } = this.state.campaign
       this.setState({ date });
-      this.loadDonators(campaignId,startFrom,finishTo)
+      this.loadDonators(campaignId, startFrom, finishTo)
     }
   }
 
@@ -67,13 +76,13 @@ export default class CampaignView extends Component {
     }
   }
 
-  async loadDonators(campaignId, from='',to=''){
+  async loadDonators(campaignId, from = '', to = '') {
     const donatorParams = new URLSearchParams()
-    donatorParams.append('from',from)
-    donatorParams.append('to',to)
-    const response = await geyDonatorByCampaignApi(campaignId,donatorParams)
+    donatorParams.append('from', from)
+    donatorParams.append('to', to)
+    const response = await geyDonatorByCampaignApi(campaignId, donatorParams)
     const { status, data: list } = response.data
-    const { data:donators } = list
+    const { data: donators } = list
     if (status === 'success') {
       this.setState({ donators })
     }
@@ -82,7 +91,7 @@ export default class CampaignView extends Component {
   render() {
     const { type_id, title, description, image, ranges_donation: rangeDonation, amount_goal: goal, amount_real: realAmount } = this.state.campaign
     const list_donators = this.state.donators || {}
-    
+
     let donationType = '-'
     switch (type_id) {
       case 1:
@@ -149,9 +158,9 @@ export default class CampaignView extends Component {
                     {Object.values(list_donators).map((donator, index) => {
                       return (
                         <tr key={index}>
-                          <td>{ moment(donator.created_at).format("YYYY-MM-DD") }</td>
-                          <td>{ ucwords(donator.name) }</td>
-                          <td>{donator.campaign.fundraising === 1 ? formatCurrency(donator.amount) : donator.amount }</td>
+                          <td>{moment(donator.created_at).format("YYYY-MM-DD")}</td>
+                          <td>{ucwords(donator.name)}</td>
+                          <td>{donator.campaign.fundraising === 1 ? formatCurrency(donator.amount) : donator.amount}</td>
                         </tr>
                       )
                     })}
@@ -168,7 +177,7 @@ export default class CampaignView extends Component {
                 <img className='img-fluid img-thumbnail img-featured-size' src={image} alt='' />
                 <div className='overlay btn-img'>
                   <span>
-                    <a href='#' className='btn btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
+                    <a href='#' onClick={this.toggleImage} className='btn btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
                   </span>
                   <span data-toggle='modal' role='button' data-target='#ModalMediaLibrary'>
                     <a href='#' className='btn btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
@@ -183,6 +192,14 @@ export default class CampaignView extends Component {
           </div>
 
         </div>
+        <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
+          <ModalBody className="mb-0 p-0">
+            <img src={image} style={{ width: '100%' }} />
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}
+          </ModalFooter>
+        </Modal>
       </Main>
     )
   }

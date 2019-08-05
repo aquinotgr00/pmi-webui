@@ -52,5 +52,11 @@
   "devDependencies": {
     "faker": "^4.1.0",
     "react-to-print": "^2.2.1"
+  },
+  "standard": {
+    "plugins": [
+      "html"
+    ],
+    "parser": "babel-eslint"
   }
 }
