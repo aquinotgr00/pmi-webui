@@ -10,7 +10,7 @@ import { listCampaignApi, toggleCampaignApi, getCampaignApi, updateFinishCampaig
 import moment from 'moment'
 
 export default class CampaignList extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       searchFor: '',
@@ -36,11 +36,11 @@ export default class CampaignList extends Component {
     this.handleSubmitFinishCampaign = this.handleSubmitFinishCampaign.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.loadCampaign()
   }
 
-  async loadCampaign(page = 1, filters = {}, campaignType = null, searchFor = '') {
+  async loadCampaign (page = 1, filters = {}, campaignType = null, searchFor = '') {
     const campaignParams = new URLSearchParams()
     const { campaign } = this.props
     switch (campaign) {
@@ -88,48 +88,45 @@ export default class CampaignList extends Component {
     }
   }
 
-  handleSearch(event) {
+  handleSearch (event) {
     const searchKeyword = event.target.value
     this.loadCampaign(this.state.page, this.state.filters, this.state.campaignType, searchKeyword)
   }
 
-  handleFilterChange(filters) {
+  handleFilterChange (filters) {
     this.loadCampaign(this.state.page, { ...this.state.filters, ...filters }, this.state.campaignType, this.state.searchFor)
   }
 
-  handleCampaignTypeChange(campaignType) {
+  handleCampaignTypeChange (campaignType) {
     this.loadCampaign(this.state.page, this.state.filters, campaignType, this.state.searchFor)
   }
 
-  goToPage(page) {
+  goToPage (page) {
     this.loadCampaign(page, this.state.filters, this.state.campaignType, this.state.searchFor)
   }
 
-  toggleTooltip() {
+  toggleTooltip () {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
     })
   }
 
-  async handleToggleDuration(id) {
+  async handleToggleDuration (id) {
     const response = await getCampaignApi(id)
     const { status, data } = response.data
-    if (status === "success") {
-
-      let finish_date = (data.finish_campaign === null) ? new Date() : data.finish_campaign
+    if (status === 'success') {
+      const finish_date = (data.finish_campaign === null) ? new Date() : data.finish_campaign
       this.setState({
-        initialCampaign: { ...data, finish_campaign: moment(finish_date).toDate() },
+        initialCampaign: { ...data, finish_campaign: moment(finish_date).toDate() }
       })
 
       this.setState(prevState => ({
         durationOpen: !prevState.durationOpen
-      }));
+      }))
     }
-
   }
 
-
-  async handleToggleAttribute(id, attribute) {
+  async handleToggleAttribute (id, attribute) {
     this.setState({ isLoading: true, error: null })
 
     const response = await toggleCampaignApi(id, attribute)
@@ -142,17 +139,17 @@ export default class CampaignList extends Component {
     }
   }
 
-  async handleSubmitFinishCampaign(id, attribute) {
+  async handleSubmitFinishCampaign (id, attribute) {
     const response = await updateFinishCampaignApi(id, attribute)
     const { status } = response.data
-    if (status === "success") {
-      let btnClose = document.getElementById('btn-close-campaign')
+    if (status === 'success') {
+      const btnClose = document.getElementById('btn-close-campaign')
       this.loadCampaign()
       btnClose.click()
     }
   }
 
-  renderCampaignList(campaign) {
+  renderCampaignList (campaign) {
     const { campaignData, currentPage, numberOfPages, from, to, numberOfEntries, initialCampaign } = this.state
     const { pathname } = this.props.location
 
@@ -176,13 +173,13 @@ export default class CampaignList extends Component {
           initialCampaign={initialCampaign}
           onClick={this.handleToggleDuration}
           handleSubmitFinishCampaign={this.handleSubmitFinishCampaign}
-           />
+        />
 
       </>
     )
   }
 
-  render() {
+  render () {
     const { campaign, title } = this.props
     const { error } = this.state
     return (
