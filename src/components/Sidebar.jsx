@@ -76,6 +76,24 @@ export function Sidebar() {
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
+        
+        <Nav className='flex-column'>
+          <NavItem>
+            <NavLink to='#' className='nav-link' id='master-wilayah'>Master Wilayah</NavLink>
+            <UncontrolledCollapse toggler='#master-wilayah' tag='ul' className='list-unstyled'>
+              <NavItem>
+                <NavLink exact={true} activeClassName='active' to='/admin/settings/kabupaten-kota'>Kabupaten/Kota</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/settings/kecamatan'>Kecamatan</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/settings/kelurahan-desa'>Kelurahan/Desa</NavLink>
+              </NavItem>
+            </UncontrolledCollapse>
+          </NavItem>
+        </Nav>
+
       </div>
     </Navbar>
   )

@@ -9,8 +9,14 @@ import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
+import SettingsAreas from 'views/SettingsAreas'
 
 var routes = [
+  {
+    path: '/settings/:area',
+    name: 'Setting Area',
+    component: SettingsAreas
+  },
   {
     path: '/users/:user',
     name: 'Users',
