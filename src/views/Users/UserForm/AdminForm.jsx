@@ -94,7 +94,7 @@ class AdminForm extends Component {
     try {
       const storeResponse = await storeUserApi(values)
       const { status } = storeResponse.data
-      if (status == 'success') {
+      if (status === 'success') {
         alert('Berhasil! admin tersimpan')
         this.props.history.push('/admin/users/admin')
       }
@@ -107,7 +107,7 @@ class AdminForm extends Component {
     try {
       const updateResponse = await updateUserApi(userId, values)
       const { status } = updateResponse.data
-      if (status == 'success') {
+      if (status === 'success') {
         alert('Berhasil! admin terupdate')
         this.props.history.push('/admin/users/admin')
       }

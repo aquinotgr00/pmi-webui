@@ -52,7 +52,7 @@ export default class AreaList extends Component {
 
   handleFilterCity(event) {
     let filterCity = event.target.value
-    if (filterCity == 0) {
+    if (filterCity === 0) {
       filterCity = null;
     }
     this.setState({ cityFilter: filterCity })
@@ -61,7 +61,7 @@ export default class AreaList extends Component {
 
   handleFilterSubdistrict(event) {
     let filterSubdistrict = event.target.value
-    if (filterSubdistrict == 0) {
+    if (filterSubdistrict === 0) {
       filterSubdistrict = null;
     }
     this.setState({ subdistrictFilter: filterSubdistrict })
@@ -100,12 +100,15 @@ export default class AreaList extends Component {
         break
       case 'kecamatan':
         response = await listSubdistrictApi(areaParams)
-        break;
+        break
       case 'kelurahan-desa':
         response = await listVillageApi(areaParams)
-        break;
+        break
+      default:
+        response = null
+        break
     }
-    if (typeof response !== null) {
+    if (response !== null) {
       const { status } = response.data
       if (status === 'success') {
         const { data } = response.data
@@ -119,7 +122,6 @@ export default class AreaList extends Component {
 
   render() {
     const { title } = this.props
-    const { error } = this.state
     const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList } = this.state
     const { pathname } = this.props.location
 

@@ -1,18 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Table, Input } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ucwords from 'utils/string'
 
-export class TransactionTable extends Component {
-
-  constructor(props) {
-    super(props)
-
-  }
-
-  render() {
-    let check = document.getElementsByClassName('check')
-
+export function TransactionTable(props){
     let headings = [
       'Tanggal Donasi',
       'ID-Transaksi',
@@ -21,9 +12,6 @@ export class TransactionTable extends Component {
       'Tipe Donasi',
       'Status'
     ]
-
-    const { data, transaction } = this.props
-
     return (
       <Table hover>
         <thead>
@@ -35,7 +23,7 @@ export class TransactionTable extends Component {
           </tr>
         </thead>
         <tbody>
-          {data && data.map((item, key) => {
+          {props.data && props.data.map((item, key) => {
             return (
               <tr key={key}>
                 <td>
@@ -43,12 +31,12 @@ export class TransactionTable extends Component {
                 </td>
                 <td>{item.created_at}</td>
                 <td>
-                  <Link to={`/admin/transactions/${transaction}/${item.id}`}>
+                  <Link to={`/admin/transactions/${props.transaction}/${item.id}`}>
                     {item.invoice_id}
                   </Link>
                 </td>
                 <td>
-                  <Link to={`/admin/transactions/${transaction}/${item.id}`}>
+                  <Link to={`/admin/transactions/${props.transaction}/${item.id}`}>
                     {ucwords(item.name)}
                   </Link>
                 </td>
@@ -62,5 +50,4 @@ export class TransactionTable extends Component {
         </tbody>
       </Table>
     )
-  }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { FormGroup, Input, Button, FormFeedback, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Formik, Form, Field } from 'formik'
 import infoDonationSchema from 'validators/infoDonation'
