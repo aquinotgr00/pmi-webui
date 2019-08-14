@@ -15,12 +15,7 @@ export function listVillageApi (params) {
 }
 
 export function detailsVillageApi(villageId){
-	cancel && cancel()
-  	return authRequest().get('/settings/village/'+villageId, { 
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })	
+  return authRequest().get(`/settings/village/${villageId}`)		
 }
 
 export function storeVillageApi(params){

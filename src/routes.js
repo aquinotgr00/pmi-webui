@@ -10,12 +10,23 @@ import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
 import SettingsAreas from 'views/SettingsAreas'
+import AreaForm from 'views/SettingsAreas/AreaForm'
 
 var routes = [
   {
     path: '/settings/:area',
     name: 'Setting Area',
     component: SettingsAreas
+  },
+  {
+    path: '/settings/:area/create',
+    name: 'Create Area',
+    component: AreaForm
+  },
+  {
+    path: '/settings/:area/:areaId/edit',
+    name: 'Edit Area',
+    component: AreaForm
   },
   {
     path: '/users/:user',

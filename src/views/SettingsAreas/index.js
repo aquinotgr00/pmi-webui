@@ -6,7 +6,7 @@ import ucwords from 'utils/string'
 
 export default function Areas (props) {
   const { area }  = props.match.params
-  const title     = ucwords(area.split('-').join(' '))
+  const title     = ucwords(area.split('-').join('/'))
   
   return (
     <Main title={title}>

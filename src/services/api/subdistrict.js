@@ -15,12 +15,7 @@ export function listSubdistrictApi (params) {
 }
 
 export function detailsSubdistrictApi(subdistrictId){
-	cancel && cancel()
-  	return authRequest().get('/settings/subdistrict/'+subdistrictId, { 
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })	
+  return authRequest().get(`/settings/subdistrict/${subdistrictId}`)	
 }
 
 export function storeSubdistrictApi(params){
@@ -34,4 +29,3 @@ export function updateSubdistrictApi(subdistrictId,params){
 export function deleteSubdistrictApi(subdistrictId){
     return authRequest().delete(`/settings/subdistrict/${subdistrictId}`) 
 }
-  
