@@ -48,6 +48,9 @@ export function getDonationList (type, fund = 1) {
   const params = new URLSearchParams()
   params.append('t', type)
   params.append('f', fund)
+  params.append('v', 1)
+  params.append('a', 1)
+  params.append('p', 1)
   params.append('page', 1) // Incorrect. must fetch campaigns WITHOUT pagination instead. 'page'=1 means other pages are hidden!
   return authRequest().get('campaigns', { params })
 }
