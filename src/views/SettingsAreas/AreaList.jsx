@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import { listCityApi, listSubdistrictApi, listVillageApi } from 'services/api'
+import {
+  listCityApi,
+  listSubdistrictApi,
+  listVillageApi
+
+} from 'services/api'
 import { CityList } from './City/CityList'
 import { SubdistrictList } from './Subdistrict/SubdistrictList'
 import { UrbanVillageList } from './UrbanVillage/UrbanVillageList'
@@ -41,11 +46,11 @@ export default class AreaList extends Component {
   }
 
   handleReset() {
-    let filter_city   = document.getElementById('filterCity')
-    let filter_sub    = document.getElementById('filterSubdistrict')
+    let filter_city = document.getElementById('filterCity')
+    let filter_sub = document.getElementById('filterSubdistrict')
     filter_city.value = 0
     if (filter_sub !== null) {
-      filter_sub.value  = 0
+      filter_sub.value = 0
     }
     this.loadArea()
   }
@@ -67,7 +72,6 @@ export default class AreaList extends Component {
     this.setState({ subdistrictFilter: filterSubdistrict })
     this.loadArea(this.state.page, this.state.searchFor, this.state.provinceFilter, this.state.cityFilter, filterSubdistrict)
   }
-
 
   async loadArea(page = 1, searchFor = '', provinceFilter = '', cityFilter = '', subdistrictFilter = '') {
     const areaParams = new URLSearchParams()
@@ -92,8 +96,7 @@ export default class AreaList extends Component {
     }
 
     this.setState({ isLoading: true, error: null })
-    let response = null;
-
+    let response = null
     switch (title) {
       case 'kabupaten-kota':
         response = await listCityApi(areaParams)
@@ -121,14 +124,15 @@ export default class AreaList extends Component {
   }
 
   render() {
-    const { title } = this.props
-    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList } = this.state
+    const { title, history } = this.props
+    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList, deleteOpen } = this.state
     const { pathname } = this.props.location
 
     return (
       <>
         {(title === 'kabupaten-kota') &&
           <CityList
+            title={title}
             data={areaData}
             path={pathname}
             from={from}
@@ -138,7 +142,7 @@ export default class AreaList extends Component {
             numberOfPages={numberOfPages}
             goToPage={this.goToPage}
             handleSearch={this.handleSearch}
-            title={title}
+            history={history}
           />
         }
 
@@ -157,6 +161,7 @@ export default class AreaList extends Component {
             handleReset={this.handleReset}
             filterCity={cityFilterList}
             handleFilterCity={this.handleFilterCity}
+            history={history}
           />
         }
         {(title === 'kelurahan-desa') &&
@@ -176,6 +181,7 @@ export default class AreaList extends Component {
             filterSubdistrict={subdistrictFilterList}
             handleFilterCity={this.handleFilterCity}
             handleFilterSubdistrict={this.handleFilterSubdistrict}
+            history={history}
           />
         }
 

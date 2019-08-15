@@ -1,9 +1,10 @@
 import React from 'react'
-import { PaginationLink, AddNewActionButton, Tool } from 'components'
-import { Row, Col, Button, Table } from 'reactstrap'
+import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'components'
+import { DeleteActionButton } from 'components/ActionButtons/DeleteActionButton'
+import { Row, Col, Button, Table, Tooltip } from 'reactstrap'
 
 export function CityList(props) {
-	const { path, title } = props
+	const { path, title, history } = props
 	return (
 		<>
 			<Row>
@@ -35,7 +36,16 @@ export function CityList(props) {
 							<td>{key + 1}</td>
 							<td>{city.name}</td>
 							<td>{city.province.name}</td>
-							<td>Aksi</td>
+							<td>
+								<EditActionButton
+									path={path + '/' + city.id + '/edit'}
+									 />
+								<DeleteActionButton									
+									dataId={city.id}
+									title={title}
+									history={history}
+									 />
+							</td>
 						</tr>
 					))}
 				</tbody>

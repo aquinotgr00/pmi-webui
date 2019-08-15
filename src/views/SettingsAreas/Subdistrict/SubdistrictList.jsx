@@ -1,40 +1,41 @@
 import React from 'react'
-import { PaginationLink, AddNewActionButton, Tool } from 'components'
+import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'components'
+import { DeleteActionButton } from 'components/ActionButtons/DeleteActionButton'
 import { Row, Col, Button, FormGroup, Label, Input, Table } from 'reactstrap'
 
 export function SubdistrictList(props) {
-	const { path, title } = props
+	const { path, title, history } = props
 
 	return (
 		<>
-			<Row>
-				<Col md="7">
-					<Tool onSearch={props.handleSearch}>
-						<AddNewActionButton path={`${path}/create`} tooltipText={`Tambah ${title} Baru`} />
-					</Tool>
-				</Col>
-				<Col md="1">
-					<Label for="filterCity">Filter:</Label>
-				</Col>
-				<Col md="3">
-					<FormGroup>
-						<Input type="select" name="select" id="filterCity" onChange={props.handleFilterCity}>
-							<option value="0">Pilih Kabupaten</option>
-							{props.filterCity && props.filterCity.map((city, key) => (
-								<option key={key} value={city.id}>{city.name}</option>
-							))}
-						</Input>
-					</FormGroup>
-				</Col>
-				<Col md="1">
-					<button onClick={props.handleReset}
-						className="circle-table btn-wrapper-reset btn-reset"
-						data-toggle="tooltip"
-						data-placement="top"
-						title=""
-						data-original-title="Reset" />
-				</Col>
-			</Row>
+			<tool className="head-tools">
+				<div className="mr-md-auto align-self-stretch">
+					<form className="form-inline my-3">
+						<Tool onSearch={props.handleSearch}>
+							<AddNewActionButton path={`${path}/create`} tooltipText={`Tambah ${title} Baru`} />
+						</Tool>
+					</form>
+				</div>
+				<div className="ml-md-auto align-self-stretch">
+					<form className="form-inline my-3">
+						<h2 className="my-auto">Filter:</h2>
+						<div className="form-group ml-3">
+							<Input type="select" name="select" id="filterCity" onChange={props.handleFilterCity}>
+								<option value="0">Pilih Kabupaten</option>
+								{props.filterCity && props.filterCity.map((city, key) => (
+									<option key={key} value={city.id}>{city.name}</option>
+								))}
+							</Input>
+						</div>
+						<button onClick={props.handleReset}
+							className="btn circle-table btn-reset"
+							data-toggle="tooltip"
+							data-placement="top"
+							title=""
+							data-original-title="Reset" />
+					</form>
+				</div>
+			</tool>
 			<PaginationLink
 				rowFrom={props.from}
 				rowTo={props.to}
@@ -59,7 +60,16 @@ export function SubdistrictList(props) {
 							<td>{subdistrict.name}</td>
 							<td>{subdistrict.city.name}</td>
 							<td>{subdistrict.city.province.name}</td>
-							<td>Aksi</td>
+							<td>
+								<EditActionButton
+									path={path + '/' + subdistrict.id + '/edit'}
+								/>
+								<DeleteActionButton
+									dataId={subdistrict.id}
+									title={title}
+									history={history}
+								/>
+							</td>
 						</tr>
 					))}
 				</tbody>

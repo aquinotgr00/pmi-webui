@@ -17,9 +17,9 @@ export default class UserList extends Component {
       error: null
     }
 
-    this.loadUser     = this.loadUser.bind(this)
+    this.loadUser = this.loadUser.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.goToPage     = this.goToPage.bind(this)
+    this.goToPage = this.goToPage.bind(this)
     this.handleDisableEnable = this.handleDisableEnable.bind(this)
   }
 
@@ -31,13 +31,13 @@ export default class UserList extends Component {
     const userParams = new URLSearchParams()
     const { user } = this.props
     userParams.append('page', page)
-    userParams.append('s',searchFor)
-    this.setState({ isLoading:true, error: null })
-    let response = { data: null}
+    userParams.append('s', searchFor)
+    this.setState({ isLoading: true, error: null })
+    let response = { data: null }
     switch (user) {
       case 'admin':
-      response = await listUserApi(userParams)
-      break
+        response = await listUserApi(userParams)
+        break
       case 'donator':
       response = await getDonatorList(userParams)
       break
@@ -46,7 +46,7 @@ export default class UserList extends Component {
       break
     }
     const { status } = response.data
-    if(status === 'success'){
+    if (status === 'success') {
       const { data } = response.data
       const { current_page: currentPage, last_page: numberOfPages, data: userData, from, to, total: numberOfEntries } = data.admins
       this.setState({ isLoading: false, userData, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
@@ -58,7 +58,7 @@ export default class UserList extends Component {
     this.loadUser(this.state.page, searchKeyword)
   }
 
-  goToPage(page){
+  goToPage (page) {
     this.setState({ page })
     this.loadUser(page, this.state.searchFor)
   }
@@ -71,30 +71,30 @@ export default class UserList extends Component {
     const { status } = response.data
     if (status === 'success') {
       const { data } = response.data
-      this.setState({ userData : this.state.userData.map(item => item.id === data.id ? data : item) })
-      alert('Berhasil me'+oposite_msg+'kan Admin')
+      this.setState({ userData: this.state.userData.map(item => item.id === data.id ? data : item) })
+      alert('Berhasil me' + oposite_msg + 'kan Admin')
     }
   }
 
-  renderUserList(user){
-    const { userData,currentPage, numberOfPages, from, to, numberOfEntries } = this.state
-    
+  renderUserList (user) {
+    const { userData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
+
     const { pathname } = this.props.location
     return (
       <>
-      <PaginationLink
-      rowFrom={from}
-      rowTo={to}
-      numberOfEntries={numberOfEntries}
-      currentPage={currentPage}
-      numberOfPages={numberOfPages}
-      onPageChange={this.goToPage}
-      />
-      { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
-      { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-      { (user === 'volunteer') && <Volunteer /> }
+        <PaginationLink
+          rowFrom={from}
+          rowTo={to}
+          numberOfEntries={numberOfEntries}
+          currentPage={currentPage}
+          numberOfPages={numberOfPages}
+          onPageChange={this.goToPage}
+        />
+        { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
+        { (user === 'donator') && <Donator data={userData} path={pathname} /> }
+        { (user === 'volunteer') && <Volunteer /> }
       </>
-      )
+    )
   }
 
   render () {
@@ -102,16 +102,16 @@ export default class UserList extends Component {
     const { error } = this.state
     return (
       <>
-      <Tool onSearch={this.handleSearch}>
-      {user !== 'donator' &&
-      <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
-      }
-      </Tool>
-      {error
-        ? <div>Error</div>
-        : this.renderUserList(user)
-      }
+        <Tool onSearch={this.handleSearch}>
+          {user !== 'donator' &&
+        <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
+          }
+        </Tool>
+        {error
+          ? <div>Error</div>
+          : this.renderUserList(user)
+        }
       </>
-      )
-    }
+    )
   }
+}
