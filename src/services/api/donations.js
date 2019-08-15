@@ -15,21 +15,19 @@ export function listTransactionApi (params) {
 }
 
 export function listDonationByStatus (id, status = null, startFrom = null, finishTo = null) {
-  let params = new URLSearchParams()
-  let url = `donations/list-by-donator/${id}`
+  const params = new URLSearchParams()
+  const url = `donations/list-by-donator/${id}`
 
-  if (status !== null)
-    params.append('status', status)
+  if (status !== null) { params.append('status', status) }
 
-  if (startFrom && finishTo)
-    params.append('startFrom', startFrom)
-    params.append('finishTo', finishTo)
+  if (startFrom && finishTo) { params.append('startFrom', startFrom) }
+  params.append('finishTo', finishTo)
 
   return authRequest().get(url, { params })
 }
 
 export function storeApi (data) {
-  let formData = new FormData()
+  const formData = new FormData()
   formData.append('name', data.name)
   formData.append('campaign_id', data.campaign_id)
   formData.append('amount', data.amount)
@@ -39,36 +37,44 @@ export function storeApi (data) {
   formData.append('image_file', data.image_file)
   if (typeof data.donation_items !== 'undefined') {
     data.donation_items.map((item, key) => {
-      return formData.append('donation_items['+key+']', JSON.stringify(item))
+      return formData.append('donation_items[' + key + ']', JSON.stringify(item))
     })
   }
-  return authRequest().post('/donations/create', formData)
+  return authRequest().post('/donations', formData)
 }
 
+// TODO : investigate why there's campaign list in donation service
 export function getDonationList (type, fund = 1) {
-  return authRequest().get('campaigns?f='+fund+'&t='+type)
+  const params = new URLSearchParams()
+  params.append('t', type)
+  params.append('f', fund)
+  params.append('v', 1)
+  params.append('a', 1)
+  params.append('p', 1)
+  params.append('page', 1) // Incorrect. must fetch campaigns WITHOUT pagination instead. 'page'=1 means other pages are hidden!
+  return authRequest().get('campaigns', { params })
 }
 
-export function showTransaction(transactionId){
-  return authRequest().get('/reports/'+transactionId)
+export function showTransaction (transactionId) {
+  return authRequest().get('/reports/' + transactionId)
 }
 
-export function updateTransaction(transactionId,data){
-  return authRequest().post('/donations/update-details/'+transactionId, data);
+export function updateTransaction (transactionId, data) {
+  return authRequest().post('/donations/update-details/' + transactionId, data)
 }
 
-export function updateInfoTransaction(transactionId,data){
-  return authRequest().post('/donations/update-info/'+transactionId, data);
+export function updateInfoTransaction (transactionId, data) {
+  return authRequest().post('/donations/update-info/' + transactionId, data)
 }
 
-export function exportToExcel(params){
+export function exportToExcel (params) {
   return authRequest().get('/reports/export/excel', { params })
 }
 
-export function exportToPdf(params){
+export function exportToPdf (params) {
   return authRequest().get('/reports/export/pdf', { params })
 }
 
-export function geyDonatorByCampaignApi(campaignId,params){
+export function geyDonatorByCampaignApi (campaignId, params) {
   return authRequest().get(`/donations/list/${campaignId}`, { params })
 }
