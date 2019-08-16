@@ -83,7 +83,7 @@ export function UrbanVillageForm(props) {
                                                 </Input>
                                             )}
                                         />
-                                        {errors.city_id !== undefined ? <FormFeedback>{errors.city_id}</FormFeedback> : ''}
+                                        {errors.subdistrict_id !== undefined ? <FormFeedback>{errors.subdistrict_id}</FormFeedback> : ''}
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Desa/Kelurahan</Label>

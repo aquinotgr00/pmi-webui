@@ -11,8 +11,25 @@ import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
 import SettingsAreas from 'views/SettingsAreas'
 import AreaForm from 'views/SettingsAreas/AreaForm'
+import MembershipList from 'views/Membership/MembershipList'
+import MembershipForm from 'views/Membership/MembershipForm'
 
 var routes = [
+  {
+    path: '/membership',
+    name: 'Membership',
+    component: MembershipList
+  },
+  {
+    path: '/membership/create',
+    name: 'Create Membership',
+    component: MembershipForm
+  },
+  {
+    path: '/membership/:memberId/edit',
+    name: 'Edit Membership',
+    component: MembershipForm
+  },
   {
     path: '/settings/:area',
     name: 'Setting Area',
