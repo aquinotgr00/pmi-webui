@@ -54,7 +54,7 @@ class CampaignForm extends Component {
 
   componentDidMount () {
     const { campaignType, campaignId } = this.props.match.params
-    console.log(campaignType)
+
     if (campaignId) {
       this.loadCampaign(campaignId)
     } else {

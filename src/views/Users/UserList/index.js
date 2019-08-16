@@ -18,9 +18,9 @@ export default class UserList extends Component {
       modal: false
     }
 
-    this.loadUser     = this.loadUser.bind(this)
+    this.loadUser = this.loadUser.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.goToPage     = this.goToPage.bind(this)
+    this.goToPage = this.goToPage.bind(this)
     this.handleDisableEnable = this.handleDisableEnable.bind(this)
     this.toggleProfileModal = this.toggleProfileModal.bind(this)
   }
@@ -33,13 +33,13 @@ export default class UserList extends Component {
     const userParams = new URLSearchParams()
     const { user } = this.props
     userParams.append('page', page)
-    userParams.append('s',searchFor)
-    this.setState({ isLoading:true, error: null })
-    let response = { data: null}
+    userParams.append('s', searchFor)
+    this.setState({ isLoading: true, error: null })
+    let response = { data: null }
     switch (user) {
       case 'admin':
-      response = await listUserApi(userParams)
-      break
+        response = await listUserApi(userParams)
+        break
       case 'donator':
       response = await getDonatorList(userParams)
       break
@@ -48,7 +48,7 @@ export default class UserList extends Component {
       break
     }
     const { status } = response.data
-    if(status === 'success'){
+    if (status === 'success') {
       const { data } = response.data
       const { current_page: currentPage, last_page: numberOfPages, data: userData, from, to, total: numberOfEntries } = data.admins
       this.setState({ isLoading: false, userData, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
@@ -65,27 +65,27 @@ export default class UserList extends Component {
     this.loadUser(this.state.page, searchKeyword)
   }
 
-  goToPage(page){
+  goToPage (page) {
     this.setState({ page })
     this.loadUser(page, this.state.searchFor)
   }
 
-  async handleDisableEnable(event){
-    let params = event.target.value.split(',')
-    let oposite = (params[1] == 1)? 'disable' : 'enable'
-    let oposite_msg = (params[1] == 1)? 'Non-aktif' : 'Aktif'
-    const response = await updateActiveUserApi(params[0],oposite)
+  async handleDisableEnable (event) {
+    const params = event.target.value.split(',')
+    const oposite = (params[1] == 1) ? 'disable' : 'enable'
+    const oposite_msg = (params[1] == 1) ? 'Non-aktif' : 'Aktif'
+    const response = await updateActiveUserApi(params[0], oposite)
     const { status } = response.data
     if (status === 'success') {
       const { data } = response.data
-      this.setState({ userData : this.state.userData.map(item => item.id === data.id ? data : item) })
-      alert('Berhasil me'+oposite_msg+'kan Admin')
+      this.setState({ userData: this.state.userData.map(item => item.id === data.id ? data : item) })
+      alert('Berhasil me' + oposite_msg + 'kan Admin')
     }
   }
 
-  renderUserList(user){
-    const { userData,currentPage, numberOfPages, from, to, numberOfEntries } = this.state
-    
+  renderUserList (user) {
+    const { userData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
+
     const { pathname } = this.props.location
     return (
       <>
@@ -101,7 +101,7 @@ export default class UserList extends Component {
       { (user === 'donator') && <Donator data={userData} path={pathname} /> }
       { (user === 'volunteer') && <Volunteer data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
       </>
-      )
+    )
   }
 
   render () {
@@ -119,6 +119,6 @@ export default class UserList extends Component {
         : this.renderUserList(user)
       }
       </>
-      )
-    }
+    )
   }
+}
