@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { PaginationLink, Tool } from 'components'
+import { PaginationLink, Tool, VolunteerProfileModal } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { Administrator } from './Administrator'
 import { Donator } from './Donator'
 import { Volunteer } from './Volunteer'
-import { listUserApi, updateActiveUserApi, getDonatorList } from 'services/api'
+import { listUserApi, updateActiveUserApi, getDonatorList, getVolunteerList } from 'services/api'
 
 export default class UserList extends Component {
   constructor (props) {
@@ -14,13 +14,15 @@ export default class UserList extends Component {
       searchFor: '',
       isLoading: false,
       userData: [],
-      error: null
+      error: null,
+      modal: false
     }
 
     this.loadUser     = this.loadUser.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.goToPage     = this.goToPage.bind(this)
     this.handleDisableEnable = this.handleDisableEnable.bind(this)
+    this.toggleProfileModal = this.toggleProfileModal.bind(this)
   }
 
   componentDidMount () {
@@ -41,6 +43,9 @@ export default class UserList extends Component {
       case 'donator':
       response = await getDonatorList(userParams)
       break
+      case 'volunteer':
+      response = await getVolunteerList(userParams)
+      break
     }
     const { status } = response.data
     if(status === 'success'){
@@ -48,6 +53,11 @@ export default class UserList extends Component {
       const { current_page: currentPage, last_page: numberOfPages, data: userData, from, to, total: numberOfEntries } = data.admins
       this.setState({ isLoading: false, userData, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
     }
+  }
+
+  toggleProfileModal () {
+      const modal = true
+      this.setState({modal})
   }
 
   handleSearch (event) {
@@ -89,7 +99,7 @@ export default class UserList extends Component {
       />
       { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
       { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-      { (user === 'volunteer') && <Volunteer /> }
+      { (user === 'volunteer') && <Volunteer data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
       </>
       )
   }
@@ -100,7 +110,7 @@ export default class UserList extends Component {
     return (
       <>
       <Tool onSearch={this.handleSearch}>
-      {user !== 'donator' &&
+      {user === 'admin' &&
       <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
       }
       </Tool>
