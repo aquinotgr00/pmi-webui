@@ -76,7 +76,7 @@ export function Sidebar() {
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
-        
+
         <Nav className='flex-column'>
           <NavItem>
             <NavLink to='#' className='nav-link' id='master-wilayah'>Master Anggota</NavLink>
@@ -109,6 +109,12 @@ export function Sidebar() {
                 <NavLink to='/admin/settings/kelurahan-desa'>Kelurahan/Desa</NavLink>
               </NavItem>
             </UncontrolledCollapse>
+          </NavItem>
+        </Nav>
+
+        <Nav className='flex-column'>
+          <NavItem>
+            <NavLink to='/admin/units' className='nav-link'>Master Unit</NavLink>
           </NavItem>
         </Nav>
 

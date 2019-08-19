@@ -17,30 +17,35 @@ export function SubMemberList(props) {
       </thead>
       <tbody>
         {data &&
-          data.map((member, key) => (
-            <tr key={key}>
-              <td>{key + 1}</td>
-              <td>{member.code}</td>
-              <td>{member.name}</td>
-              <td>{ (typeof member.parent_member.name === "undefined")? "-" : member.parent_member.name }</td>
-              <td>
-                <EditActionButton path={`${pathname}/${member.id}/edit`} />
-                <Button
-                  onClick={toggle}
-                  className='btn btn-table circle-table delete-table'
-                  title='Hapus'
-                />
-                <ConfirmModal
-                  isOpen={isOpen}
-                  toggle={toggle}
-                  onAction={() => props.onAction(member.id)}
-                  labelTitle="Hapus Data"
-                  labelContent="Anda yakin akan menghapus data ini?"
-                  labelAction="Hapus"
-                />
-              </td>
-            </tr>
-          ))}
+          data.map((member, key) => {
+            const { parent_member } = member || null
+            return (
+              <tr key={key}>
+                <td>{key + 1}</td>
+                <td>{member.code}</td>
+                <td>{member.name}</td>
+                <td>
+                {(parent_member) && <p>{parent_member.name}</p> }
+                </td>
+                <td>
+                  <EditActionButton path={`${pathname}/${member.id}/edit`} />
+                  <Button
+                    onClick={toggle}
+                    className='btn btn-table circle-table delete-table'
+                    title='Hapus'
+                  />
+                  <ConfirmModal
+                    isOpen={isOpen}
+                    toggle={toggle}
+                    onAction={() => props.onAction(member.id)}
+                    labelTitle="Hapus Data"
+                    labelContent="Anda yakin akan menghapus data ini?"
+                    labelAction="Hapus"
+                  />
+                </td>
+              </tr>
+            )
+          } )}
       </tbody>
     </Table>
   )

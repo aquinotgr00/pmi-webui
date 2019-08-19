@@ -51,8 +51,6 @@ export default class MembershipForm extends Component {
   }
   
   async loadMember(memberId) {
-    this.setState({ isLoading: true, error: null })
-
     try {
       const response = await detailsMembershipApi(memberId)
       const { status } = response.data
@@ -70,7 +68,6 @@ export default class MembershipForm extends Component {
   }
 
   async handleSaveMember(member) {
-    this.setState({ isLoading: true, errorc: null })
     try {
       const { type, memberId } = this.props.match.params
       const response = memberId
