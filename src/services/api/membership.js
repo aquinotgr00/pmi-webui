@@ -14,13 +14,13 @@ export function listMembershipApi (params) {
   })
 }
 
+export function listParentMembershipApi (params) {
+  return authRequest().get('/settings/membership-parents')
+}
+
+
 export function detailsMembershipApi(membershipId){
-	cancel && cancel()
-  	return authRequest().get('/settings/membership/'+membershipId, { 
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })	
+	return authRequest().get(`/settings/membership/${membershipId}`)
 }
 
 export function storeMembershipApi(params){

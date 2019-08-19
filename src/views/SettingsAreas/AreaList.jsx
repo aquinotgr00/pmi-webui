@@ -125,7 +125,7 @@ export default class AreaList extends Component {
 
   render() {
     const { title, history } = this.props
-    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList, deleteOpen } = this.state
+    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList } = this.state
     const { pathname } = this.props.location
 
     return (

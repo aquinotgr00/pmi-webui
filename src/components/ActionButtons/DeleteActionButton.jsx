@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { ConfirmModal } from 'components'
 

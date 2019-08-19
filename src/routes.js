@@ -16,17 +16,17 @@ import MembershipForm from 'views/Membership/MembershipForm'
 
 var routes = [
   {
-    path: '/membership',
+    path: '/membership/:type',
     name: 'Membership',
     component: MembershipList
   },
   {
-    path: '/membership/create',
+    path: '/membership/:type/create',
     name: 'Create Membership',
     component: MembershipForm
   },
   {
-    path: '/membership/:memberId/edit',
+    path: '/membership/:type/:memberId/edit',
     name: 'Edit Membership',
     component: MembershipForm
   },
