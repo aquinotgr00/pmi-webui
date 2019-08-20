@@ -28,7 +28,7 @@ export function UnitTable(props) {
           </Tool>
         </div>
         <div className="ml-md-auto align-self-stretch">
-          <form className="form-inline my-3">
+          <div className="form-inline my-3">
             <h2 className="my-auto">Filter:</h2>
             <div className="form-group ml-3">
               <Input type="select" id="cityFilter" onChange={props.handleFilterCity}>
@@ -67,7 +67,7 @@ export function UnitTable(props) {
               data-toggle="tooltip"
               data-placement="top"
               data-original-title="Reset"></button>
-          </form>
+          </div>
         </div>
       </div>
       <PaginationLink

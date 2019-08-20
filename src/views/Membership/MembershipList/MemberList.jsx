@@ -10,7 +10,6 @@ export function MemberList(props) {
         <tr>
           <th>No</th>
           <th>Kode</th>
-          <th>Jenis Anggota</th>
           <th>Aksi</th>
         </tr>
       </thead>

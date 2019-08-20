@@ -3,7 +3,7 @@ import { Main } from "components"
 import { MemberList } from "./MemberList"
 import { SubMemberList } from "./SubMemberList"
 import { PaginationLink, AddNewActionButton, Tool } from 'components'
-import { listMembershipApi, deleteMembershipApi, listParentMembershipApi } from 'services/api'
+import { listMembershipApi, deleteMembershipApi } from 'services/api'
 import ucwords from "utils/string"
 
 export default class MembershipList extends Component {
@@ -19,8 +19,8 @@ export default class MembershipList extends Component {
       parents: []
     }
     this.loadMembers = this.loadMembers.bind(this)
-    this.loadParentMembers = this.loadParentMembers.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleReset = this.handleReset.bind(this)
     this.goToPage = this.goToPage.bind(this)
     this.confirmDelete = this.confirmDelete.bind(this)
     this.toggleDelete = this.toggleDelete.bind(this)
@@ -29,31 +29,14 @@ export default class MembershipList extends Component {
 
   componentDidMount() {
     this.loadMembers()
-    this.loadParentMembers()
-  }
-
-  async loadParentMembers() {
-    try {
-      const response = await listParentMembershipApi()
-      const { status } = response.data
-      if (status === "success") {
-        const { data: parents } = response.data
-        this.setState({ parents })
-      } else {
-        // TODO : handle error
-        this.setState({ isLoading: false, error: null })
-      }
-
-    } catch (error) {
-      // TODO : handle error
-    }
+    
   }
 
   goToPage(page) {
     this.loadMembers(page, this.state.searchFor, this.state.parentFilter)
   }
 
-  handleOnChangeParent(event){
+  handleOnChangeParent(event) {
     const parentFilter = event.target.value
     this.setState({ parentFilter })
     this.loadMembers(this.state.page, this.state.searchFor, parentFilter)
@@ -63,6 +46,14 @@ export default class MembershipList extends Component {
     const searchKeyword = event.target.value
     this.setState({ searchFor: searchKeyword })
     this.loadMembers(this.state.page, searchKeyword, this.state.parentFilter)
+  }
+
+  handleReset(){
+    let filterMember  = document.getElementById('filterMember')
+    let searchBox     = document.getElementsByClassName('search-box')
+    filterMember.value = 0
+    searchBox.value = ""
+    this.loadMembers();
   }
 
   toggleDelete() {
@@ -93,7 +84,7 @@ export default class MembershipList extends Component {
     }
 
     if (parentFilter) {
-      memberParams.append('p_id', parentFilter)
+      memberParams.append('l', parentFilter)
     }
 
     if (type === 'sub-jenis-anggota') {
@@ -127,28 +118,33 @@ export default class MembershipList extends Component {
 
         {(type === "jenis-anggota" || type === "sub-jenis-anggota") &&
           <div className="head-tools">
-          <div className="mr-md-auto align-self-stretch">
-            <Tool onSearch={this.handleSearch}>
-              <AddNewActionButton path={`${pathname}/create`} tooltipText={`Tambah ${title} Baru`} />
-            </Tool>
-          </div>
-          <div className="ml-md-auto align-self-stretch">
-            <form className="form-inline my-3">
-              <h2 className="my-auto">Filter:</h2>
-            <div className="form-group ml-3">
-              <select className="form-control" onChange={this.handleOnChangeParent}>
-                  <option value="0">Pilih Jenis Anggota</option>
-                  {parents.map((parent,key) => {
-                    return (
-                      <option key={key} value={parent.id}>{parent.name}</option>
-                    )
-                  })}
-              </select>
+            <div className="mr-md-auto align-self-stretch">
+              <Tool onSearch={this.handleSearch}>
+                <AddNewActionButton path={`${pathname}/create`} tooltipText={`Tambah ${title} Baru`} />
+              </Tool>
             </div>
-            <button className="btn circle-table btn-reset" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reset"></button>
-            </form>
+            <div className="ml-md-auto align-self-stretch">
+              <form className="form-inline my-3">
+                <h2 className="my-auto">Filter:</h2>
+                <div className="form-group ml-3">
+                  <select id="filterMember" className="form-control" onChange={this.handleOnChangeParent}>
+                    <option value="0">Pilih Jenis Anggota</option>
+                    {parents.map((parent, key) => {
+                      return (
+                        <option key={key} value={parent.id}>{parent.name}</option>
+                      )
+                    })}
+                  </select>
+                </div>
+                <button
+                  onClick={this.handleReset}
+                  type="button"
+                  className="btn circle-table btn-reset"
+                  data-toggle="tooltip" data-placement="top"
+                  data-original-title="Reset"></button>
+              </form>
+            </div>
           </div>
-        </div>
         }
 
         {(type === "jenis-anggota" || type === "sub-jenis-anggota") &&

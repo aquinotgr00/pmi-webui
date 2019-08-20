@@ -4,7 +4,6 @@ import { Button, FormGroup, FormFeedback, Input } from 'reactstrap'
 import { Formik, Form, Field } from "formik"
 import {
 	listCityApi,
-	listParentMembershipApi,
 	listMembershipApi,
 	detailsUnitApi,
 	storeUnitApi,
@@ -27,15 +26,16 @@ export default class UnitForm extends Component {
 			unit: {
 				name: '',
 				city_id: '',
-				membership_id:'',
-				sub_member_id:''
+				membership_id: '',
+				sub_member_id: ''
 			}
 		}
-		this.loadParentMembers = this.loadParentMembers.bind(this)
-		this.loadSubMembers = this.loadSubMembers.bind(this)
+
+		this.loadMembership = this.loadMembership.bind(this)
 		this.loadCities = this.loadCities.bind(this)
 		this.loadUnit = this.loadUnit.bind(this)
 		this.handleSaveUnit = this.handleSaveUnit.bind(this)
+		this.handleFilterParent = this.handleFilterParent.bind(this)
 	}
 
 	componentDidMount() {
@@ -43,28 +43,37 @@ export default class UnitForm extends Component {
 		if (unitId) {
 			this.loadUnit(unitId)
 		}
-		this.loadParentMembers()
-		this.loadSubMembers()
+		this.loadMembership(0)
 		this.loadCities()
 	}
 
-	async handleSaveUnit(values){
+	handleFilterParent(event) {
+		const parentFilter = event.target.value
+		if (parentFilter === '0') {
+			this.setState({ parentFilter: null })
+		} else {
+			this.setState({ parentFilter })
+			this.loadMembership(parentFilter)
+		}
+	}
+
+	async handleSaveUnit(values) {
 		try {
-      const { unitId } = this.props.match.params
-      const response = unitId
-        ? await updateUnitApi(unitId, values)
+			const { unitId } = this.props.match.params
+			const response = unitId
+				? await updateUnitApi(unitId, values)
 				: await storeUnitApi(values)
-				
-      const { status } = response.data
-      if (status === "success") {
-        const { history } = this.props
-        history.push(`/admin/units`)
+
+			const { status } = response.data
+			if (status === "success") {
+				const { history } = this.props
+				history.push(`/admin/units`)
 			}
-			
-    } catch (error) {
+
+		} catch (error) {
 			// TODO : handle errors
 			console.log(error)
-    }
+		}
 	}
 
 	async loadUnit(unitId) {
@@ -84,30 +93,20 @@ export default class UnitForm extends Component {
 		}
 	}
 
-	async loadParentMembers() {
-		try {
-			const response = await listParentMembershipApi()
-			const { status } = response.data
-			if (status === "success") {
-				const { data: parentData } = response.data
-				this.setState({ parentData })
-			}
-		} catch (error) {
-			console.log(error)
-		}
-	}
 
-	async loadSubMembers(membership_id = '') {
+	async loadMembership(parent_id = '') {
 		try {
 			const memberParams = new URLSearchParams()
-			memberParams.append('sub', 1)
-			if (membership_id) {
-				memberParams.append('p_id', membership_id)
+			if (parent_id) {
+				memberParams.append('l', parent_id)
 			}
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {
 				const { data: subData } = response.data
+				if (parseInt(parent_id) === 0) {
+					this.setState({ parentData: subData })
+				}
 				this.setState({ subData })
 			}
 		} catch (error) {
@@ -165,7 +164,11 @@ export default class UnitForm extends Component {
 									<Field
 										name='city_id'
 										render={({ field }) => (
-											<Input type="select" {...field} id='city_id' invalid={errors.city_id !== undefined} >
+											<Input
+												type="select"
+												{...field}
+												id='city_id'
+												invalid={errors.city_id !== undefined}>
 												<option value="0">Pilih Kabupaten/Kota</option>
 												{cityData.map((city, key) => {
 													return (
@@ -181,8 +184,18 @@ export default class UnitForm extends Component {
 									<label htmlFor='membership_id'>Jenis Anggota</label>
 									<Field
 										name='membership_id'
-										render={({ field }) => (
-											<Input type="select" {...field} id='membership_id' invalid={errors.membership_id !== undefined} >
+										render={({ field, form }) => (
+											<Input 
+											type="select" 
+											{...field} 
+											id='membership_id' 
+											invalid={errors.membership_id !== undefined} 
+											onChange={e => {
+												const membershipId = e.target.value
+												this.handleFilterParent(e)
+												form.setFieldValue('membership_id', membershipId)
+											}}
+											>
 												<option value="0">Pilih Jenis Anggota</option>
 												{parentData.map((parent, key) => {
 													return (

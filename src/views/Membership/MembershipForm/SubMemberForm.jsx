@@ -5,6 +5,7 @@ import MembershipSchema from "validators/membership"
 
 export function SubMemberForm(props) {
 	const { member } = props
+	console.log(member)
 	return (
 		<Formik
 			enableReinitialize
@@ -22,7 +23,7 @@ export function SubMemberForm(props) {
 			}) => (
 					<Form className='col-md-6 col-lg7 pl-0' onSubmit={handleSubmit}>
 						<FormGroup>
-							<label htmlFor='name'>Sub Jenis Anggota</label>
+							<label htmlFor='name'>Jenis Anggota</label>
 							<Field
 								name='name'
 								render={({ field }) => (
@@ -32,7 +33,7 @@ export function SubMemberForm(props) {
 							{errors.name !== undefined ? <FormFeedback>{errors.name}</FormFeedback> : ''}
 						</FormGroup>
 						<FormGroup>
-							<label htmlFor='parent_id'>Jenis Anggota</label>
+							<label htmlFor='parent_id'>Induk Jenis Anggota</label>
 							<Field
 								name='parent_id'
 								render={({ field }) => (

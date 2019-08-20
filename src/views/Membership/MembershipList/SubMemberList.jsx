@@ -8,10 +8,9 @@ export function SubMemberList(props) {
     <Table hover>
       <thead>
         <tr>
-          <th>No</th>
-          <th>Kode</th>
-          <th>Sub Jenis Anggota</th>
+          <th>No</th>          
           <th>Jenis Anggota</th>
+          <th>Sub Jenis Anggota</th>
           <th>Aksi</th>
         </tr>
       </thead>
@@ -22,10 +21,11 @@ export function SubMemberList(props) {
             return (
               <tr key={key}>
                 <td>{key + 1}</td>
-                <td>{member.code}</td>
-                <td>{member.name}</td>
                 <td>
-                {(parent_member) && <p>{parent_member.name}</p> }
+                  {(parent_member)? parent_member.name : member.name  }
+                </td>
+                <td>
+                  {(parent_member)? member.name : '-'  }
                 </td>
                 <td>
                   <EditActionButton path={`${pathname}/${member.id}/edit`} />
@@ -45,7 +45,7 @@ export function SubMemberList(props) {
                 </td>
               </tr>
             )
-          } )}
+          })}
       </tbody>
     </Table>
   )

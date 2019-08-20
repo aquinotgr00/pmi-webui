@@ -36,9 +36,9 @@ export default class AreaForm extends Component {
             subdistricts: []
         }
 
-        this.loadDetailsArea    = this.loadDetailsArea.bind(this)
-        this.handleSaveArea     = this.handleSaveArea.bind(this)
-        this.handleUpdateArea   = this.handleUpdateArea.bind(this)
+        this.loadDetailsArea = this.loadDetailsArea.bind(this)
+        this.handleSaveArea = this.handleSaveArea.bind(this)
+        this.handleUpdateArea = this.handleUpdateArea.bind(this)
         this.handleSelectedCity = this.handleSelectedCity.bind(this)
     }
 
@@ -46,7 +46,7 @@ export default class AreaForm extends Component {
         this.loadDetailsArea()
     }
 
-    handleSelectedCity(e){
+    handleSelectedCity(e) {
         const { areaData } = this.state
         let cities  = areaData
         if (typeof areaData.selection !== "undefined") {
@@ -61,8 +61,6 @@ export default class AreaForm extends Component {
             let subdistricts = city[0].subdistricts
             this.setState({ subdistricts })
         }
-        //let city_id = e.target.value
-        //this.setState({ areaData: { ...areaData,city_id   }  })
     }
 
     async handleUpdateArea(areaId, values) {
@@ -156,8 +154,10 @@ export default class AreaForm extends Component {
 
                 if (typeof status !== 'undefined') {
                     if (status === 'success') {
-                        const { data: areaData } = response.data
-                        this.setState({ areaData })
+                        const { data: areaData }    = response.data
+                        const { subdistricts }      = areaData
+                        
+                        this.setState({ areaData, subdistricts })
                     }
                 }
             }

@@ -8,7 +8,7 @@ export function UrbanVillageForm(props) {
         name: ""
     }
     let selection = props.data
-    const { subdistricts } = props    
+    const { subdistricts } = props
     let subdistrictsList = subdistricts
     if (props.data.selection) {
         selection = props.data.selection
@@ -45,12 +45,16 @@ export function UrbanVillageForm(props) {
                                         <Label>Kabupaten/Kota</Label>
                                         <Field
                                             name='city_id'
-                                            render={({ field }) => (
+                                            render={({ field, form }) => (
                                                 <Input
                                                     type="select" {...field}
                                                     id='city_id'
                                                     invalid={errors.city_id !== undefined}
-                                                    onChange={props.handleSelectedCity}
+                                                    onChange={e => {
+                                                        const cityId = e.target.value
+                                                        props.handleSelectedCity(e)
+                                                        form.setFieldValue('city_id', cityId)
+                                                    }}
                                                 >
                                                     <option value="0">Pilih Kabupaten/Kota</option>
                                                     {selection.map((option, index) => {
@@ -74,7 +78,7 @@ export function UrbanVillageForm(props) {
                                                     invalid={errors.subdistrict_id !== undefined}
                                                 >
                                                     <option value="0">Pilih Kecamatan</option>
-                                                    
+
                                                     {subdistrictsList.map((subdistrict, key) => {
                                                         return (
                                                             <option key={key} value={subdistrict.id}>{subdistrict.name}</option>

@@ -31,8 +31,7 @@ export default class UnitList extends Component {
 			unitData: []
 		}
 		this.loadUnits = this.loadUnits.bind(this)
-		this.loadParentMembers = this.loadParentMembers.bind(this)
-		this.loadSubMembers = this.loadSubMembers.bind(this)
+		this.loadMembership = this.loadMembership.bind(this)
 		this.loadCities = this.loadCities.bind(this)
 
 		this.goToPage = this.goToPage.bind(this)
@@ -47,8 +46,7 @@ export default class UnitList extends Component {
 
 	componentDidMount() {
 		this.loadUnits()
-		this.loadParentMembers()
-		this.loadSubMembers()
+		this.loadMembership(0)
 		this.loadCities()
 	}
 
@@ -97,7 +95,7 @@ export default class UnitList extends Component {
 		} else {
 			this.setState({ parentFilter })
 			this.loadUnits(this.state.page, this.state.searchFor, this.state.cityFilter, parentFilter, this.state.subFilter)
-			this.loadSubMembers(parentFilter)
+			this.loadMembership(parentFilter)
 		}
 	}
 
@@ -113,28 +111,28 @@ export default class UnitList extends Component {
 
 	async loadUnits(page = 1, searchFor = '', cityFilter = '', parentFilter = '', subFilter = '') {
 		try {
-			const memberParams = new URLSearchParams()
+			const unitParams = new URLSearchParams()
 
-			memberParams.append('page', page)
+			unitParams.append('page', page)
 
 			if (searchFor) {
-				memberParams.append('s', searchFor)
+				unitParams.append('s', searchFor)
 			}
 
 			if (cityFilter) {
 
-				memberParams.append('c_id', cityFilter)
+				unitParams.append('c_id', cityFilter)
 			}
 
 			if (parentFilter) {
-				memberParams.append('p_id', parentFilter)
+				unitParams.append('p_id', parentFilter)
 			}
 
 			if (subFilter) {
-				memberParams.append('s_id', subFilter)
+				unitParams.append('l', subFilter)
 			}
 
-			const response = await listUnitApi(memberParams)
+			const response = await listUnitApi(unitParams)
 			const { status } = response.data
 
 			if (status === 'success') {
@@ -150,30 +148,19 @@ export default class UnitList extends Component {
 		}
 	}
 
-	async loadParentMembers() {
-		try {
-			const response = await listParentMembershipApi()
-			const { status } = response.data
-			if (status === "success") {
-				const { data: parentData } = response.data
-				this.setState({ parentData })
-			}
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	async loadSubMembers(parent_id = '') {
+	async loadMembership(parent_id = '') {
 		try {
 			const memberParams = new URLSearchParams()
-			memberParams.append('sub', 1)
 			if (parent_id) {
-				memberParams.append('p_id', parent_id)
+				memberParams.append('l', parent_id)
 			}
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {
 				const { data: subData } = response.data
+				if (parseInt(parent_id) === 0 ) {
+					this.setState({ parentData: subData })
+				}
 				this.setState({ subData })
 			}
 		} catch (error) {

@@ -14,11 +14,6 @@ export function listMembershipApi (params) {
   })
 }
 
-export function listParentMembershipApi (params) {
-  return authRequest().get('/settings/membership-parents')
-}
-
-
 export function detailsMembershipApi(membershipId){
 	return authRequest().get(`/settings/membership/${membershipId}`)
 }

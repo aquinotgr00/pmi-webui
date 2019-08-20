@@ -8,13 +8,13 @@ export function SubdistrictList(props) {
 
 	return (
 		<>
-			<tool className="head-tools">
+			<div className="head-tools">
 				<div className="mr-md-auto align-self-stretch">
-					<form className="form-inline my-3">
+					<div className="form-inline my-3">
 						<Tool onSearch={props.handleSearch}>
 							<AddNewActionButton path={`${path}/create`} tooltipText={`Tambah ${title} Baru`} />
 						</Tool>
-					</form>
+					</div>
 				</div>
 				<div className="ml-md-auto align-self-stretch">
 					<form className="form-inline my-3">
@@ -35,7 +35,7 @@ export function SubdistrictList(props) {
 							data-original-title="Reset" />
 					</form>
 				</div>
-			</tool>
+			</div>
 			<PaginationLink
 				rowFrom={props.from}
 				rowTo={props.to}
