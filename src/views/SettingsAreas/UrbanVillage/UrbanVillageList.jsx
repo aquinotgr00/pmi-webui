@@ -19,7 +19,7 @@ export function UrbanVillageList(props) {
 					<div className="form-inline my-3">
 						<h2 className="my-auto">Filter:</h2>
 						<div className="form-group ml-3">
-							<Input type="select"  id="filterCity" onChange={props.handleFilterCity}>
+							<Input type="select" id="filterCity" onChange={props.handleFilterCity}>
 								<option value="0">Pilih Kabupaten/Kota</option>
 								{props.filterCity && props.filterCity.map((city, key) => (
 									<option key={key} value={city.id}>{city.name}</option>
@@ -27,7 +27,7 @@ export function UrbanVillageList(props) {
 							</Input>
 						</div>
 						<div className="form-group ml-3">
-							<Input type="select"  id="filterSubdistrict" onChange={props.handleFilterSubdistrict}>
+							<Input type="select" id="filterSubdistrict" onChange={props.handleFilterSubdistrict}>
 								<option value="0">Pilih Kecamatan</option>
 								{props.filterSubdistrict && props.filterSubdistrict.map((subdistrict, index) => (
 									<option key={index} value={subdistrict.id}>{subdistrict.name}</option>
@@ -69,14 +69,16 @@ export function UrbanVillageList(props) {
 							<td>{village.subdistrict.name}</td>
 							<td>{village.subdistrict.city.name}</td>
 							<td>{village.subdistrict.city.province.name}</td>
-							<EditActionButton
-								path={path + '/' + village.id + '/edit'}
-							/>
-							<DeleteActionButton
-								dataId={village.id}
-								title={title}
-								history={history}
-							/>
+							<td>
+								<EditActionButton
+									path={path + '/' + village.id + '/edit'}
+								/>
+								<DeleteActionButton
+									dataId={village.id}
+									title={title}
+									history={history}
+								/>
+							</td>
 						</tr>
 					))}
 				</tbody>

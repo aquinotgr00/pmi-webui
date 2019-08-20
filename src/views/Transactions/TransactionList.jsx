@@ -256,7 +256,11 @@ export default class TransactionList extends Component {
           onPageChange={this.goToPage}
         />
         {error}
-        <TransactionTable data={transactionData} items={this.state.goodItems} transaction={transaction} ref={el => (this.componentRef = el)} />
+        <TransactionTable
+          data={transactionData}
+          items={this.state.goodItems}
+          transaction={transaction}
+          ref={el => (this.componentRef = el)} />
       </>
     )
   }

@@ -7,15 +7,22 @@ export function UrbanVillageForm(props) {
         city_id: 0,
         name: ""
     }
-    let selection = props.data
-    const { subdistricts } = props
-    let subdistrictsList = subdistricts
-    if (props.data.selection) {
+    let selection 					= props.data
+    let subdistrictsList 		= []
+		
+		if (props.data.selection) {
         selection = props.data.selection
-    }
+		}
+		
     if (props.data.id) {
         initialValues = props.data
-    }
+		}
+
+		const { subdistricts } 	= props || null
+		if (subdistricts) {
+			subdistrictsList = Object.values(subdistricts)
+		}
+		
     return (
         <>
             <Row>

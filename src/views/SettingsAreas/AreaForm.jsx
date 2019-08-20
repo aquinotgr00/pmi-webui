@@ -16,7 +16,8 @@ import {
     updateCityApi,
     updateSubdistrictApi,
     updateVillageApi,
-    listCityApi
+    listCityApi,
+    listSubdistrictApi
 } from 'services/api'
 
 import addCitySchema from 'validators/addCity'
@@ -40,17 +41,19 @@ export default class AreaForm extends Component {
         this.handleSaveArea = this.handleSaveArea.bind(this)
         this.handleUpdateArea = this.handleUpdateArea.bind(this)
         this.handleSelectedCity = this.handleSelectedCity.bind(this)
+        this.loadSubdistrict = this.loadSubdistrict.bind(this)
     }
 
     componentDidMount() {
         this.loadDetailsArea()
+        this.loadSubdistrict()
     }
 
     handleSelectedCity(e) {
         const { areaData } = this.state
-        let cities  = areaData
+        let cities = areaData
         if (typeof areaData.selection !== "undefined") {
-            const { selection }   = areaData
+            const { selection } = areaData
             cities = selection
         }
 
@@ -154,16 +157,35 @@ export default class AreaForm extends Component {
 
                 if (typeof status !== 'undefined') {
                     if (status === 'success') {
-                        const { data: areaData }    = response.data
-                        const { subdistricts }      = areaData
-                        
-                        this.setState({ areaData, subdistricts })
+                        const { data: areaData } = response.data
+                        const { subdistricts } = areaData || null
+                        if (subdistricts) {
+                            this.setState({ subdistricts })
+                        }
+                        this.setState({ areaData })
+
                     }
                 }
             }
         } catch (error) {
             // TODO : handle error
             console.log(error)
+        }
+    }
+
+    async loadSubdistrict(cityId = '') {
+        const subParams = new URLSearchParams()
+        if (cityId) {
+            subParams.append('c_id', cityId)    
+        }
+
+        const response = await listSubdistrictApi(subParams)
+        if (response !== null) {
+            const { status } = response.data
+            if (status === 'success') {
+                const { data: subdistricts } = response.data
+                this.setState({ subdistricts })
+            }
         }
     }
 
