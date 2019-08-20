@@ -19,14 +19,6 @@ function generatePreviewImgUrl (file, callback) {
   reader.onloadend = e => callback(reader.result)
 }
 
-function dataURLtoFile (dataurl, filename) {
-  var arr = dataurl.split(','); var mime = arr[0].match(/:(.*?);/)[1]
-  var bstr = atob(arr[1]); var n = bstr.length; var u8arr = new Uint8Array(n)
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n)
-  }
-  return new File([u8arr], filename, { type: mime })
-}
 
 class CampaignForm extends Component {
   constructor (props) {
@@ -54,7 +46,6 @@ class CampaignForm extends Component {
 
   componentDidMount () {
     const { campaignType, campaignId } = this.props.match.params
-
     if (campaignId) {
       this.loadCampaign(campaignId)
     } else {

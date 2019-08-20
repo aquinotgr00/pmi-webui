@@ -5,7 +5,6 @@ export function Main (props) {
   return (
     <>
       <Header title={props.title} />
-
       {props.children}
     </>
   )

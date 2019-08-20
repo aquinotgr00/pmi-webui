@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Col, Button, FormGroup, Label, Table } from 'reactstrap'
+import { Row, Col, FormGroup, Label, Table } from 'reactstrap'
 import { Main, DonationStatusDropdown, EditDonatorModal } from 'components'
 import { getDonator, listDonationByStatus, postUpdateDonator } from 'services/api'
 import { formatDate } from 'utils/number'

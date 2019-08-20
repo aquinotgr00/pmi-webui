@@ -139,7 +139,7 @@ export default class DetailsTransaction extends Component {
                 </Col>
               )
             })}
-            {(typeof payment_method !== 'undefind' && payment_method == 1) &&
+            {(typeof payment_method !== 'undefined' && payment_method === 1) &&
               <Card className="card-transaction col-md-4">
                 <CardBody>
                   <CardTitle>
@@ -150,10 +150,10 @@ export default class DetailsTransaction extends Component {
                       <img src={image} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
                       <div className="overlay-kwitansi btn-kwitansi">
                         <span>
-                          <a href="#" onClick={this.toggleImage} className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></a>
+                          <button onClick={this.toggleImage} className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></button>
                         </span>
                         <span data-toggle="modal" role="button" data-target="#ModalMediaLibrary">
-                          <a href="#" className="btn btn-table circle-table edit-table" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ubah Gambar"></a>
+                          <button className="btn btn-table circle-table edit-table" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ubah Gambar"></button>
                         </span>
                       </div>
                     </div>

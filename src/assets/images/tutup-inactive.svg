@@ -1,25 +1,35 @@
-<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g opacity="0.5">
-<path d="M27.75 14C27.75 21.5939 21.5939 27.75 14 27.75C6.40608 27.75 0.25 21.5939 0.25 14C0.25 6.40608 6.40608 0.25 14 0.25C21.5939 0.25 27.75 6.40608 27.75 14Z" fill="#131927"/>
-<path d="M27.75 14C27.75 21.5939 21.5939 27.75 14 27.75C6.40608 27.75 0.25 21.5939 0.25 14C0.25 6.40608 6.40608 0.25 14 0.25C21.5939 0.25 27.75 6.40608 27.75 14Z" stroke="url(#paint0_linear)" stroke-width="0.5"/>
-<path d="M27.75 14C27.75 21.5939 21.5939 27.75 14 27.75C6.40608 27.75 0.25 21.5939 0.25 14C0.25 6.40608 6.40608 0.25 14 0.25C21.5939 0.25 27.75 6.40608 27.75 14Z" stroke="url(#paint1_linear)" stroke-width="0.5"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 28 28" style="enable-background:new 0 0 28 28;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.5;}
+	.st1{fill:#131927;}
+	.st2{fill:none;stroke:url(#SVGID_1_);stroke-width:0.5;}
+	.st3{fill:none;stroke:url(#SVGID_2_);stroke-width:0.5;}
+	.st4{fill:#FFFFFF;}
+</style>
+<g class="st0">
+	<path class="st1" d="M27.8,14c0,7.6-6.2,13.8-13.8,13.8C6.4,27.8,0.2,21.6,0.2,14C0.2,6.4,6.4,0.2,14,0.2
+		C21.6,0.2,27.8,6.4,27.8,14z"/>
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="14" y1="30" x2="14" y2="2.274" gradientTransform="matrix(1 0 0 -1 0 30)">
+		<stop  offset="0" style="stop-color:#000000;stop-opacity:0"/>
+		<stop  offset="0.8" style="stop-color:#000000;stop-opacity:2.000000e-02"/>
+		<stop  offset="1" style="stop-color:#000000;stop-opacity:4.000000e-02"/>
+	</linearGradient>
+	<path class="st2" d="M27.8,14c0,7.6-6.2,13.8-13.8,13.8C6.4,27.8,0.2,21.6,0.2,14C0.2,6.4,6.4,0.2,14,0.2
+		C21.6,0.2,27.8,6.4,27.8,14z"/>
+	
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="14" y1="30" x2="14" y2="2" gradientTransform="matrix(1 0 0 -1 0 30)">
+		<stop  offset="0" style="stop-color:#FFFFFF;stop-opacity:0.12"/>
+		<stop  offset="0.2" style="stop-color:#FFFFFF;stop-opacity:6.000000e-02"/>
+		<stop  offset="1" style="stop-color:#FFFFFF;stop-opacity:0"/>
+	</linearGradient>
+	<path class="st3" d="M27.8,14c0,7.6-6.2,13.8-13.8,13.8C6.4,27.8,0.2,21.6,0.2,14C0.2,6.4,6.4,0.2,14,0.2
+		C21.6,0.2,27.8,6.4,27.8,14z"/>
 </g>
-<g clip-path="url(#clip0)">
-<path d="M19.8333 15.3909C19.8316 15.3909 19.8293 15.3909 19.8276 15.3909L8.16098 15.3333C7.5167 15.3299 6.9966 14.8053 7.00002 14.161C7.00343 13.5187 7.52467 13 8.16668 13C8.16839 13 8.17067 13 8.17238 13L19.839 13.0575C20.4833 13.0607 21.0034 13.5856 21 14.2299C20.9966 14.8725 20.4753 15.3909 19.8333 15.3909Z" fill="white"/>
-</g>
-<defs>
-<linearGradient id="paint0_linear" x1="0.136997" y1="0" x2="0.136997" y2="27.726" gradientUnits="userSpaceOnUse">
-<stop stop-opacity="0"/>
-<stop offset="0.8" stop-opacity="0.02"/>
-<stop offset="1" stop-opacity="0.04"/>
-</linearGradient>
-<linearGradient id="paint1_linear" x1="0" y1="0" x2="0" y2="28" gradientUnits="userSpaceOnUse">
-<stop stop-color="white" stop-opacity="0.12"/>
-<stop offset="0.2" stop-color="white" stop-opacity="0.06"/>
-<stop offset="1" stop-color="white" stop-opacity="0"/>
-</linearGradient>
-<clipPath id="clip0">
-<rect width="14" height="2.39086" fill="white" transform="translate(7 13)"/>
-</clipPath>
-</defs>
+<path class="st4" d="M12.4,14.9H11c-0.4,0-0.7-0.3-0.7-0.7v0c0-0.4,0.3-0.7,0.7-0.7h1.4c0.4,0,0.7,0.3,0.7,0.7v0
+	C13.2,14.6,12.8,14.9,12.4,14.9z M19,8.5H9C8.7,8.5,8.5,8.7,8.5,9v10.5c0,0.3,0.2,0.5,0.5,0.5h10c0.3,0,0.5-0.2,0.5-0.5V9
+	C19.5,8.7,19.3,8.5,19,8.5z"/>
 </svg>

@@ -9,8 +9,60 @@ import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
+import SettingsAreas from 'views/SettingsAreas'
+import AreaForm from 'views/SettingsAreas/AreaForm'
+import MembershipList from 'views/Membership/MembershipList'
+import MembershipForm from 'views/Membership/MembershipForm'
+import UnitList from 'views/SettingsUnits/UnitList'
+import UnitForm from 'views/SettingsUnits/UnitForm'
 
 var routes = [
+  
+  {
+    path: '/units',
+    name: 'Unit',
+    component: UnitList
+  },
+  {
+    path: '/units/create',
+    name: 'Create Unit',
+    component: UnitForm
+  },
+  {
+    path: '/units/:unitId/edit',
+    name: 'Edit Unit',
+    component: UnitForm
+  },
+  {
+    path: '/membership/:type',
+    name: 'Membership',
+    component: MembershipList
+  },
+  {
+    path: '/membership/:type/create',
+    name: 'Create Membership',
+    component: MembershipForm
+  },
+  {
+    path: '/membership/:type/:memberId/edit',
+    name: 'Edit Membership',
+    component: MembershipForm
+  },
+  {
+    path: '/settings/:area',
+    name: 'Setting Area',
+    component: SettingsAreas
+  },
+  {
+    path: '/settings/:area/create',
+    name: 'Create Area',
+    component: AreaForm
+  },
+  {
+    path: '/settings/:area/:areaId/edit',
+    name: 'Edit Area',
+    component: AreaForm
+  },
   {
     path: '/users/:user',
     name: 'Users',
