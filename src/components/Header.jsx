@@ -5,12 +5,12 @@ import { showConfirmLogout } from 'actions'
 
 function Header (props) {
   return (
-    <header id='nav-top' className='pt-4'>
-      <Row>
-        <Col md='10'>
+    <>
+    <header id='nav-top' className='navbar navbar-expand-lg navbar-light pl-0 pt-4'>
+        <div className='mr-md-auto align-self-stretch'>
           <h1>{props.title}</h1>
-        </Col>
-        <Col md='2'>
+        </div>
+        <div className='mr-3'>
           <UncontrolledDropdown>
             <DropdownToggle caret tag='a'>
               admin 01
@@ -24,10 +24,10 @@ function Header (props) {
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
-        </Col>
-      </Row>
-      <hr />
+        </div>
     </header>
+    <hr />
+    </>
   )
 }
 
