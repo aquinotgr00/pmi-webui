@@ -10,22 +10,17 @@ export function SubMemberList(props) {
         <tr>
           <th>No</th>          
           <th>Jenis Anggota</th>
-          <th>Sub Jenis Anggota</th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
         {data &&
           data.map((member, key) => {
-            const { parent_member } = member || null
             return (
               <tr key={key}>
                 <td>{key + 1}</td>
                 <td>
-                  {(parent_member)? parent_member.name : member.name  }
-                </td>
-                <td>
-                  {(parent_member)? member.name : '-'  }
+                  { member.circular  }
                 </td>
                 <td>
                   <EditActionButton path={`${pathname}/${member.id}/edit`} />

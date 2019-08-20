@@ -199,7 +199,7 @@ export default class UnitForm extends Component {
 												<option value="0">Pilih Jenis Anggota</option>
 												{parentData.map((parent, key) => {
 													return (
-														<option key={key} value={parent.id}>{parent.name}</option>
+														<option key={key} value={parent.id}>{parent.circular}</option>
 													)
 												})}
 											</Input>
@@ -207,23 +207,7 @@ export default class UnitForm extends Component {
 									/>
 									{errors.membership_id !== undefined ? <FormFeedback>{errors.membership_id}</FormFeedback> : ''}
 								</FormGroup>
-								<FormGroup>
-									<label htmlFor='sub_member_id'>Sub Jenis Anggota</label>
-									<Field
-										name='sub_member_id'
-										render={({ field }) => (
-											<Input type="select" {...field} id='sub_member_id' invalid={errors.sub_member_id !== undefined} >
-												<option value="0">Pilih Sub Jenis Anggota</option>
-												{subData.map((sub, key) => {
-													return (
-														<option key={key} value={sub.id}>{sub.name}</option>
-													)
-												})}
-											</Input>
-										)}
-									/>
-									{errors.sub_member_id !== undefined ? <FormFeedback>{errors.sub_member_id}</FormFeedback> : ''}
-								</FormGroup>
+				
 								<div className='float-right'>
 									<Button type='submit' color='success' disabled={isSubmitting}>Simpan</Button>
 								</div>

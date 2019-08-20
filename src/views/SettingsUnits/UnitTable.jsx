@@ -43,23 +43,14 @@ export function UnitTable(props) {
             <div className="form-group ml-3">
               <Input type="select" id="filterParent" onChange={props.handleFilterParent}>
                 <option value="0">Pilih Jenis Anggota</option>
-                {parentData.map((parent, key) => {
+                {Object.values(parentData).map((parent, key) => {
                   return (
-                    <option key={key} value={parent.id}>{parent.name}</option>
+                    <option key={key} value={parent.id}>{parent.circular}</option>
                   )
                 })}
               </Input>
             </div>
-            <div className="form-group ml-3">
-              <Input type="select" id="filterSub" onChange={props.handleFilterSub}>
-                <option value="0">Pilih Sub Jenis Anggota</option>
-                {subData.map((sub, key) => {
-                  return (
-                    <option key={key} value={sub.id}>{sub.name}</option>
-                  )
-                })}
-              </Input>
-            </div>
+
             <button
               type="button"
               onClick={props.handleReset}
@@ -85,7 +76,6 @@ export function UnitTable(props) {
             <th>Unit</th>
             <th>Kabupaten/Kota</th>
             <th>Jenis Anggota</th>
-            <th>Sub Jenis Anggota</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -94,14 +84,13 @@ export function UnitTable(props) {
             unitData.map((unit, key) => {
               const { membership } = unit || null
               const { city } = unit || null
-              const { sub_membership } = unit || null
+              const { parent_member } = membership || null
               return (
                 <tr key={key}>
                   <td>{key + 1}</td>
                   <td>{unit.name}</td>
                   <td>{(city) ? city.name : ""} </td>
-                  <td>{(membership) ? membership.name : ''} </td>
-                  <td>{(sub_membership) ? sub_membership.name : ''} </td>
+                  <td>{(parent_member) ? parent_member.name+' > '+membership.name :  membership.name } </td>
                   <td>
                     <EditActionButton path={`${pathname}/${unit.id}/edit`} />
                     <Button

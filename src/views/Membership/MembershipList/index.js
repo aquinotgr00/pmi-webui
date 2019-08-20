@@ -123,27 +123,7 @@ export default class MembershipList extends Component {
                 <AddNewActionButton path={`${pathname}/create`} tooltipText={`Tambah ${title} Baru`} />
               </Tool>
             </div>
-            <div className="ml-md-auto align-self-stretch">
-              <form className="form-inline my-3">
-                <h2 className="my-auto">Filter:</h2>
-                <div className="form-group ml-3">
-                  <select id="filterMember" className="form-control" onChange={this.handleOnChangeParent}>
-                    <option value="0">Pilih Jenis Anggota</option>
-                    {parents.map((parent, key) => {
-                      return (
-                        <option key={key} value={parent.id}>{parent.name}</option>
-                      )
-                    })}
-                  </select>
-                </div>
-                <button
-                  onClick={this.handleReset}
-                  type="button"
-                  className="btn circle-table btn-reset"
-                  data-toggle="tooltip" data-placement="top"
-                  data-original-title="Reset"></button>
-              </form>
-            </div>
+   
           </div>
         }
 

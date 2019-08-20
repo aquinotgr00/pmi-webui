@@ -5,7 +5,6 @@ import MembershipSchema from "validators/membership"
 
 export function SubMemberForm(props) {
 	const { member } = props
-	console.log(member)
 	return (
 		<Formik
 			enableReinitialize
@@ -39,7 +38,7 @@ export function SubMemberForm(props) {
 								render={({ field }) => (
 									<Input type="select" {...field} id='parent_id' invalid={errors.parent_id !== undefined} >
 										<option value="0">Pilih Jenis Anggota</option>
-										{props.parents.map((parent,key) => {
+										{Object.values(props.parents).map((parent,key) => {
 											return(
 												<option key={key} value={parent.id}>{parent.name}</option>
 											)
