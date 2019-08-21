@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, useRef } from 'react'
 import { PaginationLink, Tool, VolunteerFilter } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { Administrator } from './Administrator'
 import { Donator } from './Donator'
 import { Volunteer } from './Volunteer'
-import { listUserApi, updateActiveUserApi, getDonatorList, getVolunteerList, getSubdistrictListApi, getUnitListApi } from 'services/api'
+import { listUserApi, updateActiveUserApi, getDonatorList, getVolunteerList, getSubdistrictListApi, getUnitListApi, exportVolunteerToPdfApi } from 'services/api'
 
 export default class UserList extends Component {
   constructor (props) {
@@ -24,6 +24,7 @@ export default class UserList extends Component {
       tooltipOpen: false,
     }
     this.selectInput = React.createRef()
+    this.volunteerTable = React.createRef()
 
     this.loadUser = this.loadUser.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -35,6 +36,8 @@ export default class UserList extends Component {
     this.getUnitList = this.getUnitList.bind(this)
     this.getSubdistrictList = this.getSubdistrictList.bind(this)
     this.tooltipToggle = this.tooltipToggle.bind(this)
+    this.handleExportPdf = this.handleExportPdf.bind(this)
+    this.handlePrint = this.handlePrint.bind(this)
   }
 
   componentDidMount () {
@@ -140,6 +143,18 @@ export default class UserList extends Component {
     }
   }
 
+  async handleExportPdf () {
+    const response = await exportVolunteerToPdfApi(this.state.filters)
+    const { status } = response.data
+    console.log(response)
+    if (status === 'success') {
+      const { url } = response.data.data
+      window.open(url, "_blank")
+    }
+  }
+
+  handlePrint () {}
+
   renderUserList (user) {
     const { userData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
 
@@ -156,7 +171,7 @@ export default class UserList extends Component {
       />
       { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
       { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-      { (user === 'volunteer') && <Volunteer data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
+      { (user === 'volunteer') && <Volunteer forwadedRef={this.volunteerTable} data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
       </>
     )
   }
@@ -182,6 +197,9 @@ export default class UserList extends Component {
             selectedUnit={this.state.selectedUnit}
             tootltipOpen={this.state.tooltipOpen}
             tooltipToggle={this.tooltipToggle}
+            handleExportPdf={this.handleExportPdf}
+            volunteerTable={this.volunteerTable.current}
+            handlePrint={this.handlePrint}
         />
       }
       {error
