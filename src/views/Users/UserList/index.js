@@ -68,6 +68,9 @@ export default class UserList extends Component {
       case 'volunteer':
         response = await getVolunteerList(userParams)
         break
+      default:
+        response = { data: null }
+        break
     }
 
     const { status } = response.data
@@ -124,11 +127,11 @@ export default class UserList extends Component {
     this.loadUser(page, this.state.searchFor)
   }
 
-  async handleDisableEnable (event) {
-    const params = event.target.value.split(',')
-    const oposite = (params[1] == 1) ? 'disable' : 'enable'
-    const oposite_msg = (params[1] == 1) ? 'Non-aktif' : 'Aktif'
-    const response = await updateActiveUserApi(params[0], oposite)
+  async handleDisableEnable(event){
+    let params = event.target.value.split(',')
+    let oposite = (params[1] === 1)? 'disable' : 'enable'
+    let oposite_msg = (params[1] === 1)? 'Non-aktif' : 'Aktif'
+    const response = await updateActiveUserApi(params[0],oposite)
     const { status } = response.data
     if (status === 'success') {
       const { data } = response.data

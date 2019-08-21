@@ -6,6 +6,7 @@ import ucwords from 'utils/string'
 
 export class Administrator extends Component {
 
+  // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props)
   }
@@ -35,7 +36,7 @@ export class Administrator extends Component {
                   path={`${path}/${user.id}/edit`}
                   data={user}
                 />
-                {user.active == 0 &&
+                {user.active === 0 &&
                   <Button
                     onClick={this.props.toggleEnable}
                     value={[user.id, user.active]}
@@ -44,7 +45,7 @@ export class Administrator extends Component {
                   />
                 }
 
-                {user.active == 1 &&
+                {user.active === 1 &&
                   <Button
                     onClick={this.props.toggleEnable}
                     value={[user.id, user.active]}

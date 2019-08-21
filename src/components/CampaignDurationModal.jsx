@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, FormFeedback } from 'reactstrap'
+import { Button, FormGroup, Label, Modal, ModalHeader, ModalBody, FormFeedback } from 'reactstrap'
 import { Formik, Form, Field } from 'formik'
 import DatePicker from 'react-datepicker'
 import ExtendDurationSchema from 'validators/extendDuration'

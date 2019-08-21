@@ -14,8 +14,6 @@ class AdminForm extends Component {
 
     this.loadUser = this.loadUser.bind(this)
     this.handleUpdateUser = this.handleUpdateUser.bind(this)
-    this.onChangeName   = this.onChangeName.bind(this)
-    this.onChangeEmail  = this.onChangeEmail.bind(this)
 
     this.state = {
       items: [],
@@ -94,9 +92,9 @@ class AdminForm extends Component {
     try {
       const storeResponse = await storeUserApi(values)
       const { status } = storeResponse.data
-      if (status == 'success') {
-        alert('Berhasil! admin tersimpan')
-        this.props.history.push('/admin/users/admin')
+      if (status === 'success') {
+        const { history } = this.props
+        history.push(`/admin/users/admin`)
       }
     } catch (e) {
       console.log(e)
@@ -107,23 +105,13 @@ class AdminForm extends Component {
     try {
       const updateResponse = await updateUserApi(userId, values)
       const { status } = updateResponse.data
-      if (status == 'success') {
-        alert('Berhasil! admin terupdate')
-        this.props.history.push('/admin/users/admin')
+      if (status === 'success') {
+        const { history } = this.props
+        history.push(`/admin/users/admin`)
       }
     } catch (e) {
       console.log(e)
     }
-  }
-
-  onChangeName(event){
-    const name = event.target.value
-    this.setState({ name })
-  }
-
-  onChangeEmail(event){
-    const email = event.target.value
-    this.setState({ email })
   }
 
   render() {
@@ -138,13 +126,13 @@ class AdminForm extends Component {
         <Row className="pl-3">
 
           <Formik
-            enableReinitialize={true} 
+            enableReinitialize={true}
             initialValues={initialValues}
-            validationSchema={ this.state.userId > 0 ? UpdateUserSchema : AddUserSchema}
+            validationSchema={this.state.userId > 0 ? UpdateUserSchema : AddUserSchema}
             onSubmit={(values, { setSubmitting }) => {
               if (this.state.userId > 0) {
-                this.handleUpdateUser(this.state.userId,values)
-              }else{
+                this.handleUpdateUser(this.state.userId, values)
+              } else {
                 this.handleStoreUser(values)
               }
               setSubmitting(false)
@@ -157,7 +145,7 @@ class AdminForm extends Component {
             }) => (
 
                 <Form onSubmit={handleSubmit} className='col-md-6 col-lg7 pl-0'>
-                  
+
                   <FormGroup>
                     <label>Nama Lengkap</label>
                     <Field

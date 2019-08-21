@@ -15,12 +15,7 @@ export function listUserApi (params) {
 }
 
 export function detailsUserApi(userId){
-	cancel && cancel()
-  	return authRequest().get('/users/'+userId, { 
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })	
+  return authRequest().get(`/users/${userId}`)	
 }
 
 export function storeUserApi(params){

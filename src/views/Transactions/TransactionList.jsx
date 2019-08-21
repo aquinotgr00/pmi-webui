@@ -100,7 +100,7 @@ export default class TransactionList extends Component {
 
   handleFilterStatus(event) {
     let filterStatus = event.target.value
-    if (filterStatus == 0) {
+    if (filterStatus === 0) {
       filterStatus = null;
     }
     this.loadTransaction(this.state.page, this.state.searchFor, this.state.title, filterStatus, this.state.startDate, this.state.finishDate)
@@ -256,7 +256,11 @@ export default class TransactionList extends Component {
           onPageChange={this.goToPage}
         />
         {error}
-        <TransactionTable data={transactionData} items={this.state.goodItems} transaction={transaction} ref={el => (this.componentRef = el)} />
+        <TransactionTable
+          data={transactionData}
+          items={this.state.goodItems}
+          transaction={transaction}
+          ref={el => (this.componentRef = el)} />
       </>
     )
   }
