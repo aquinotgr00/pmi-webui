@@ -1,7 +1,7 @@
 import React from 'react'
 import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'components'
 import { DeleteActionButton } from 'components/ActionButtons/DeleteActionButton'
-import { Row, Col, Button, FormGroup, Label, Input, Table } from 'reactstrap'
+import { Input, Table } from 'reactstrap'
 
 export function UrbanVillageList(props) {
 	const { path, title, history } = props

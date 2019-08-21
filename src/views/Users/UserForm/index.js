@@ -5,6 +5,7 @@ import { VolunteerForm } from './VolunteerForm'
 
 export default class UserForm extends Component {
   
+  	// eslint-disable-next-line no-useless-constructor
   	constructor (props) {
 		super(props)
 	}

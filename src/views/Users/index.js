@@ -5,6 +5,7 @@ import ucwords from 'utils/string'
 import UserList from './UserList'
 
 export default class Users extends Component {
+  // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props)
   }
