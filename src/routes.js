@@ -9,6 +9,7 @@ import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
+import DashboardRelawan from 'views/DashboardRelawan'
 import SettingsAreas from 'views/SettingsAreas'
 import AreaForm from 'views/SettingsAreas/AreaForm'
 import MembershipList from 'views/Membership/MembershipList'
@@ -19,6 +20,10 @@ import UnitForm from 'views/SettingsUnits/UnitForm'
 var routes = [
   
   {
+    path: '/dashboard/relawan',
+    name: 'Dashboard Relawan',
+    component: DashboardRelawan
+  },{
     path: '/units',
     name: 'Unit',
     component: UnitList

@@ -30,12 +30,14 @@ export default class MembershipForm extends Component {
     if (memberId) {
       this.loadMember(memberId)
     }
-    this.loadParentMembers()
+    this.loadParentMembers(0)
   }
 
-  async loadParentMembers() {
+  async loadParentMembers(parentId) {
     try {
-      const response = await listMembershipApi()
+      const memberParams = new URLSearchParams()
+      memberParams.append('l',parentId)
+      const response = await listMembershipApi(memberParams)
       const { status } = response.data
       if (status === "success") {
         const { data: parents } = response.data
