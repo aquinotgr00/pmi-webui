@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Table, Button } from 'reactstrap'
 import { VolunteerProfileModal } from 'components'
+import { EditActionButton } from 'components/ActionButtons/EditActionButton'
 
 export function Volunteer (props) {
   const { path } = props
@@ -32,9 +33,9 @@ export function Volunteer (props) {
                     <td>{volunteer.city}</td>
                     <td>{volunteer.unit === null ? '':volunteer.unit.name}</td>
                     <td>
-                        <Button
-                            className='btn btn-table circle-table edit-table'
-                            title='Edit'
+                        <EditActionButton
+                          path={`${path}/${volunteer.id}/edit`}
+                          data={volunteer}
                         />
                         <Button
                             className='btn btn-table circle-table delete-table'
