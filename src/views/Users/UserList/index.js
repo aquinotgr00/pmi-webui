@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { PaginationLink, Tool } from 'components'
+import { PaginationLink, Tool, VolunteerFilter } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { Administrator } from './Administrator'
 import { Donator } from './Donator'
 import { Volunteer } from './Volunteer'
-import { listUserApi, updateActiveUserApi, getDonatorList } from 'services/api'
+import { listUserApi, updateActiveUserApi, getDonatorList, getVolunteerList, getSubdistrictListApi, getUnitListApi } from 'services/api'
 
 export default class UserList extends Component {
   constructor (props) {
@@ -14,43 +14,107 @@ export default class UserList extends Component {
       searchFor: '',
       isLoading: false,
       userData: [],
-      error: null
+      error: null,
+      modal: false,
+      filters: {},
+      subdistricts: [],
+      units: [],
+      selectedSubdistrict: 'null',
+      selectedUnit: 'null',
+      tooltipOpen: false,
     }
+    this.selectInput = React.createRef()
 
     this.loadUser = this.loadUser.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.goToPage = this.goToPage.bind(this)
     this.handleDisableEnable = this.handleDisableEnable.bind(this)
+    this.toggleProfileModal = this.toggleProfileModal.bind(this)
+    this.handleFilterChange = this.handleFilterChange.bind(this)
+    this.handleProvinceChange = this.handleProvinceChange.bind(this)
+    this.getUnitList = this.getUnitList.bind(this)
+    this.getSubdistrictList = this.getSubdistrictList.bind(this)
+    this.tooltipToggle = this.tooltipToggle.bind(this)
   }
 
   componentDidMount () {
     this.loadUser()
   }
 
-  async loadUser (page = 1, searchFor = '') {
+  async loadUser (page = 1, searchFor = '', filters = {}) {
     const userParams = new URLSearchParams()
     const { user } = this.props
+
     userParams.append('page', page)
+
+    for (const param in filters) {
+      if (filters[param] !== null) {
+        userParams.append(param, filters[param])
+      }
+    }
+
     userParams.append('s', searchFor)
+
     this.setState({ isLoading: true, error: null })
+
     let response = { data: null }
     switch (user) {
       case 'admin':
         response = await listUserApi(userParams)
         break
       case 'donator':
-      response = await getDonatorList(userParams)
-      break
+        response = await getDonatorList(userParams)
+        break
+      case 'volunteer':
+        response = await getVolunteerList(userParams)
+        break
       default:
-      response = { data: null }
-      break
+        response = { data: null }
+        break
     }
+
     const { status } = response.data
     if (status === 'success') {
       const { data } = response.data
       const { current_page: currentPage, last_page: numberOfPages, data: userData, from, to, total: numberOfEntries } = data.admins
-      this.setState({ isLoading: false, userData, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
+      this.setState({ isLoading: false, userData, currentPage, numberOfPages, from, to, numberOfEntries, searchFor, filters })
     }
+  }
+
+  tooltipToggle () {
+    this.setState({tooltipOpen: !this.state.tooltipOpen})
+  }
+
+  toggleProfileModal () {
+      const modal = true
+      this.setState({modal})
+  }
+
+  handleFilterChange (filters) {
+    console.log(filters)
+    this.setState({selectedSubdistricts:filters.sd, selectedUnit:filters.u})
+    this.loadUser(this.state.page, this.state.searchFor, { ...this.state.filters, ...filters })
+  }
+
+  handleProvinceChange (filter) {
+    this.selectInput.current.selected = 'null'
+    delete this.state.filters.sd
+    delete this.state.filters.u
+    this.getSubdistrictList({c_id:filter.c})
+    this.getUnitList({c_id:filter.c})
+    this.loadUser(this.state.page, this.state.searchFor, { ...this.state.filters, ...filter })
+  }
+
+  async getUnitList (param) {
+    const response = await getUnitListApi(param)
+    const { data } = response.data
+    this.setState({units:data})
+  }
+
+  async getSubdistrictList (param) {
+    const response = await getSubdistrictListApi(param)
+    const { data } = response.data
+    this.setState({subdistricts:data})
   }
 
   handleSearch (event) {
@@ -82,17 +146,17 @@ export default class UserList extends Component {
     const { pathname } = this.props.location
     return (
       <>
-        <PaginationLink
-          rowFrom={from}
-          rowTo={to}
-          numberOfEntries={numberOfEntries}
-          currentPage={currentPage}
-          numberOfPages={numberOfPages}
-          onPageChange={this.goToPage}
-        />
-        { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
-        { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-        { (user === 'volunteer') && <Volunteer /> }
+      <PaginationLink
+        rowFrom={from}
+        rowTo={to}
+        numberOfEntries={numberOfEntries}
+        currentPage={currentPage}
+        numberOfPages={numberOfPages}
+        onPageChange={this.goToPage}
+      />
+      { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
+      { (user === 'donator') && <Donator data={userData} path={pathname} /> }
+      { (user === 'volunteer') && <Volunteer data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
       </>
     )
   }
@@ -102,15 +166,28 @@ export default class UserList extends Component {
     const { error } = this.state
     return (
       <>
-        <Tool onSearch={this.handleSearch}>
-          {user !== 'donator' &&
+      <Tool onSearch={this.handleSearch}>
+      {user === 'admin' &&
         <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
-          }
-        </Tool>
-        {error
-          ? <div>Error</div>
-          : this.renderUserList(user)
-        }
+      }
+      </Tool>
+      {user === 'volunteer' &&
+        <VolunteerFilter
+            onChange={this.handleFilterChange}
+            onProvinceChange={this.handleProvinceChange}
+            subdistricts={this.state.subdistricts}
+            units={this.state.units}
+            selectInput={this.selectInput}
+            selectedSubdistrict={this.state.selectedSubdistrict}
+            selectedUnit={this.state.selectedUnit}
+            tootltipOpen={this.state.tooltipOpen}
+            tooltipToggle={this.tooltipToggle}
+        />
+      }
+      {error
+        ? <div>Error</div>
+        : this.renderUserList(user)
+      }
       </>
     )
   }
