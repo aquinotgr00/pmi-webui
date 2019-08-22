@@ -150,12 +150,13 @@ class RsvpForm extends Component {
                     </Col>
                   </Row>
                 </div>
+                <hr/>
                 <FormGroup>
-                  <label htmlFor='description'>Deskripsi</label>
+                  <label htmlFor='description'>Deskripsi Singkat</label>
                   <Field
                     name='description'
                     render={({ field }) => (
-                      <Input {...field} id="description" type="textarea" />
+                      <Input {...field} id="description" type="textarea" rows={4}/>
                     )}
                   />
                   {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
