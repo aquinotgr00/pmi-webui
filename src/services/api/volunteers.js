@@ -27,3 +27,7 @@ export function getSubdistrictListApi (params) {
 export function getUnitListApi (params) {
   return authRequest().get('settings/unit',{params})
 }
+
+export function exportVolunteerToPdfApi (params) {
+  return authRequest().get('export-volunteers/print',{params})
+}
