@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import  AdminForm  from './AdminForm'
 import { DonatorForm } from './DonatorForm'
-import { VolunteerForm } from './VolunteerForm'
+import VolunteerForm from './VolunteerForm'
 
 export default class UserForm extends Component {
   
@@ -16,7 +16,7 @@ export default class UserForm extends Component {
       	<>
         	{ (user === 'admin') && <AdminForm params={this.props.match.params} /> }
         	{ (user === 'donator') && <DonatorForm params={this.props.match.params} /> }
-        	{ (user === 'volunteer') && <VolunteerForm /> }
+        	{ (user === 'volunteer') && <VolunteerForm params={this.props.match.params} /> }
       	</>
   		)
 	}

@@ -9,20 +9,20 @@ import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
-import DashboardRelawan from 'views/DashboardRelawan'
-import SettingsAreas from 'views/SettingsAreas'
-import AreaForm from 'views/SettingsAreas/AreaForm'
-import MembershipList from 'views/Membership/MembershipList'
-import MembershipForm from 'views/Membership/MembershipForm'
-import UnitList from 'views/SettingsUnits/UnitList'
-import UnitForm from 'views/SettingsUnits/UnitForm'
+import DashboardVolunteer from 'views/Dashboard/Volunteer'
+import SettingsArea from 'views/Settings/Area'
+import AreaForm from 'views/Settings/Area/AreaForm'
+import MembershipList from 'views/Settings/Membership/MembershipList'
+import MembershipForm from 'views/Settings/Membership/MembershipForm'
+import UnitList from 'views//Settings/Unit/UnitList'
+import UnitForm from 'views//Settings/Unit/UnitForm'
 
 var routes = [
   
   {
-    path: '/dashboard/relawan',
+    path: '/dashboard/volunteer',
     name: 'Dashboard Relawan',
-    component: DashboardRelawan
+    component: DashboardVolunteer
   },{
     path: '/units',
     name: 'Unit',
@@ -56,7 +56,7 @@ var routes = [
   {
     path: '/settings/:area',
     name: 'Setting Area',
-    component: SettingsAreas
+    component: SettingsArea
   },
   {
     path: '/settings/:area/create',

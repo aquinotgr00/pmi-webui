@@ -4,7 +4,7 @@ import { Main } from 'components'
 import AreaList from './AreaList'
 import ucwords from 'utils/string'
 
-export default function Areas (props) {
+export default function SettingsArea (props) {
   const { area }  = props.match.params
   const title     = ucwords(area.split('-').join('/'))
   

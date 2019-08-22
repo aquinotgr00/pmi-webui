@@ -957,3 +957,10 @@ a[aria-expanded="true"]>.fa-arrow{
     -webkit-transform: rotate(90deg);
     transition-duration: 0.5s;
 }
+.hidden-file-input {
+    opacity: 0;
+    position: absolute;
+    
+    width: 1px;
+    height: 1px;
+}

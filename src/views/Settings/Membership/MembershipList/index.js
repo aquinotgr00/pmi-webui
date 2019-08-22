@@ -15,8 +15,7 @@ export default class MembershipList extends Component {
       memberData: [],
       parentFilter: null,
       searchFor: null,
-      isOpen: false,
-      parents: []
+      isOpen: false
     }
     this.loadMembers = this.loadMembers.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -110,7 +109,7 @@ export default class MembershipList extends Component {
   render() {
     const { type } = this.props.match.params
     const title = ucwords(type.split("-").join(" "))
-    const { memberData, currentPage, numberOfPages, from, to, numberOfEntries, isOpen, parents } = this.state
+    const { memberData, currentPage, numberOfPages, from, to, numberOfEntries, isOpen } = this.state
     const { pathname } = this.props.location
     return (
 

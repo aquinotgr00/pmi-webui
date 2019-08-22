@@ -171,7 +171,6 @@ export default class UnitList extends Component {
 		const {
 			unitData
 			, currentPage
-			, numberOfPages
 			, from
 			, to
 			, numberOfEntries

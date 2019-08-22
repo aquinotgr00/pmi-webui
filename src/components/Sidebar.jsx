@@ -76,7 +76,12 @@ export function Sidebar() {
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
-
+        <hr />
+        <Nav className='flex-column'>
+          <NavItem>
+            <NavLink to='/admin/dashboard/volunteer' className='nav-link'>Dashboard Relawan</NavLink>
+          </NavItem>
+        </Nav>
         <Nav className='flex-column'>
           <NavItem>
             <NavLink to='#' className='nav-link' id='settings'>Settings</NavLink>
@@ -105,8 +110,8 @@ export function Sidebar() {
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>
-          </Nav>
+        </Nav>
       </div>
     </Navbar>
-      )
-    }
+  )
+}

@@ -29,4 +29,8 @@ export function updateMembershipApi(membershipId,params){
 export function deleteMembershipApi(membershipId){
     return authRequest().delete(`/settings/membership/${membershipId}`) 
 }
+
+export function getAmountVolunteerByMembershipApi(membershipId){
+	return authRequest().get('/settings/membership/amount/volunteer')
+}
   
