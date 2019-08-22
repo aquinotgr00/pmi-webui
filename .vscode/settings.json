@@ -1,7 +1,5 @@
 {
     "standard.enable":true,
     "standard.autoFixOnSave":true,
-    "standard.run": "onSave",
-    "editor.tabSize": 2,
-    "editor.lineHeight": 30
+    "standard.run":"onSave"
 }
