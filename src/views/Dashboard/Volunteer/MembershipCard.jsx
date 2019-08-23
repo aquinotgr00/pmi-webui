@@ -1,9 +1,9 @@
 import React from 'react'
-import { Row, Col, Collapse, Card, CardBody } from 'reactstrap'
+import { Row, Col, Collapse, Card, CardHeader, CardBody } from 'reactstrap'
 import { MembershipCardItem } from './MembershipCardItem'
 
 export function MembershipCard(props) {
-    const { membership, collapse, shown, panelNumber, subMembership } = props
+    const { membership, collapse, shown, subMembership, membershipName } = props
 
     return (
         <>
@@ -26,19 +26,29 @@ export function MembershipCard(props) {
             <Row >
                 <Col>
                     <Collapse isOpen={collapse} >
-                        <Card>
+                        <Card className="px-3 mb-3">
+                            <CardHeader className="header-top pl-0">
+                            { membershipName }
+                            </CardHeader>
                             <CardBody>
                                 <Row>
                                     {Object.values(subMembership).map((submember, key) => {
+                                        let title = submember.title.toLowerCase()
+                                        let images = ['mula', 'madya', 'wira']
+                                        let thumbnail = 'people'
+                                        let find = images.indexOf(title)
+                                        if (find >= 0) {
+                                            thumbnail = title
+                                        }
                                         return (
                                             <Col key={key} md="4" className="grs-right">
                                                 <Row>
                                                     <Col md="3">
-                                                        <img src={require('assets/images/mula.svg')} className="img-collapse" />
+                                                        <img src={require(`assets/images/${thumbnail}.svg`)} className="img-collapse" />
                                                     </Col>
                                                     <Col md="9" className="pl-0">
                                                         <label className="mb-0">{submember.title}</label>
-                                                        <p>{submember.amount}</p>
+                                                        <p>{submember.all}</p>
                                                     </Col>
                                                 </Row>
                                             </Col>

@@ -1,10 +1,9 @@
 import React from 'react'
 import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'components'
-import { DeleteActionButton } from 'components/ActionButtons/DeleteActionButton'
-import { Input, Table } from 'reactstrap'
+import { Input, Table, Button } from 'reactstrap'
 
 export function UrbanVillageList(props) {
-	const { path, title, history } = props
+	const { path, title } = props
 	return (
 		<>
 			<div className="head-tools">
@@ -73,10 +72,10 @@ export function UrbanVillageList(props) {
 								<EditActionButton
 									path={path + '/' + village.id + '/edit'}
 								/>
-								<DeleteActionButton
-									dataId={village.id}
-									title={title}
-									history={history}
+								<Button
+									onClick={() => props.toggle(village.id)}
+									className='btn btn-table circle-table delete-table'
+									title='Hapus'
 								/>
 							</td>
 						</tr>

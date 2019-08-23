@@ -19,15 +19,15 @@ export function VolunteerTable(props) {
                 <tbody>
                     {data.map((item, key) => {
                         const { unit } = item
-                        const { membership } = unit || {}
+                        const { membership } = unit || null
                         return (
                             <tr key={key}>
                                 <td>{key + 1}</td>
                                 <td>{item.name}</td>
                                 <td>{item.gender}</td>
-                                <td>{item.unit}</td>
-                                <td>Kabupaten/Kota</td>
-                                <td>Unit</td>
+                                <td>{ (membership) ? membership.name : '-' }</td>
+                                <td>{item.city}</td>
+                                <td>{(unit)? unit.name : '-' }</td>
                             </tr>
                         )
                     })}

@@ -1,10 +1,9 @@
 import React from 'react'
 import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'components'
-import { DeleteActionButton } from 'components/ActionButtons/DeleteActionButton'
-import { Input, Table } from 'reactstrap'
+import { Input, Table, Button } from 'reactstrap'
 
 export function SubdistrictList(props) {
-	const { path, title, history } = props
+	const { path, title } = props
 
 	return (
 		<>
@@ -64,10 +63,10 @@ export function SubdistrictList(props) {
 								<EditActionButton
 									path={path + '/' + subdistrict.id + '/edit'}
 								/>
-								<DeleteActionButton
-									dataId={subdistrict.id}
-									title={title}
-									history={history}
+								<Button
+									onClick={() => props.toggle(subdistrict.id)}
+									className='btn btn-table circle-table delete-table'
+									title='Hapus'
 								/>
 							</td>
 						</tr>

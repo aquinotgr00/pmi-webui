@@ -18,12 +18,13 @@ export default class UnitList extends Component {
 			error: false,
 			isLoading: false,
 			searchFor: null,
-			isOpen: false,
 			memberFilter: null,
 			cityFilter: null,
 			memberData: [],
 			cityData: [],
-			unitData: []
+			unitData: [],
+			isOpenDelete: false,
+			dataId: null
 		}
 		this.loadUnits = this.loadUnits.bind(this)
 		this.loadMembership = this.loadMembership.bind(this)
@@ -35,7 +36,7 @@ export default class UnitList extends Component {
 		this.handleFilterCity = this.handleFilterCity.bind(this)
 		this.handleFilterParent = this.handleFilterParent.bind(this)
 		this.toggleDelete = this.toggleDelete.bind(this)
-		this.confirmDelete = this.confirmDelete.bind(this)
+		this.actionDelete = this.actionDelete.bind(this)
 	}
 
 	componentDidMount() {
@@ -44,9 +45,10 @@ export default class UnitList extends Component {
 		this.loadCities()
 	}
 
-	toggleDelete() {
+	toggleDelete(dataId) {
+		this.setState({ dataId })
 		this.setState(prevState => ({
-			isOpen: !prevState.isOpen
+			isOpenDelete: !prevState.isOpenDelete
 		}))
 	}
 
@@ -103,7 +105,6 @@ export default class UnitList extends Component {
 			}
 
 			if (cityFilter) {
-
 				unitParams.append('c_id', cityFilter)
 			}
 
@@ -155,8 +156,9 @@ export default class UnitList extends Component {
 		}
 	}
 
-	async confirmDelete(unitId) {
-		const response = await deleteUnitApi(unitId)
+	async actionDelete() {
+		const { dataId } = this.state
+		const response = await deleteUnitApi(dataId)
 		const { status } = response.data
 		if (status === 'success') {
 			this.toggleDelete()
@@ -176,7 +178,7 @@ export default class UnitList extends Component {
 			, numberOfEntries
 			, cityData
 			, memberData
-			, isOpen
+			, isOpenDelete
 		} = this.state
 		let title = "Master Unit"
 
@@ -198,9 +200,9 @@ export default class UnitList extends Component {
 					handleReset={this.handleReset}
 					handleSearch={this.handleSearch}
 					goToPage={this.goToPage}
-					isOpen={isOpen}
+					isOpen={isOpenDelete}
 					toggle={this.toggleDelete}
-					onAction={this.confirmDelete}
+					onAction={this.actionDelete}
 				/>
 			</Main>
 		)

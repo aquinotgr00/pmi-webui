@@ -1,9 +1,9 @@
 import React from "react"
-import { EditActionButton, ConfirmModal } from "components"
+import { EditActionButton } from "components"
 import { Table, Button } from "reactstrap"
 
 export function SubMemberList(props) {
-  const { data, pathname, toggle, isOpen } = props
+  const { data, pathname, isOpen } = props
   return (
     <Table hover>
       <thead>
@@ -25,17 +25,9 @@ export function SubMemberList(props) {
                 <td>
                   <EditActionButton path={`${pathname}/${member.id}/edit`} />
                   <Button
-                    onClick={toggle}
+                    onClick={() => props.toggle(member.id)}
                     className='btn btn-table circle-table delete-table'
                     title='Hapus'
-                  />
-                  <ConfirmModal
-                    isOpen={isOpen}
-                    toggle={toggle}
-                    onAction={() => props.onAction(member.id)}
-                    labelTitle="Hapus Data"
-                    labelContent="Anda yakin akan menghapus data ini?"
-                    labelAction="Hapus"
                   />
                 </td>
               </tr>

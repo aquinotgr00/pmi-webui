@@ -4,6 +4,7 @@ import { MemberList } from "./MemberList"
 import { SubMemberList } from "./SubMemberList"
 import { PaginationLink, AddNewActionButton, Tool } from 'components'
 import { listMembershipApi, deleteMembershipApi } from 'services/api'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import ucwords from "utils/string"
 
 export default class MembershipList extends Component {
@@ -15,20 +16,21 @@ export default class MembershipList extends Component {
       memberData: [],
       parentFilter: null,
       searchFor: null,
-      isOpen: false
+      isOpenDelete: false,
+      dataId: null
     }
     this.loadMembers = this.loadMembers.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.goToPage = this.goToPage.bind(this)
-    this.confirmDelete = this.confirmDelete.bind(this)
+    this.actionDelete = this.actionDelete.bind(this)
     this.toggleDelete = this.toggleDelete.bind(this)
     this.handleOnChangeParent = this.handleOnChangeParent.bind(this)
   }
 
   componentDidMount() {
     this.loadMembers()
-    
+
   }
 
   goToPage(page) {
@@ -47,28 +49,31 @@ export default class MembershipList extends Component {
     this.loadMembers(this.state.page, searchKeyword, this.state.parentFilter)
   }
 
-  handleReset(){
-    let filterMember  = document.getElementById('filterMember')
-    let searchBox     = document.getElementsByClassName('search-box')
+  handleReset() {
+    let filterMember = document.getElementById('filterMember')
+    let searchBox = document.getElementsByClassName('search-box')
     filterMember.value = 0
     searchBox.value = ""
     this.loadMembers();
   }
 
-  toggleDelete() {
+  toggleDelete(dataId) {
+    this.setState({ dataId })
     this.setState(prevState => ({
-      isOpen: !prevState.isOpen
+      isOpenDelete: !prevState.isOpenDelete
     }))
   }
 
-  async confirmDelete(memberId) {
+  async actionDelete() {
     const { type } = this.props.match.params
-    const response = await deleteMembershipApi(memberId)
+    const { dataId }  = this.state
+    const response = await deleteMembershipApi(dataId)
     const { status } = response.data
     if (status === 'success') {
       this.toggleDelete()
+      this.loadMembers();
       const { history } = this.props
-      history.push(`/admin/membership/${type}`)
+      history.push(`/admin/membership`)
     }
   }
 
@@ -77,17 +82,14 @@ export default class MembershipList extends Component {
 
     const memberParams = new URLSearchParams()
     memberParams.append('page', page)
-
+    memberParams.append('sub', 1)
+    
     if (searchFor) {
       memberParams.append('s', searchFor)
     }
 
     if (parentFilter) {
       memberParams.append('l', parentFilter)
-    }
-
-    if (type === 'sub-jenis-anggota') {
-      memberParams.append('sub', 1)
     }
 
     this.setState({ isLoading: true, error: null })
@@ -107,54 +109,44 @@ export default class MembershipList extends Component {
 
 
   render() {
-    const { type } = this.props.match.params
-    const title = ucwords(type.split("-").join(" "))
-    const { memberData, currentPage, numberOfPages, from, to, numberOfEntries, isOpen } = this.state
+    const title = "Jenis Anggota"
+    const { memberData, currentPage, numberOfPages, from, to, numberOfEntries, isOpenDelete } = this.state
     const { pathname } = this.props.location
     return (
 
       <Main title={title}>
-
-        {(type === "jenis-anggota" || type === "sub-jenis-anggota") &&
-          <div className="head-tools">
-            <div className="mr-md-auto align-self-stretch">
-              <Tool onSearch={this.handleSearch}>
-                <AddNewActionButton path={`${pathname}/create`} tooltipText={`Tambah ${title} Baru`} />
-              </Tool>
-            </div>
-   
+        <div className="head-tools">
+          <div className="mr-md-auto align-self-stretch">
+            <Tool onSearch={this.handleSearch}>
+              <AddNewActionButton path={`${pathname}/create`} tooltipText={`Tambah ${title} Baru`} />
+            </Tool>
           </div>
-        }
 
-        {(type === "jenis-anggota" || type === "sub-jenis-anggota") &&
-          <PaginationLink
-            rowFrom={from}
-            rowTo={to}
-            numberOfEntries={numberOfEntries}
-            currentPage={currentPage}
-            numberOfPages={numberOfPages}
-            onPageChange={this.goToPage}
-          />
-        }
-
-        {type === "jenis-anggota" &&
-          <MemberList
-            data={memberData}
-            pathname={pathname}
-            toggle={this.toggleDelete}
-            onAction={this.confirmDelete}
-            isOpen={isOpen}
-          />
-        }
-        {type === "sub-jenis-anggota" &&
-          <SubMemberList
-            data={memberData}
-            pathname={pathname}
-            toggle={this.toggleDelete}
-            onAction={this.confirmDelete}
-            isOpen={isOpen}
-          />
-        }
+        </div>
+        <PaginationLink
+          rowFrom={from}
+          rowTo={to}
+          numberOfEntries={numberOfEntries}
+          currentPage={currentPage}
+          numberOfPages={numberOfPages}
+          onPageChange={this.goToPage}
+        />
+        <SubMemberList
+          data={memberData}
+          pathname={pathname}
+          toggle={this.toggleDelete}
+          isOpen={isOpenDelete}
+        />
+        <Modal isOpen={isOpenDelete} toggle={this.toggleDelete}>
+          <ModalHeader >Hapus Data</ModalHeader>
+          <ModalBody>
+            <p>Anda yakin menghapus data ini?</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' onClick={this.toggleDelete}>Batal</Button>{' '}
+            <Button color='danger' onClick={this.actionDelete}>Hapus</Button>
+          </ModalFooter>
+        </Modal>
       </Main>
     )
   }

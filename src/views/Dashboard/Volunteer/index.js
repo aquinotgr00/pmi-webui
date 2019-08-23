@@ -5,7 +5,7 @@ import {
     listMembershipApi,
     getVolunteerList,
     getVolunteerApi,
-    getAmountVolunteerByMembershipApi
+    getAmountVolunteerApi
 } from 'services/api'
 
 import { VolunteerTable } from './VolunteerTable'
@@ -20,7 +20,8 @@ export default class DashboardVolunteer extends Component {
             subMembership: [],
             collapse: false,
             shown: {},
-            panelNumber: null
+            panelNumber: null,
+            membershipName: ''
         }
         this.loadAmountVolunteer = this.loadAmountVolunteer.bind(this)
         this.toggleCollapse = this.toggleCollapse.bind(this)
@@ -29,11 +30,12 @@ export default class DashboardVolunteer extends Component {
     }
 
     componentDidMount() {
-        this.loadAmountVolunteer()
         this.loadVolunteer()
+        this.loadAmountVolunteer()
     }
 
     toggleCollapse(panelNumber) {
+        
         this.setState({
             shown: {
                 ...this.state.shown,
@@ -43,8 +45,11 @@ export default class DashboardVolunteer extends Component {
         this.setState({ panelNumber })
         this.setState(state => ({ collapse: !state.collapse }))
         const { membership } = this.state
-        const { data: subMembership } = membership[panelNumber] || {}
-        this.setState({ subMembership })
+        let member = membership.filter(member => {
+            return member.id === parseInt(panelNumber)
+        })
+        const { subMember: subMembership, title: membershipName } = member[0]
+        this.setState({ subMembership, membershipName })
     }
 
     goToPage(page) {
@@ -53,7 +58,7 @@ export default class DashboardVolunteer extends Component {
 
     async loadAmountVolunteer() {
         try {
-            const response = await getAmountVolunteerByMembershipApi()
+            const response = await getAmountVolunteerApi()
             const { status } = response.data
             if (status === "success") {
                 const { data: membership } = response.data
@@ -80,6 +85,7 @@ export default class DashboardVolunteer extends Component {
         const title = 'Database Relawan PMI Provinsi DKI Jakarta'
         const {
             membership,
+            membershipName,
             subMembership,
             collapse,
             shown,
@@ -91,6 +97,7 @@ export default class DashboardVolunteer extends Component {
             to,
             numberOfEntries
         } = this.state
+
         return (
             <Main title={title}>
                 <MembershipCard
@@ -100,6 +107,7 @@ export default class DashboardVolunteer extends Component {
                     shown={shown}
                     panelNumber={panelNumber}
                     subMembership={subMembership}
+                    membershipName={membershipName}
                 />
                 <Card>
                     <CardHeader className="header-top">
@@ -114,11 +122,10 @@ export default class DashboardVolunteer extends Component {
                             numberOfPages={numberOfPages}
                             onPageChange={this.goToPage}
                         />
-                        <VolunteerTable
-                            data={volunteers}
-                        />
                     </CardBody>
+                    <VolunteerTable data={volunteers} />
                 </Card>
+
             </Main>
         )
     }

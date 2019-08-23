@@ -1,5 +1,6 @@
 import React from 'react'
-import { Row, Col, Label, FormGroup, Input, Tooltip } from 'reactstrap'
+import { Row, Col, Label, FormGroup, Input, Tooltip, Button } from 'reactstrap'
+import ReactToPrint from 'react-to-print'
 
 function renderListElement (data) {
 	if (Object.keys(data).length > 0) {
@@ -87,8 +88,12 @@ export function VolunteerFilter (props) {
 					<label>Export Data</label>
 				  </div>
 				  <div className="btn-group" role="group" aria-label="#">
-					<button type="button" className="btn btn-line">PDF</button>
-					<button type="button" className="btn btn-line">Print</button>
+					<Button onClick={props.handleExportPdf} className="btn btn-line">PDF</Button>
+					<Button onClick={props.handlePrint} className="btn btn-line">Print</Button>
+          <ReactToPrint
+            trigger={() => <Button className="btn btn-line" >Print</Button>}
+            content={() => props.volunteerTable}
+          />
 				  </div>
 				</div> 
 			  </Col>

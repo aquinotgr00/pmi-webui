@@ -9,6 +9,7 @@ import CampaignForm from 'views/Campaigns/CampaignForm'
 import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
+import Rsvp from 'views/RSVP'
 import DashboardVolunteer from 'views/Dashboard/Volunteer'
 import SettingsArea from 'views/Settings/Area'
 import AreaForm from 'views/Settings/Area/AreaForm'
@@ -39,17 +40,17 @@ var routes = [
     component: UnitForm
   },
   {
-    path: '/membership/:type',
+    path: '/membership',
     name: 'Membership',
     component: MembershipList
   },
   {
-    path: '/membership/:type/create',
+    path: '/membership/create',
     name: 'Create Membership',
     component: MembershipForm
   },
   {
-    path: '/membership/:type/:memberId/edit',
+    path: '/membership/:memberId/edit',
     name: 'Edit Membership',
     component: MembershipForm
   },
@@ -99,11 +100,6 @@ var routes = [
     component: Campaigns
   },
   {
-    path: '/donations/:donation',
-    name: 'Donations',
-    component: Donations
-  },
-  {
     path: '/campaigns/:campaignType/create',
     name: 'Create Campaign',
     component: CampaignForm
@@ -112,6 +108,16 @@ var routes = [
     path: '/campaigns/:campaignType/:campaignId/edit',
     name: 'Edit Campaign',
     component: CampaignForm
+  },
+  {
+    path: '/campaigns/:campaign/:campaignId',
+    name: 'View Campaign',
+    component: CampaignView
+  },
+  {
+    path: '/donations/:donation',
+    name: 'Donations',
+    component: Donations
   },
   {
     path: '/transactions/:transaction',
@@ -124,15 +130,29 @@ var routes = [
     component: DetailsTransaction
   },
   {
-    path: '/campaigns/:campaign/:campaignId',
-    name: 'View Campaign',
-    component: CampaignView
-  },
-  {
     path: '/',
     name: 'Dashboard',
     component: Dashboard
+  },
+  {
+    path: '/rsvp/:category',
+    name: 'RSVP',
+    component: Rsvp
+  },
+  {
+    path: '/units',
+    name: 'Unit',
+    component: UnitList
+  },
+  {
+    path: '/units/create',
+    name: 'Create Unit',
+    component: UnitForm
+  },
+  {
+    path: '/units/:unitId/edit',
+    name: 'Edit Unit',
+    component: UnitForm
   }
-
 ]
 export default routes

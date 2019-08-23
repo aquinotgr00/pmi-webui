@@ -1,9 +1,9 @@
 import React from "react"
-import { EditActionButton, ConfirmModal } from "components"
+import { EditActionButton } from "components"
 import { Table, Button } from "reactstrap"
 
 export function MemberList(props) {
-  const { data, pathname, toggle, isOpen } = props
+  const { data, pathname, toggle } = props
   return (
     <Table hover>
       <thead>
@@ -26,14 +26,6 @@ export function MemberList(props) {
                   onClick={toggle}
                   className='btn btn-table circle-table delete-table'
                   title='Hapus'
-                />
-                <ConfirmModal
-                  isOpen={isOpen}
-                  toggle={toggle}
-                  onAction={() => props.onAction(member.id)}
-                  labelTitle="Hapus Data"
-                  labelContent="Anda yakin akan menghapus data ini?"
-                  labelAction="Hapus"
                 />
               </td>
             </tr>

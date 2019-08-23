@@ -2,12 +2,15 @@ import React, { Component } from 'react'
 import {
   listCityApi,
   listSubdistrictApi,
-  listVillageApi
-
+  listVillageApi,
+  deleteCityApi,
+  deleteSubdistrictApi,
+  deleteVillageApi
 } from 'services/api'
 import { CityList } from './City/CityList'
 import { SubdistrictList } from './Subdistrict/SubdistrictList'
 import { UrbanVillageList } from './UrbanVillage/UrbanVillageList'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 export default class AreaList extends Component {
 
@@ -22,13 +25,17 @@ export default class AreaList extends Component {
       subdistrictFilterList: [],
       isLoading: false,
       areaData: [],
-      error: null
+      error: null,
+      isOpenDelete: false,
+      dataId: null
     }
     this.goToPage = this.goToPage.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleFilterCity = this.handleFilterCity.bind(this)
     this.handleFilterSubdistrict = this.handleFilterSubdistrict.bind(this)
+    this.actionDelete = this.actionDelete.bind(this)
+    this.toggleDelete = this.toggleDelete.bind(this)
   }
 
   componentDidMount() {
@@ -37,6 +44,13 @@ export default class AreaList extends Component {
 
   goToPage(page) {
     this.loadArea(page, this.state.searchFor)
+  }
+
+  toggleDelete(dataId) {
+    this.setState({ dataId })
+    this.setState(prevState => ({
+      isOpenDelete: !prevState.isOpenDelete
+    }))
   }
 
   handleSearch(event) {
@@ -123,9 +137,36 @@ export default class AreaList extends Component {
     }
   }
 
+  async actionDelete() {
+    const { title } = this.props
+    const { dataId } = this.state
+    let response = null
+    switch (title) {
+      case 'kabupaten-kota':
+        response = await deleteCityApi(dataId)
+        break
+      case 'kecamatan':
+        response = await deleteSubdistrictApi(dataId)
+        break
+      case 'kelurahan-desa':
+        response = await deleteVillageApi(dataId)
+        break
+      default:
+        response = null
+        break
+    }
+    if (response !== null) {
+      const { status } = response.data
+      if (status === 'success') {
+        this.toggleDelete()
+        this.loadArea()
+      }
+    }
+  }
+
   render() {
     const { title, history } = this.props
-    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList } = this.state
+    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList, isOpenDelete } = this.state
     const { pathname } = this.props.location
 
     return (
@@ -142,7 +183,8 @@ export default class AreaList extends Component {
             numberOfPages={numberOfPages}
             goToPage={this.goToPage}
             handleSearch={this.handleSearch}
-            history={history}
+            toggle={this.toggleDelete}
+            isOpen={isOpenDelete}
           />
         }
 
@@ -161,7 +203,8 @@ export default class AreaList extends Component {
             handleReset={this.handleReset}
             filterCity={cityFilterList}
             handleFilterCity={this.handleFilterCity}
-            history={history}
+            toggle={this.toggleDelete}
+            isOpen={isOpenDelete}
           />
         }
         {(title === 'kelurahan-desa') &&
@@ -181,10 +224,20 @@ export default class AreaList extends Component {
             filterSubdistrict={subdistrictFilterList}
             handleFilterCity={this.handleFilterCity}
             handleFilterSubdistrict={this.handleFilterSubdistrict}
-            history={history}
+            toggle={this.toggleDelete}
+            isOpen={isOpenDelete}
           />
         }
-
+        <Modal isOpen={isOpenDelete} toggle={this.toggleDelete}>
+          <ModalHeader >Hapus Data</ModalHeader>
+          <ModalBody>
+            <p>Anda yakin menghapus data ini?</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' onClick={this.toggleDelete}>Batal</Button>{' '}
+            <Button color='danger' onClick={this.actionDelete}>Hapus</Button>
+          </ModalFooter>
+        </Modal>
       </>
     )
   }

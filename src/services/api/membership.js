@@ -30,7 +30,7 @@ export function deleteMembershipApi(membershipId){
     return authRequest().delete(`/settings/membership/${membershipId}`) 
 }
 
-export function getAmountVolunteerByMembershipApi(membershipId){
-	return authRequest().get('/settings/membership/amount/volunteer')
+export function getAmountVolunteerApi(membershipId){
+	return authRequest().get('/dashboard/amount/volunteer')
 }
   
