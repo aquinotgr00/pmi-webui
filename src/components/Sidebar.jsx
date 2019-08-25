@@ -22,6 +22,9 @@ export function Sidebar() {
               <NavItem>
                 <NavLink to='/admin/users/volunteer'>Relawan</NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink to='/admin/users/volunteer-moderation'>Moderasi Relawan</NavLink>
+              </NavItem>
             </UncontrolledCollapse>
           </NavItem>
         </Nav>

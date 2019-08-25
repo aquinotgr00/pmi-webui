@@ -1,10 +1,21 @@
-import React, { Component, useRef } from 'react'
+import React, { Component } from 'react'
 import { PaginationLink, Tool, VolunteerFilter } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { Administrator } from './Administrator'
 import { Donator } from './Donator'
 import { Volunteer } from './Volunteer'
-import { listUserApi, updateActiveUserApi, getDonatorList, getVolunteerList, getSubdistrictListApi, getUnitListApi, exportVolunteerToPdfApi } from 'services/api'
+import { VolunteerModeration } from './VolunteerModeration'
+import {
+    listUserApi,
+    updateActiveUserApi,
+    getDonatorList,
+    getVolunteerList,
+    getSubdistrictListApi,
+    getUnitListApi,
+    exportVolunteerToPdfApi,
+    exportVolunteerProfilePdf,
+    postVolunteerUpdateApi
+} from 'services/api'
 
 export default class UserList extends Component {
   constructor (props) {
@@ -16,6 +27,7 @@ export default class UserList extends Component {
       userData: [],
       error: null,
       modal: false,
+      rejectModal: false,
       filters: {},
       subdistricts: [],
       units: [],
@@ -38,6 +50,7 @@ export default class UserList extends Component {
     this.tooltipToggle = this.tooltipToggle.bind(this)
     this.handleExportPdf = this.handleExportPdf.bind(this)
     this.handlePrint = this.handlePrint.bind(this)
+    this.handleApprove = this.handleApprove.bind(this)
   }
 
   componentDidMount () {
@@ -69,6 +82,11 @@ export default class UserList extends Component {
         response = await getDonatorList(userParams)
         break
       case 'volunteer':
+        userParams.append('v', 1)
+        response = await getVolunteerList(userParams)
+        break
+      case 'volunteer-moderation':
+        userParams.append('v', 0)
         response = await getVolunteerList(userParams)
         break
       default:
@@ -88,13 +106,17 @@ export default class UserList extends Component {
     this.setState({tooltipOpen: !this.state.tooltipOpen})
   }
 
-  toggleProfileModal () {
+  toggleProfileModal (type = 'profile') {
+    if (type === 'profile') {
       const modal = true
       this.setState({modal})
+    } else if (type === 'reject') {
+      const rejectModal = true
+      this.setState({rejectModal})
+    }
   }
 
   handleFilterChange (filters) {
-    console.log(filters)
     this.setState({selectedSubdistricts:filters.sd, selectedUnit:filters.u})
     this.loadUser(this.state.page, this.state.searchFor, { ...this.state.filters, ...filters })
   }
@@ -143,10 +165,19 @@ export default class UserList extends Component {
     }
   }
 
-  async handleExportPdf () {
-    const response = await exportVolunteerToPdfApi(this.state.filters)
+  async handleExportPdf (profile = null) {
+    let response = { data: null }
+    switch (true) {
+        case profile !== null:
+            response = await exportVolunteerProfilePdf(profile)
+            break
+
+        default:
+            response = await exportVolunteerToPdfApi(this.state.filters)
+            break
+    }
+
     const { status } = response.data
-    console.log(response)
     if (status === 'success') {
       const { url } = response.data.data
       window.open(url, "_blank")
@@ -154,6 +185,16 @@ export default class UserList extends Component {
   }
 
   handlePrint () {}
+
+  handleApprove (volunteerId, data, index) {
+    index--
+    data._method = 'PUT'
+    const response = postVolunteerUpdateApi(volunteerId, data)
+    const userData = this.state.userData
+    userData.splice(index, 1)
+    this.setState({userData})
+    console.log(response);
+  }
 
   renderUserList (user) {
     const { userData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
@@ -171,7 +212,24 @@ export default class UserList extends Component {
       />
       { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
       { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-      { (user === 'volunteer') && <Volunteer forwadedRef={this.volunteerTable} data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
+      { (user === 'volunteer') &&
+        <Volunteer
+            forwadedRef={this.volunteerTable}
+            data={userData}
+            path={pathname}
+            handleExportPdf={this.handleExportPdf}
+            toggleProfileModal={this.toggleProfileModal}
+            isOpen={this.state.modal}
+        /> }
+      { (user === 'volunteer-moderation') &&
+        <VolunteerModeration
+          data={userData}
+          path={pathname}
+          handleApprove={this.handleApprove}
+          toggleProfileModal={this.toggleProfileModal}
+          isOpen={this.state.modal}
+          rejectModalOpen={this.state.rejectModal}
+        /> }
       </>
     )
   }
