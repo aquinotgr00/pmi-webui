@@ -14,7 +14,7 @@ import {
     getUnitListApi,
     exportVolunteerToPdfApi,
     exportVolunteerProfilePdf,
-    volunteerApproveOrDelete
+    postVolunteerUpdateApi
 } from 'services/api'
 
 export default class UserList extends Component {
@@ -188,7 +188,8 @@ export default class UserList extends Component {
 
   handleApprove (volunteerId, data, index) {
     index--
-    const response = volunteerApproveOrDelete(volunteerId, data)
+    data._method = 'PUT'
+    const response = postVolunteerUpdateApi(volunteerId, data)
     const userData = this.state.userData
     userData.splice(index, 1)
     this.setState({userData})

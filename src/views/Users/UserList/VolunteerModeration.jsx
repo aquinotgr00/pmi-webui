@@ -30,7 +30,7 @@ export function VolunteerModeration (props) {
                     <td>{volunteer.city}</td>
                     <td>{volunteer.unit === null ? '':volunteer.unit.name}</td>
                     <td>
-                      <Button className='btn btn-table circle-table setuju-table' onClick={() => props.handleApprove(volunteer.id, {status:1}, key)} />
+                      <Button className='btn btn-table circle-table setuju-table' onClick={() => props.handleApprove(volunteer.id, {verified:1}, key)} />
                       <span data-toggle="modal" role="button" data-target="#modaltolak">
                         <RejectModal handleApprove={props.handleApprove} key={key} volunteerId={volunteer.id} isOpen={props.rejectModalOpen} toggle={props.toggleProfileModal} />
                       </span>

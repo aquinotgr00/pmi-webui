@@ -39,7 +39,7 @@ export class RejectModal extends React.Component {
               <Button onClick={() => {
                   this.toggle()
                   this.state.description = ''
-                  this.props.handleApprove(this.props.volunteerId, {status: 3, description: this.state.description}, this.props.key)
+                  this.props.handleApprove(this.props.volunteerId, {verified: 0, description: this.state.description}, this.props.key)
                 }} className="ml-4" color='success'>Kirim</Button>
               <Button onClick={this.toggle} className="btn-outline-secondary">Batal</Button>
             </div>
