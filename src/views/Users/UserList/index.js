@@ -1,11 +1,21 @@
-import React, { Component, useRef } from 'react'
+import React, { Component } from 'react'
 import { PaginationLink, Tool, VolunteerFilter } from 'components'
 import { AddNewActionButton } from 'components/ActionButtons'
 import { Administrator } from './Administrator'
 import { Donator } from './Donator'
 import { Volunteer } from './Volunteer'
 import { VolunteerModeration } from './VolunteerModeration'
-import { listUserApi, updateActiveUserApi, getDonatorList, getVolunteerList, getSubdistrictListApi, getUnitListApi, exportVolunteerToPdfApi, volunteerApproveOrDelete } from 'services/api'
+import {
+    listUserApi,
+    updateActiveUserApi,
+    getDonatorList,
+    getVolunteerList,
+    getSubdistrictListApi,
+    getUnitListApi,
+    exportVolunteerToPdfApi,
+    exportVolunteerProfilePdf,
+    volunteerApproveOrDelete
+} from 'services/api'
 
 export default class UserList extends Component {
   constructor (props) {
@@ -155,10 +165,19 @@ export default class UserList extends Component {
     }
   }
 
-  async handleExportPdf () {
-    const response = await exportVolunteerToPdfApi(this.state.filters)
+  async handleExportPdf (profile = null) {
+    let response = { data: null }
+    switch (true) {
+        case profile !== null:
+            response = await exportVolunteerProfilePdf(profile)
+            break
+
+        default:
+            response = await exportVolunteerToPdfApi(this.state.filters)
+            break
+    }
+
     const { status } = response.data
-    console.log(response)
     if (status === 'success') {
       const { url } = response.data.data
       window.open(url, "_blank")
@@ -192,7 +211,15 @@ export default class UserList extends Component {
       />
       { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
       { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-      { (user === 'volunteer') && <Volunteer forwadedRef={this.volunteerTable} data={userData} path={pathname} toggleProfileModal={this.toggleProfileModal} isOpen={this.state.modal} /> }
+      { (user === 'volunteer') &&
+        <Volunteer
+            forwadedRef={this.volunteerTable}
+            data={userData}
+            path={pathname}
+            handleExportPdf={this.handleExportPdf}
+            toggleProfileModal={this.toggleProfileModal}
+            isOpen={this.state.modal}
+        /> }
       { (user === 'volunteer-moderation') &&
         <VolunteerModeration
           data={userData}

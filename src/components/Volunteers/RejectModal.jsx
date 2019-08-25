@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Label, Input, Button, Card, CardHeader, Table, Modal, ModalHeader, ModalBody, Form, FormGroup } from 'reactstrap'
+import { Label, Input, Button, Modal, ModalHeader, ModalBody, FormGroup } from 'reactstrap'
 
 export class RejectModal extends React.Component {
   constructor(props) {

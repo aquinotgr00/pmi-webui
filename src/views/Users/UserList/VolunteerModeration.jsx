@@ -1,11 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Table, Button } from 'reactstrap'
 import { VolunteerProfileModal, RejectModal } from 'components'
-import { EditActionButton } from 'components/ActionButtons/EditActionButton'
 
 export function VolunteerModeration (props) {
-  const path = props
   return (
     <Table hover>
       <thead>
@@ -22,7 +19,7 @@ export function VolunteerModeration (props) {
       </thead>
       <tbody>
         {props.data.map((volunteer, key) => {
-            {key++}
+            key++
             return (
                 <tr key={key}>
                     <td>{key}</td>

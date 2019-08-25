@@ -88,12 +88,11 @@ export function VolunteerFilter (props) {
 					<label>Export Data</label>
 				  </div>
 				  <div className="btn-group" role="group" aria-label="#">
-					<Button onClick={props.handleExportPdf} className="btn btn-line">PDF</Button>
-					<Button onClick={props.handlePrint} className="btn btn-line">Print</Button>
-          <ReactToPrint
-            trigger={() => <Button className="btn btn-line" >Print</Button>}
-            content={() => props.volunteerTable}
-          />
+					<Button onClick={() => props.handleExportPdf()} className="btn btn-line">PDF</Button>
+                    <ReactToPrint
+                        trigger={() => <Button className="btn btn-line" >Print</Button>}
+                        content={() => props.volunteerTable}
+                    />
 				  </div>
 				</div> 
 			  </Col>

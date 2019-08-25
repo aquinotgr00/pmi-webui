@@ -5,9 +5,6 @@ import ucwords from 'utils/string'
 import UserList from './UserList'
 
 export default class Users extends Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     const { user } = this.props.match.params
     const title = ucwords(user.split('-').join(' '))

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Table, Button } from 'reactstrap'
 import { VolunteerProfileModal } from 'components'
 import { EditActionButton } from 'components/ActionButtons/EditActionButton'
@@ -22,11 +21,19 @@ export function Volunteer (props) {
       </thead>
       <tbody>
         {props.data.map((volunteer, key) => {
-            {key++}
+            key++
             return (
                 <tr key={key}>
                     <td>{key}</td>
-                    <td><VolunteerProfileModal title={volunteer.name} data={volunteer} isOpen={props.isOpen} toggle={props.toggleProfileModal} /></td>
+                    <td>
+                        <VolunteerProfileModal
+                            title={volunteer.name}
+                            data={volunteer}
+                            isOpen={props.isOpen}
+                            toggle={props.toggleProfileModal}
+                            handleExportPdf={props.handleExportPdf}
+                        />
+                    </td>
                     <td>{volunteer.gender}</td>
                     <td>{volunteer.unit === null ? '':volunteer.unit.membership.parent_member.name}</td>
                     <td>{volunteer.unit === null ? '':volunteer.unit.membership.name}</td>
