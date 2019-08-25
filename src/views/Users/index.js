@@ -13,7 +13,7 @@ export default class Users extends Component {
     const title = ucwords(user.split('-').join(' '))
     return (
       <Main title={title}>
-        {['admin', 'donator', 'volunteer'].map(function (c, index) {
+        {['admin', 'donator', 'volunteer', 'volunteer-moderation'].map(function (c, index) {
           return (
             <Route
               key={index}

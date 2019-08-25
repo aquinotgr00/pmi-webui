@@ -160,7 +160,14 @@ export class VolunteerProfileModal extends React.Component {
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.toggle}>Tutup</Button>
-            <Button color="success" onClick={this.toggle}>Cetak</Button>{' '}
+            {volunteer.verified === 1
+            ? <Button color="success" onClick={this.toggle}>Cetak</Button>
+            : (
+              <>
+                <Button color='primary'>Terima</Button>
+                <Button color='danger'>Tolak</Button>
+              </>
+            )}
           </ModalFooter>
         </Modal>
       </div>

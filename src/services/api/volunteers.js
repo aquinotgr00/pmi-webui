@@ -12,6 +12,10 @@ export function postVolunteerUpdateApi (volunteerId, data) {
   return authRequest().post(`volunteers/${volunteerId}`, data)
 }
 
+export function volunteerApproveOrDelete (volunteerId, data) {
+  return authRequest().post(`approve-volunteer/${volunteerId}`, data)
+}
+
 export function getParentMemberListApi () {
   return authRequest().get('settings/membership')
 }
