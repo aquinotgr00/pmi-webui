@@ -5,7 +5,8 @@ import {
     listMembershipApi,
     getVolunteerList,
     getVolunteerApi,
-    getAmountVolunteerApi
+    getAmountVolunteerApi,
+    exportVolunteerProfilePdf
 } from 'services/api'
 
 import { VolunteerTable } from './VolunteerTable'
@@ -16,17 +17,22 @@ export default class DashboardVolunteer extends Component {
         super(props)
         this.state = {
             volunteers: [],
+            volunteer: [],
             membership: [],
             subMembership: [],
             collapse: false,
             shown: {},
             panelNumber: null,
-            membershipName: ''
+            membershipName: '',
+            openModal: false
         }
         this.loadAmountVolunteer = this.loadAmountVolunteer.bind(this)
         this.toggleCollapse = this.toggleCollapse.bind(this)
         this.loadVolunteer = this.loadVolunteer.bind(this)
         this.goToPage = this.goToPage.bind(this)
+        this.toggleModal = this.toggleModal.bind(this)
+        this.detailsVolunteer = this.detailsVolunteer.bind(this)
+        this.exportToPdf = this.exportToPdf.bind(this)
     }
 
     componentDidMount() {
@@ -35,7 +41,7 @@ export default class DashboardVolunteer extends Component {
     }
 
     toggleCollapse(panelNumber) {
-        
+
         this.setState({
             shown: {
                 ...this.state.shown,
@@ -54,6 +60,42 @@ export default class DashboardVolunteer extends Component {
 
     goToPage(page) {
         this.loadVolunteer(page)
+    }
+
+    toggleModal(volunteerId) {
+        if (volunteerId === 0) {
+            let volunteer = []
+            this.setState({ volunteer })
+        } else {
+            this.detailsVolunteer(volunteerId)
+        }
+        this.setState(prevState => ({
+            openModal: !prevState.openModal
+        }))
+    }
+
+    async exportToPdf(volunteerId) {
+        try {
+            const response = await exportVolunteerProfilePdf(volunteerId)
+            const { status } = response.data
+            if (status === "success") {
+                const { url } = response.data.data
+                let btn_download = document.getElementById('btn-download-pdf')
+                btn_download.setAttribute('href', url)
+                btn_download.click()                
+            }
+        } catch (error) { }
+    }
+
+    async detailsVolunteer(volunteerId) {
+        try {
+            const response = await getVolunteerApi(volunteerId)
+            const { status } = response.data
+            if (status === "success") {
+                const { data: volunteer } = response.data
+                this.setState({ volunteer })
+            }
+        } catch (error) { }
     }
 
     async loadAmountVolunteer() {
@@ -95,7 +137,9 @@ export default class DashboardVolunteer extends Component {
             numberOfPages,
             from,
             to,
-            numberOfEntries
+            numberOfEntries,
+            openModal,
+            volunteer
         } = this.state
 
         return (
@@ -123,9 +167,15 @@ export default class DashboardVolunteer extends Component {
                             onPageChange={this.goToPage}
                         />
                     </CardBody>
-                    <VolunteerTable data={volunteers} />
+                    <VolunteerTable
+                        exportToPdf={this.exportToPdf}
+                        volunteer={volunteer}
+                        data={volunteers}
+                        openModal={openModal}
+                        toggleModal={this.toggleModal}
+                    />
                 </Card>
-
+                <a href="#" target='_blank' id="btn-download-pdf"></a>
             </Main>
         )
     }

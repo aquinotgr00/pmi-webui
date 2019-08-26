@@ -30,65 +30,65 @@ export class VolunteerProfileModal extends React.Component {
           <ModalBody>
             <Row>
                 <Col md="4">
-                    <img className="img-fluid img-thumbnail img-profil mb-3" src={volunteer.image} alt="User profile picture" />
+                    <img className="img-fluid img-thumbnail img-profil mb-3" src={volunteer.image} alt="User profile" />
                     <h1>{volunteer.name}</h1>
                     <p>{volunteer.email}</p>
                     <hr />
                     <ul className="list-group">
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>No KTA</b>
-                            <p class="float-right my-1">-</p>
+                            <p className="float-right my-1">-</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Tempat Lahir</b>
-                            <p class="float-right my-1">{volunteer.birthplae}</p>
+                            <p className="float-right my-1">{volunteer.birthplae}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Umur</b>
-                            <p class="float-right my-1">{volunteer.age} Tahun</p>
+                            <p className="float-right my-1">{volunteer.age} Tahun</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Tanggal Lahir</b>
-                            <p class="float-right my-1">{volunteer.dob}</p>
+                            <p className="float-right my-1">{volunteer.dob}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Jenis Kelamin</b>
-                            <p class="float-right my-1">{volunteer.gender}</p>
+                            <p className="float-right my-1">{volunteer.gender}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Agama</b>
-                            <p class="float-right my-1">{volunteer.religion}</p>
+                            <p className="float-right my-1">{volunteer.religion}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>No Telepon</b>
-                            <p class="float-right my-1">{volunteer.phone}</p>
+                            <p className="float-right my-1">{volunteer.phone}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Gol Darah</b>
-                            <p class="float-right my-1">{volunteer.blood_type}</p>
+                            <p className="float-right my-1">{volunteer.blood_type}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Provinsi</b>
-                            <p class="float-right my-1">{volunteer.province}</p>
+                            <p className="float-right my-1">{volunteer.province}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Kabupaten</b>
-                            <p class="float-right my-1">{volunteer.city}</p>
+                            <p className="float-right my-1">{volunteer.city}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                             <b>Kecamatan</b>
-                            <p class="float-right my-1">{volunteer.subdistrict}</p>
+                            <p className="float-right my-1">{volunteer.subdistrict}</p>
                         </li>
-                        <li class="no-list">
+                        <li className="no-list">
                         <b>Desa</b>
-                        <p class="float-right my-1">{volunteer.subdivision}</p>
+                        <p className="float-right my-1">{volunteer.subdivision}</p>
                     </li>
                     </ul>
                 </Col>
                 <Col md="8" className="grs-modal">
                     <Card>
                         <CardHeader>Penghargaan</CardHeader>
-                        <div class="table-responsive px-3">
+                        <div className="table-responsive px-3">
                             <Table>
                                 <thead>
                                     <tr>
@@ -111,7 +111,7 @@ export class VolunteerProfileModal extends React.Component {
                     </Card>
                     <Card className="mt-4">
                         <CardHeader>Penugasan</CardHeader>
-                        <div class="table-responsive px-3">
+                        <div className="table-responsive px-3">
                             <Table>
                                 <thead>
                                     <tr>
@@ -134,7 +134,7 @@ export class VolunteerProfileModal extends React.Component {
                     </Card>
                     <Card className="mt-4">
                         <CardHeader>Pelatihan</CardHeader>
-                        <div class="table-responsive px-3">
+                        <div className="table-responsive px-3">
                             <Table>
                                 <thead>
                                     <tr>
@@ -160,7 +160,14 @@ export class VolunteerProfileModal extends React.Component {
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.toggle}>Tutup</Button>
-            <Button color="success" onClick={this.toggle}>Cetak</Button>{' '}
+            {volunteer.verified === 1
+            ? <Button color="success" onClick={() => this.props.handleExportPdf(volunteer.id)}>Cetak</Button>
+            : (
+              <>
+                <Button color='primary'>Terima</Button>
+                <Button color='danger'>Tolak</Button>
+              </>
+            )}
           </ModalFooter>
         </Modal>
       </div>

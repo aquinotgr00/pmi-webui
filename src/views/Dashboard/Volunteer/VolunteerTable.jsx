@@ -1,8 +1,9 @@
 import React from 'react'
 import { Table } from 'reactstrap'
+import { VolunteerModal } from './VolunteerModal'
 
 export function VolunteerTable(props) {
-    const { data } = props
+    const { data, volunteer } = props
     return (
         <>
             <Table hover>
@@ -23,16 +24,26 @@ export function VolunteerTable(props) {
                         return (
                             <tr key={key}>
                                 <td>{key + 1}</td>
-                                <td>{item.name}</td>
+                                <td>
+                                    <a href="#open-modal" onClick={() => props.toggleModal(item.id)}>{item.name}</a>
+                                </td>
                                 <td>{item.gender}</td>
-                                <td>{ (membership) ? membership.name : '-' }</td>
+                                <td>{(membership) ? membership.name : '-'}</td>
                                 <td>{item.city}</td>
-                                <td>{(unit)? unit.name : '-' }</td>
+                                <td>{(unit) ? unit.name : '-'}</td>
                             </tr>
                         )
                     })}
                 </tbody>
             </Table>
+            {(volunteer.user) &&
+                <VolunteerModal
+                    exportToPdf={props.exportToPdf}
+                    volunteer={volunteer}
+                    openModal={props.openModal}
+                    toggleModal={props.toggleModal}
+                />
+            }
         </>
     )
 }

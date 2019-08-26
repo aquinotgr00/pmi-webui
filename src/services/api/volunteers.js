@@ -31,3 +31,7 @@ export function getUnitListApi (params) {
 export function exportVolunteerToPdfApi (params) {
   return authRequest().get('export-volunteers/print',{params})
 }
+
+export function exportVolunteerProfilePdf (volunteerId) {
+    return authRequest().get(`export-volunteers/print-profile/${volunteerId}`)
+}

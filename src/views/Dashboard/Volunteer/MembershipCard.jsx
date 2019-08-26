@@ -28,7 +28,7 @@ export function MembershipCard(props) {
                     <Collapse isOpen={collapse} >
                         <Card className="px-3 mb-3">
                             <CardHeader className="header-top pl-0">
-                            { membershipName }
+                                {membershipName}
                             </CardHeader>
                             <CardBody>
                                 <Row>
@@ -54,6 +54,32 @@ export function MembershipCard(props) {
                                             </Col>
                                         )
                                     })}
+                                    {(subMembership.length === 0) &&
+                                        <>
+                                            <Col md="4" className="grs-right">
+                                                <Row>
+                                                    <Col md="3">
+                                                        <img src={require(`assets/images/male.svg`)} className="img-collapse" />
+                                                    </Col>
+                                                    <Col md="9" className="pl-0">
+                                                        <label className="mb-0">Laki-laki</label>
+                                                        <p>{(props.m)? props.m : 0}</p>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col md="4" className="grs-right">
+                                                <Row>
+                                                    <Col md="3">
+                                                        <img src={require(`assets/images/female.svg`)} className="img-collapse" />
+                                                    </Col>
+                                                    <Col md="9" className="pl-0">
+                                                        <label className="mb-0">Perempuan</label>
+                                                        <p>{(props.f)? props.f : 0}</p>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </>
+                                    }
                                 </Row>
                             </CardBody>
                         </Card>

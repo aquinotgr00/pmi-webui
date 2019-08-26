@@ -98,7 +98,6 @@ class VolunteerForm extends Component {
   async handleUpdateVolunteer (values) {
     const { userId: volunteerId } = this.props.params
     values._method = 'PUT'
-    console.log(values)
     const response = await postVolunteerUpdateApi(volunteerId, values)
     const { status } = response.data
     if (status === 'success') {
