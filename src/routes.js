@@ -10,13 +10,14 @@ import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
 import Rsvp from 'views/RSVP'
+import RsvpForm from 'views/RSVP/RsvpForm'
 import DashboardVolunteer from 'views/Dashboard/Volunteer'
 import SettingsArea from 'views/Settings/Area'
 import AreaForm from 'views/Settings/Area/AreaForm'
 import MembershipList from 'views/Settings/Membership/MembershipList'
 import MembershipForm from 'views/Settings/Membership/MembershipForm'
-import UnitList from 'views//Settings/Unit/UnitList'
-import UnitForm from 'views//Settings/Unit/UnitForm'
+import UnitList from 'views/Settings/Unit/UnitList'
+import UnitForm from 'views/Settings/Unit/UnitForm'
 
 var routes = [
   
@@ -133,6 +134,11 @@ var routes = [
     path: '/',
     name: 'Dashboard',
     component: Dashboard
+  },
+  {
+    path: '/rsvp/buat-rsvp',
+    name: 'Form RSVP',
+    component: RsvpForm
   },
   {
     path: '/rsvp/:category',
