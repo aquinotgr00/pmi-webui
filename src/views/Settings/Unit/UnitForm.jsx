@@ -9,8 +9,7 @@ import {
 	storeUnitApi,
 	updateUnitApi
 } from 'services/api'
-import { UnitTable } from './UnitTable'
-import ucwords from "utils/string"
+
 import UnitSchema from "validators/unit"
 
 export default class UnitForm extends Component {
@@ -21,7 +20,6 @@ export default class UnitForm extends Component {
 			subFilter: null,
 			cityFilter: null,
 			parentData: [],
-			subData: [],
 			cityData: [],
 			unit: {
 				name: '',
@@ -94,20 +92,15 @@ export default class UnitForm extends Component {
 	}
 
 
-	async loadMembership(parent_id = '') {
+	async loadMembership() {
 		try {
 			const memberParams = new URLSearchParams()
-			if (parent_id) {
-				memberParams.append('l', parent_id)
-			}
+			memberParams.append('sub', 1)
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {
-				const { data: subData } = response.data
-				if (parseInt(parent_id) === 0) {
-					this.setState({ parentData: subData })
-				}
-				this.setState({ subData })
+				const { data: parentData } = response.data
+				this.setState({ parentData })
 			}
 		} catch (error) {
 			console.log(error)
@@ -131,7 +124,7 @@ export default class UnitForm extends Component {
 	render() {
 		const { unitId } = this.props.match.params
 		const title = (unitId) ? "Edit Unit" : "Tambah Unit"
-		const { parentData, subData, cityData, unit } = this.state
+		const { parentData, cityData, unit } = this.state
 		return (
 			<Main title={title}>
 				<Formik

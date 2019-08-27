@@ -30,12 +30,14 @@ export default class MembershipForm extends Component {
     if (memberId) {
       this.loadMember(memberId)
     }
-    this.loadParentMembers()
+    this.loadParentMembers(0)
   }
 
-  async loadParentMembers() {
+  async loadParentMembers(parentId) {
     try {
-      const response = await listMembershipApi()
+      const memberParams = new URLSearchParams()
+      memberParams.append('l', parentId)
+      const response = await listMembershipApi(memberParams)
       const { status } = response.data
       if (status === "success") {
         const { data: parents } = response.data
@@ -49,12 +51,12 @@ export default class MembershipForm extends Component {
       // TODO : handle error
     }
   }
-  
+
   async loadMember(memberId) {
     try {
       const response = await detailsMembershipApi(memberId)
       const { status } = response.data
-      
+
       if (status === "success") {
         const { data: member } = response.data
         this.setState({ member })
@@ -69,7 +71,7 @@ export default class MembershipForm extends Component {
 
   async handleSaveMember(member) {
     try {
-      const { type, memberId } = this.props.match.params
+      const { memberId } = this.props.match.params
       const response = memberId
         ? await updateMembershipApi(memberId, member)
         : await storeMembershipApi(member)
@@ -80,7 +82,7 @@ export default class MembershipForm extends Component {
 
         const { history } = this.props
 
-        history.push(`/admin/membership/${type}`)
+        history.push(`/admin/membership`)
       } else {
         // TODO : handle errors
         this.setState({ isLoading: false, error: null })
@@ -92,23 +94,15 @@ export default class MembershipForm extends Component {
   }
 
   render() {
-    const { type, memberId } = this.props.match.params
-    let title = ucwords(type.split("-").join(" "))
-    const heading = memberId ? `Edit ${title}` : `Tambah ${title}`
+    const { memberId } = this.props.match.params
+    const heading = memberId ? `Edit Jenis Anggota` : `Tambah Jenis Anggota`
     const { parents } = this.state
     return (
       <Main title={heading}>
-        {type === "jenis-anggota" &&
-          <MemberForm
-            handleSaveMember={this.handleSaveMember}
-            member={this.state.member} />
-        }
-        {type === "sub-jenis-anggota" &&
-          <SubMemberForm
-            handleSaveMember={this.handleSaveMember}
-            member={this.state.member}
-            parents={parents} />
-        }
+        <SubMemberForm
+          handleSaveMember={this.handleSaveMember}
+          member={this.state.member}
+          parents={parents} />
       </Main>
     )
   }

@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import { Main } from "components"
-import { PaginationLink, AddNewActionButton, Tool } from 'components'
 import {
 	listUnitApi,
 	listCityApi,
-	listParentMembershipApi,
 	listMembershipApi,
 	deleteUnitApi
 
 } from 'services/api'
 
-import ucwords from "utils/string"
 import { UnitTable } from './UnitTable'
 
 export default class UnitList extends Component {
@@ -21,14 +18,13 @@ export default class UnitList extends Component {
 			error: false,
 			isLoading: false,
 			searchFor: null,
-			isOpen: false,
-			parentFilter: null,
-			subFilter: null,
+			memberFilter: null,
 			cityFilter: null,
-			parentData: [],
-			subData: [],
+			memberData: [],
 			cityData: [],
-			unitData: []
+			unitData: [],
+			isOpenDelete: false,
+			dataId: null
 		}
 		this.loadUnits = this.loadUnits.bind(this)
 		this.loadMembership = this.loadMembership.bind(this)
@@ -39,41 +35,41 @@ export default class UnitList extends Component {
 		this.handleReset = this.handleReset.bind(this)
 		this.handleFilterCity = this.handleFilterCity.bind(this)
 		this.handleFilterParent = this.handleFilterParent.bind(this)
-		this.handleFilterSub = this.handleFilterSub.bind(this)
 		this.toggleDelete = this.toggleDelete.bind(this)
-		this.confirmDelete = this.confirmDelete.bind(this)
+		this.actionDelete = this.actionDelete.bind(this)
 	}
 
 	componentDidMount() {
 		this.loadUnits()
-		this.loadMembership(0)
+		this.loadMembership()
 		this.loadCities()
 	}
 
-	toggleDelete() {
+	toggleDelete(dataId) {
+		this.setState({ dataId })
 		this.setState(prevState => ({
-			isOpen: !prevState.isOpen
+			isOpenDelete: !prevState.isOpenDelete
 		}))
 	}
 
 	goToPage(page) {
-		this.loadUnits(page, this.state.searchFor, this.state.cityFilter, this.state.parentFilter, this.state.subFilter)
+		this.loadUnits(page, this.state.searchFor, this.state.cityFilter, this.state.memberFilter)
 	}
 
 	handleSearch(event) {
 		const searchFor = event.target.value
 		this.setState({ searchFor })
-		this.loadUnits(this.state.page, searchFor, this.state.cityFilter, this.state.parentFilter, this.state.subFilter)
+		this.loadUnits(this.state.page, searchFor, this.state.cityFilter, this.state.memberFilter)
 	}
 
 	handleReset() {
 		let filter_city = document.getElementById('cityFilter')
 		let filter_parent = document.getElementById('filterParent')
-		let filter_sub = document.getElementById('filterSub')
+		
 		let searchBox = document.getElementsByClassName('search-box')
 		filter_city.value = 0
 		filter_parent.value = 0
-		filter_sub.value = 0
+		
 		searchBox.value = ""
 		this.loadUnits()
 	}
@@ -84,32 +80,21 @@ export default class UnitList extends Component {
 			this.setState({ cityFilter: null })
 		} else {
 			this.setState({ cityFilter: cityFilter })
-			this.loadUnits(this.state.page, this.state.searchFor, cityFilter, this.state.parentFilter, this.state.subFilter)
+			this.loadUnits(this.state.page, this.state.searchFor, cityFilter, this.state.memberFilter)
 		}
 	}
 
 	handleFilterParent(event) {
-		const parentFilter = event.target.value
-		if (parentFilter === '0') {
-			this.setState({ parentFilter: null })
+		const memberFilter = event.target.value
+		if (memberFilter === '0') {
+			this.setState({ memberFilter: null })
 		} else {
-			this.setState({ parentFilter })
-			this.loadUnits(this.state.page, this.state.searchFor, this.state.cityFilter, parentFilter, this.state.subFilter)
-			this.loadMembership(parentFilter)
+			this.setState({ memberFilter })
+			this.loadUnits(this.state.page, this.state.searchFor, this.state.cityFilter, memberFilter)
 		}
 	}
 
-	handleFilterSub(event) {
-		const subFilter = event.target.value
-		if (subFilter === '0') {
-			this.setState({ subFilter: null })
-		} else {
-			this.setState({ subFilter })
-			this.loadUnits(this.state.page, this.state.searchFor, this.state.cityFilter, this.state.parentFilter, subFilter)
-		}
-	}
-
-	async loadUnits(page = 1, searchFor = '', cityFilter = '', parentFilter = '', subFilter = '') {
+	async loadUnits(page = 1, searchFor = '', cityFilter = '', memberFilter = '') {
 		try {
 			const unitParams = new URLSearchParams()
 
@@ -120,16 +105,11 @@ export default class UnitList extends Component {
 			}
 
 			if (cityFilter) {
-
 				unitParams.append('c_id', cityFilter)
 			}
 
-			if (parentFilter) {
-				unitParams.append('p_id', parentFilter)
-			}
-
-			if (subFilter) {
-				unitParams.append('l', subFilter)
+			if (memberFilter) {
+				unitParams.append('p_id', memberFilter)
 			}
 
 			const response = await listUnitApi(unitParams)
@@ -148,20 +128,15 @@ export default class UnitList extends Component {
 		}
 	}
 
-	async loadMembership(parent_id = '') {
+	async loadMembership() {
 		try {
 			const memberParams = new URLSearchParams()
-			if (parent_id) {
-				memberParams.append('l', parent_id)
-			}
+			memberParams.append('sub', 1)
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {
-				const { data: subData } = response.data
-				if (parseInt(parent_id) === 0 ) {
-					this.setState({ parentData: subData })
-				}
-				this.setState({ subData })
+				const { data: memberData } = response.data
+				this.setState({ memberData })
 			}
 		} catch (error) {
 			console.log(error)
@@ -181,8 +156,9 @@ export default class UnitList extends Component {
 		}
 	}
 
-	async confirmDelete(unitId) {
-		const response = await deleteUnitApi(unitId)
+	async actionDelete() {
+		const { dataId } = this.state
+		const response = await deleteUnitApi(dataId)
 		const { status } = response.data
 		if (status === 'success') {
 			this.toggleDelete()
@@ -193,19 +169,16 @@ export default class UnitList extends Component {
 	}
 
 	render() {
-		const { history } = this.props
 		const { pathname } = this.props.location
 		const {
 			unitData
 			, currentPage
-			, numberOfPages
 			, from
 			, to
 			, numberOfEntries
 			, cityData
-			, parentData
-			, subData
-			, isOpen
+			, memberData
+			, isOpenDelete
 		} = this.state
 		let title = "Master Unit"
 
@@ -219,8 +192,7 @@ export default class UnitList extends Component {
 					to={to}
 					numberOfEntries={numberOfEntries}
 					cityData={cityData}
-					parentData={parentData}
-					subData={subData}
+					memberData={memberData}
 					unitData={unitData}
 					handleFilterCity={this.handleFilterCity}
 					handleFilterParent={this.handleFilterParent}
@@ -228,9 +200,9 @@ export default class UnitList extends Component {
 					handleReset={this.handleReset}
 					handleSearch={this.handleSearch}
 					goToPage={this.goToPage}
-					isOpen={isOpen}
+					isOpen={isOpenDelete}
 					toggle={this.toggleDelete}
-					onAction={this.confirmDelete}
+					onAction={this.actionDelete}
 				/>
 			</Main>
 		)

@@ -10,14 +10,65 @@ import CampaignView from 'views/Campaigns/CampaignView'
 import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
 import Rsvp from 'views/RSVP'
-import SettingsAreas from 'views/SettingsAreas'
-import AreaForm from 'views/SettingsAreas/AreaForm'
-import MembershipList from 'views/Membership/MembershipList'
-import MembershipForm from 'views/Membership/MembershipForm'
-import UnitList from 'views/SettingsUnits/UnitList'
-import UnitForm from 'views/SettingsUnits/UnitForm'
+import DashboardVolunteer from 'views/Dashboard/Volunteer'
+import SettingsArea from 'views/Settings/Area'
+import AreaForm from 'views/Settings/Area/AreaForm'
+import MembershipList from 'views/Settings/Membership/MembershipList'
+import MembershipForm from 'views/Settings/Membership/MembershipForm'
+import UnitList from 'views//Settings/Unit/UnitList'
+import UnitForm from 'views//Settings/Unit/UnitForm'
 
 var routes = [
+  
+  {
+    path: '/dashboard/volunteer',
+    name: 'Dashboard Relawan',
+    component: DashboardVolunteer
+  },{
+    path: '/units',
+    name: 'Unit',
+    component: UnitList
+  },
+  {
+    path: '/units/create',
+    name: 'Create Unit',
+    component: UnitForm
+  },
+  {
+    path: '/units/:unitId/edit',
+    name: 'Edit Unit',
+    component: UnitForm
+  },
+  {
+    path: '/membership',
+    name: 'Membership',
+    component: MembershipList
+  },
+  {
+    path: '/membership/create',
+    name: 'Create Membership',
+    component: MembershipForm
+  },
+  {
+    path: '/membership/:memberId/edit',
+    name: 'Edit Membership',
+    component: MembershipForm
+  },
+  {
+    path: '/settings/:area',
+    name: 'Setting Area',
+    component: SettingsArea
+  },
+  {
+    path: '/settings/:area/create',
+    name: 'Create Area',
+    component: AreaForm
+  },
+  {
+    path: '/settings/:area/:areaId/edit',
+    name: 'Edit Area',
+    component: AreaForm
+  },
   {
     path: '/users/:user',
     name: 'Users',
@@ -102,36 +153,6 @@ var routes = [
     path: '/units/:unitId/edit',
     name: 'Edit Unit',
     component: UnitForm
-  },
-  {
-    path: '/membership/:type',
-    name: 'Membership',
-    component: MembershipList
-  },
-  {
-    path: '/membership/:type/create',
-    name: 'Create Membership',
-    component: MembershipForm
-  },
-  {
-    path: '/membership/:type/:memberId/edit',
-    name: 'Edit Membership',
-    component: MembershipForm
-  },
-  {
-    path: '/settings/:area',
-    name: 'Setting Area',
-    component: SettingsAreas
-  },
-  {
-    path: '/settings/:area/create',
-    name: 'Create Area',
-    component: AreaForm
-  },
-  {
-    path: '/settings/:area/:areaId/edit',
-    name: 'Edit Area',
-    component: AreaForm
   }
 ]
 export default routes

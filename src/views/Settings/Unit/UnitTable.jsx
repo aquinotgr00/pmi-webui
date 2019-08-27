@@ -1,11 +1,10 @@
 import React from 'react'
 import { Tool, AddNewActionButton, PaginationLink, EditActionButton, ConfirmModal } from 'components'
-import { Row, Col, Table, Input, Button } from 'reactstrap'
+import { Table, Input,Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 export function UnitTable(props) {
   const {
     isOpen,
-    toggle,
     currentPage,
     numberOfPages,
     from,
@@ -14,8 +13,7 @@ export function UnitTable(props) {
     pathname,
     title,
     cityData,
-    parentData,
-    subData,
+    memberData,
     unitData
   } = props
 
@@ -43,7 +41,7 @@ export function UnitTable(props) {
             <div className="form-group ml-3">
               <Input type="select" id="filterParent" onChange={props.handleFilterParent}>
                 <option value="0">Pilih Jenis Anggota</option>
-                {Object.values(parentData).map((parent, key) => {
+                {Object.values(memberData).map((parent, key) => {
                   return (
                     <option key={key} value={parent.id}>{parent.circular}</option>
                   )
@@ -90,28 +88,31 @@ export function UnitTable(props) {
                   <td>{key + 1}</td>
                   <td>{unit.name}</td>
                   <td>{(city) ? city.name : ""} </td>
-                  <td>{(parent_member) ? parent_member.name+' > '+membership.name :  membership.name } </td>
+                  <td>{(parent_member) ? parent_member.name + ' > ' + membership.name : membership.name} </td>
                   <td>
                     <EditActionButton path={`${pathname}/${unit.id}/edit`} />
                     <Button
-                      onClick={toggle}
+                      onClick={() => props.toggle(unit.id)}
                       className='btn btn-table circle-table delete-table'
                       title='Hapus'
                     />
-                    <ConfirmModal
-                      isOpen={isOpen}
-                      toggle={toggle}
-                      onAction={() => props.onAction(unit.id)}
-                      labelTitle="Hapus Data"
-                      labelContent="Anda yakin akan menghapus data ini?"
-                      labelAction="Hapus"
-                    />
+
                   </td>
                 </tr>
               )
             })}
         </tbody>
       </Table>
+      <Modal isOpen={isOpen} toggle={props.toggle}>
+        <ModalHeader >Hapus Data</ModalHeader>
+        <ModalBody>
+          <p>Anda yakin menghapus data ini?</p>
+        </ModalBody>
+        <ModalFooter>
+          <Button color='secondary' onClick={props.toggle}>Batal</Button>{' '}
+          <Button color='danger' onClick={props.onAction}>Hapus</Button>
+        </ModalFooter>
+      </Modal>
     </>
   )
 }

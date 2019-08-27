@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
 import { Main } from 'components'
 import { CityForm } from './City/CityForm'
 import { SubdistrictForm } from './Subdistrict/SubdistrictForm'
@@ -7,7 +6,6 @@ import { UrbanVillageForm } from './UrbanVillage/UrbanVillageForm'
 
 import {
     detailsCityApi,
-    createCityApi,
     storeCityApi,
     detailsSubdistrictApi,
     storeSubdistrictApi,
@@ -24,7 +22,6 @@ import addCitySchema from 'validators/addCity'
 import addSubdistrictSchema from 'validators/addSubdistrict'
 import addVillageSchema from 'validators/addVillage'
 import ucwords from 'utils/string'
-import { th } from 'date-fns/esm/locale';
 
 export default class AreaForm extends Component {
     constructor(props) {
@@ -101,7 +98,7 @@ export default class AreaForm extends Component {
     }
 
     async handleSaveArea(values) {
-        const { area, areaId } = this.state
+        const { area } = this.state
         let response = null
         try {
             switch (area) {

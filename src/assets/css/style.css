@@ -660,14 +660,6 @@ footer p {
     min-height: 434px;
 }
 
-.hidden-file-input {
-    opacity: 0;
-    position: absolute;
-    
-    width: 1px;
-    height: 1px;
-}
-    
 .date-range-input {
     font-weight: 300;
     font-size: 0.8em;
@@ -844,4 +836,52 @@ footer p {
 }
 ::-moz-scrollbars {
     display: none;
+}
+
+.date-range-input {
+    font-weight: 300;
+    font-size: 0.8em;
+    width: 100%;
+    border: 1px solid #DFDFDB;
+    height: 2.5em;
+    padding-left:1em;
+}
+
+.date-range-input .react-daterange-picker__range-divider {
+    align-self: center;
+    font-weight: bold;
+    margin: 0.5em;
+}
+
+.react-daterange-picker__wrapper {
+    border: none;
+}
+
+.react-daterange-picker {
+    display: inline-flex;
+    position: relative;
+    width: 200px;
+    font-size: 12px;
+}
+
+.react-datepicker {
+    width: 100%;
+}
+
+a[aria-expanded="false"]>.fa-arrow{
+    transition-duration: 0.5s;
+}
+
+a[aria-expanded="true"]>.fa-arrow{
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transition-duration: 0.5s;
+}
+.hidden-file-input {
+    opacity: 0;
+    position: absolute;
+    
+    width: 1px;
+    height: 1px;
 }

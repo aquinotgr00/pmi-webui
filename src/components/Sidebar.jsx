@@ -82,6 +82,7 @@ export function Sidebar() {
         <hr />
         <Nav className='flex-column'>
           <NavItem>
+            <NavLink to='/admin/dashboard/volunteer' className='nav-link'>Dashboard Relawan</NavLink>
             <SubMenu href='#' id='toggler-rsvp' className='side'>RSVP</SubMenu>
 
             <UncontrolledCollapse toggler='#toggler-rsvp' tag='ul' className='list-unstyled'>
@@ -103,7 +104,7 @@ export function Sidebar() {
             <NavLink to='#' className='nav-link' id='settings'>Settings</NavLink>
             <UncontrolledCollapse toggler='#settings' tag='ul' className='list-unstyled'>
               <NavItem>
-                <NavLink to='/admin/membership/sub-jenis-anggota'>
+                <NavLink to='/admin/membership'>
                   Anggota
                   </NavLink>
               </NavItem>
@@ -126,8 +127,8 @@ export function Sidebar() {
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>
-          </Nav>
+        </Nav>
       </div>
     </Navbar>
-      )
-    }
+  )
+}

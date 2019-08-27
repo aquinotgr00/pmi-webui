@@ -1,11 +1,9 @@
 import React from 'react'
 import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'components'
-import { DeleteActionButton } from 'components/ActionButtons/DeleteActionButton'
-import { Row, Col, Button, FormGroup, Label, Input, Table } from 'reactstrap'
+import { Input, Table, Button } from 'reactstrap'
 
-export function SubdistrictList(props) {
-	const { path, title, history } = props
-
+export function UrbanVillageList(props) {
+	const { path, title } = props
 	return (
 		<>
 			<div className="head-tools">
@@ -17,13 +15,21 @@ export function SubdistrictList(props) {
 					</div>
 				</div>
 				<div className="ml-md-auto align-self-stretch">
-					<form className="form-inline my-3">
+					<div className="form-inline my-3">
 						<h2 className="my-auto">Filter:</h2>
 						<div className="form-group ml-3">
-							<Input type="select" name="select" id="filterCity" onChange={props.handleFilterCity}>
-								<option value="0">Pilih Kabupaten</option>
+							<Input type="select" id="filterCity" onChange={props.handleFilterCity}>
+								<option value="0">Pilih Kabupaten/Kota</option>
 								{props.filterCity && props.filterCity.map((city, key) => (
 									<option key={key} value={city.id}>{city.name}</option>
+								))}
+							</Input>
+						</div>
+						<div className="form-group ml-3">
+							<Input type="select" id="filterSubdistrict" onChange={props.handleFilterSubdistrict}>
+								<option value="0">Pilih Kecamatan</option>
+								{props.filterSubdistrict && props.filterSubdistrict.map((subdistrict, index) => (
+									<option key={index} value={subdistrict.id}>{subdistrict.name}</option>
 								))}
 							</Input>
 						</div>
@@ -33,7 +39,7 @@ export function SubdistrictList(props) {
 							data-placement="top"
 							title=""
 							data-original-title="Reset" />
-					</form>
+					</div>
 				</div>
 			</div>
 			<PaginationLink
@@ -47,6 +53,7 @@ export function SubdistrictList(props) {
 				<thead>
 					<tr>
 						<th>No</th>
+						<th>Desa/Kelurahan</th>
 						<th>Kecamatan</th>
 						<th>Kabupaten</th>
 						<th>Provinsi</th>
@@ -54,20 +61,21 @@ export function SubdistrictList(props) {
 					</tr>
 				</thead>
 				<tbody>
-					{props.data && props.data.map((subdistrict, key) => (
+					{props.data && props.data.map((village, key) => (
 						<tr key={key}>
 							<td>{key + 1}</td>
-							<td>{subdistrict.name}</td>
-							<td>{subdistrict.city.name}</td>
-							<td>{subdistrict.city.province.name}</td>
+							<td>{village.name}</td>
+							<td>{village.subdistrict.name}</td>
+							<td>{village.subdistrict.city.name}</td>
+							<td>{village.subdistrict.city.province.name}</td>
 							<td>
 								<EditActionButton
-									path={path + '/' + subdistrict.id + '/edit'}
+									path={path + '/' + village.id + '/edit'}
 								/>
-								<DeleteActionButton
-									dataId={subdistrict.id}
-									title={title}
-									history={history}
+								<Button
+									onClick={() => props.toggle(village.id)}
+									className='btn btn-table circle-table delete-table'
+									title='Hapus'
 								/>
 							</td>
 						</tr>
