@@ -97,7 +97,7 @@ export class VolunteerProfileModal extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {volunteer.qualifications.filter(data => data.category === 1).map((data, key) => {
+                                    {volunteer.achievements.map((data, key) => {
                                         return (
                                             <tr key={key}>
                                                 <th>{key+1}</th>
@@ -120,7 +120,7 @@ export class VolunteerProfileModal extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {volunteer.qualifications.filter(data => data.category === 2).map((data, key) => {
+                                {volunteer.assignments.map((data, key) => {
                                     return (
                                         <tr key={key}>
                                             <th>{key+1}</th>
@@ -143,7 +143,7 @@ export class VolunteerProfileModal extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {volunteer.qualifications.filter(data => data.category === 3).map((data, key) => {
+                                {volunteer.trainings.map((data, key) => {
                                     return (
                                         <tr key={key}>
                                             <th>{key+1}</th>

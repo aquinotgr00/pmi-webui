@@ -37,10 +37,10 @@ export default class RsvpList extends Component {
     const rsvpListParams = new URLSearchParams()
     const { category } = this.props
     switch (category) {
-      case 'archived':
+      case 'arsip':
         rsvpListParams.append('ar', 1)
         break
-      case 'pending':
+      case 'moderasi':
         rsvpListParams.append('p', 1)
         break
       default:
@@ -100,9 +100,9 @@ export default class RsvpList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        {(category === 'list-rsvp') && <Active />}
-        {(category === 'moderasi') && <Pending />}
-        {(category === 'arsip') && <Archived />}
+        {(category === 'list-rsvp') && <Active data={rsvpData} />}
+        {(category === 'moderasi') && <Pending data={rsvpData} />}
+        {(category === 'arsip') && <Archived data={rsvpData} />}
       </>
     )
   }

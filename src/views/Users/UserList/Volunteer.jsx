@@ -22,6 +22,12 @@ export function Volunteer (props) {
       <tbody>
         {props.data.map((volunteer, key) => {
             key++
+            const { membership } = volunteer.unit
+            let memberType = membership.name
+            let subMemberType = membership.name
+            if(membership.parent_member) {
+              memberType = membership.parent_member.name
+            }
             return (
                 <tr key={key}>
                     <td>{key}</td>
@@ -35,8 +41,8 @@ export function Volunteer (props) {
                         />
                     </td>
                     <td>{volunteer.gender}</td>
-                    <td>{volunteer.unit === null ? '':volunteer.unit.membership.parent_member.name}</td>
-                    <td>{volunteer.unit === null ? '':volunteer.unit.membership.name}</td>
+                    <td>{volunteer.unit === null ? '':memberType}</td>
+                    <td>{memberType === subMemberType ? '':subMemberType}</td>
                     <td>{volunteer.city}</td>
                     <td>{volunteer.unit === null ? '':volunteer.unit.name}</td>
                     <td>
