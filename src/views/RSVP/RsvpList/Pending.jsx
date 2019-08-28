@@ -1,8 +1,9 @@
 import React from 'react'
 import { Table } from 'reactstrap'
+import moment from 'moment'
 
 export function Pending (props) {
-  const { data, path } = props
+  const { data } = props
   return (
     <Table responsive hover>
       <thead>
@@ -16,11 +17,25 @@ export function Pending (props) {
         </tr>
       </thead>
       <tbody>
-        {data && data.map((rsvp, key) => (
-          <tr key={key}>
-            
-          </tr>
-        ))}
+        {data && data.map((rsvp, key) => {
+          const {created_at, title, village_id, village, admin_id, admin, volunteer} = rsvp
+          const dateCreated = moment(created_at)
+
+          return (
+            <tr key={key}>
+              <td>{key+1}</td>
+              <td>
+                {dateCreated.format('DD-MM-YYYY')}
+                <br/>
+                <small>{dateCreated.format('HH:mm')}</small>
+              </td>
+              <td>{title}</td>
+              <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
+              <td>{admin_id?admin.name:volunteer.name}</td>
+              <td></td>
+            </tr>
+          )}
+        )}
       </tbody>
     </Table>
   )
