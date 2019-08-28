@@ -4,7 +4,7 @@ import Header from './Header'
 export function Main (props) {
   return (
     <>
-      <Header title={props.title} />
+      <Header {...props} />
       {props.children}
     </>
   )

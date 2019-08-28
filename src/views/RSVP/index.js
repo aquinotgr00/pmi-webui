@@ -6,7 +6,7 @@ import RsvpForm from './RsvpForm'
 
 export default function Rsvp (props) {
   const { category } = props.match.params
-  const titles = {'list-rsvp':'List RSVP', 'moderasi':'Moderasi','arsip':'Arsip', 'buat-rsvp':'Form RSVP'}
+  const titles = {'list-rsvp':'List RSVP', 'moderasi':'Moderasi','arsip':'Arsip'}
   return (
     <Main title={titles[category]}>
       <Switch>
@@ -20,11 +20,6 @@ export default function Rsvp (props) {
             />
           )
         })}
-        <Route
-          exact
-          path={`/admin/rsvp/buat-rsvp`}
-          component={RsvpForm}
-        />
       </Switch>
     </Main>
   )
