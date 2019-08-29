@@ -4,7 +4,7 @@ import { AddNewActionButton, PaginationLink, Tool } from 'components'
 import { Active } from './Active'
 import { Pending } from './Pending'
 import { Archived } from './Archived'
-import { archiveRsvpApi, listRsvpApi } from 'services/api'
+import { updateRsvpApi, listRsvpApi } from 'services/api'
 
 export default class RsvpList extends Component {
   constructor (props) {
@@ -26,7 +26,7 @@ export default class RsvpList extends Component {
     this.toggleTooltip = this.toggleTooltip.bind(this)
     this.renderRsvpList = this.renderRsvpList.bind(this)
     this.goToPage = this.goToPage.bind(this)
-    this.handleArchive = this.handleArchive.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
   }
 
   componentDidMount () {
@@ -72,10 +72,10 @@ export default class RsvpList extends Component {
     }
   }
 
-  async handleArchive(rsvpId) {
+  async handleUpdate(rsvpId, data) {
     this.setState({ isLoading: true, error: null })
     try {
-      const response = await archiveRsvpApi(rsvpId)
+      const response = await updateRsvpApi(rsvpId, data)
       const { status } = response.data
       if (status === 'success') {
         this.setState({ isLoading: false, error: null })
@@ -118,8 +118,8 @@ export default class RsvpList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        {(category === 'list-rsvp') && <Active data={rsvpData} onArchive={this.handleArchive} />}
-        {(category === 'moderasi') && <Pending data={rsvpData} />}
+        {(category === 'list-rsvp') && <Active data={rsvpData} onArchive={this.handleUpdate} />}
+        {(category === 'moderasi') && <Pending data={rsvpData} onApproveOrReject={this.handleUpdate} />}
         {(category === 'arsip') && <Archived data={rsvpData} />}
       </>
     )
