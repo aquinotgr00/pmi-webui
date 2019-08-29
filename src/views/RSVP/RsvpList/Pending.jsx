@@ -19,7 +19,7 @@ export function Pending (props) {
       </thead>
       <tbody>
         {data && data.map((rsvp, key) => {
-          const {created_at, title, village_id, village, admin_id, admin, volunteer} = rsvp
+          const {created_at, id, title, village_id, village, admin_id, admin, volunteer} = rsvp
           return (
             <tr key={key}>
               <td>{key+1}</td>
@@ -28,8 +28,8 @@ export function Pending (props) {
               <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
               <td>{admin_id?admin.name:volunteer.name}</td>
               <td>
-                <ApproveActionButton />
-                <RejectActionButton />
+                <ApproveActionButton onClick={props.onApprove} id={id} />
+                <RejectActionButton onClick={props.onReject} id={id} />
               </td>
             </tr>
           )}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { AddNewActionButton, PaginationLink, Tool } from 'components'
 import { Active } from './Active'
 import { Pending } from './Pending'
@@ -18,7 +18,8 @@ export default class RsvpList extends Component {
       numberOfPages: 0,
       from: 0,
       to: 0,
-      numberOfEntries: 0
+      numberOfEntries: 0,
+      rejectModalIsOpen: false
     }
 
     this.loadRsvp = this.loadRsvp.bind(this)
@@ -27,6 +28,8 @@ export default class RsvpList extends Component {
     this.renderRsvpList = this.renderRsvpList.bind(this)
     this.goToPage = this.goToPage.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
+    this.toggleRejectModal = this.toggleRejectModal.bind(this)
+    this.handleReject = this.handleReject.bind(this)
   }
 
   componentDidMount () {
@@ -105,6 +108,14 @@ export default class RsvpList extends Component {
     })
   }
 
+  handleReject() {
+    this.setState({rejectModalIsOpen:true});
+  }
+
+  toggleRejectModal() {
+    this.setState({rejectModalIsOpen:!this.state.rejectModalIsOpen});
+  }
+
   renderRsvpList (category) {
     const { rsvpData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
 
@@ -119,7 +130,7 @@ export default class RsvpList extends Component {
           onPageChange={this.goToPage}
         />
         {(category === 'list-rsvp') && <Active data={rsvpData} onArchive={this.handleUpdate} />}
-        {(category === 'moderasi') && <Pending data={rsvpData} onApproveOrReject={this.handleUpdate} />}
+        {(category === 'moderasi') && <Pending data={rsvpData} onApprove={this.handleUpdate} onReject={this.handleReject} />}
         {(category === 'arsip') && <Archived data={rsvpData} />}
       </>
     )
@@ -137,6 +148,24 @@ export default class RsvpList extends Component {
           ? <div>Error</div>
           : this.renderRsvpList(category)
         }
+        <Modal isOpen={this.state.rejectModalIsOpen} toggle={this.toggleRejectModal} centered={true}>
+          <ModalHeader toggle={this.toggleRejectModal}>Tolak</ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Label for="rejection-reason">Alasan</Label>
+              <Input 
+                type="textarea" 
+                name="description" 
+                className="form-control" 
+                id="rejection-reason" 
+                rows="3" />
+            </FormGroup>
+            <div className="d-flex flex-row-reverse">
+              <Button onClick={this.toggleRejectModal} className="ml-4" color='success'>Kirim</Button>
+              <Button onClick={this.toggleRejectModal} className="btn-outline-secondary">Batal</Button>
+            </div>
+          </ModalBody>
+        </Modal>
       </>
     )
   }

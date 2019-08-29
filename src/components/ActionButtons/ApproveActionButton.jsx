@@ -9,7 +9,7 @@ export class ApproveActionButton extends React.Component {
   }
 
   onClick() {
-    this.props.onClick(this.props.id, {archived:1})
+    this.props.onClick(this.props.id, {approved:1})
   }
   
   render() {
