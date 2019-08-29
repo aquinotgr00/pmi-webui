@@ -9,7 +9,7 @@ export class RejectActionButton extends React.Component {
   }
 
   onClick() {
-    this.props.onClick(this.props.id, {archived:1})
+    this.props.onClick(this.props.id)
   }
   
   render() {
