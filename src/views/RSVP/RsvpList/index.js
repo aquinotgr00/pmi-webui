@@ -4,8 +4,7 @@ import { AddNewActionButton, PaginationLink, Tool } from 'components'
 import { Active } from './Active'
 import { Pending } from './Pending'
 import { Archived } from './Archived'
-import { listRsvpApi } from 'services/api'
-import moment from 'moment'
+import { archiveRsvpApi, listRsvpApi } from 'services/api'
 
 export default class RsvpList extends Component {
   constructor (props) {
@@ -27,6 +26,7 @@ export default class RsvpList extends Component {
     this.toggleTooltip = this.toggleTooltip.bind(this)
     this.renderRsvpList = this.renderRsvpList.bind(this)
     this.goToPage = this.goToPage.bind(this)
+    this.handleArchive = this.handleArchive.bind(this)
   }
 
   componentDidMount () {
@@ -72,6 +72,24 @@ export default class RsvpList extends Component {
     }
   }
 
+  async handleArchive(rsvpId) {
+    this.setState({ isLoading: true, error: null })
+    try {
+      const response = await archiveRsvpApi(rsvpId)
+      const { status } = response.data
+      if (status === 'success') {
+        this.setState({ isLoading: false, error: null })
+        const { searchFor, currentPage } = this.state
+        this.loadRsvp(currentPage, searchFor)
+      } else {
+        // TODO : handle error
+        this.setState({ isLoading: false, error: null })
+      }
+    } catch (error) {
+      // TODO : handle error
+    }
+  }
+
   handleSearch (event) {
     const searchKeyword = event.target.value
     this.loadRsvp(this.state.page, searchKeyword)
@@ -100,7 +118,7 @@ export default class RsvpList extends Component {
           numberOfPages={numberOfPages}
           onPageChange={this.goToPage}
         />
-        {(category === 'list-rsvp') && <Active data={rsvpData} />}
+        {(category === 'list-rsvp') && <Active data={rsvpData} onArchive={this.handleArchive} />}
         {(category === 'moderasi') && <Pending data={rsvpData} />}
         {(category === 'arsip') && <Archived data={rsvpData} />}
       </>

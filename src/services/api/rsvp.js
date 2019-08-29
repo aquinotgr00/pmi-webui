@@ -13,3 +13,12 @@ export function listRsvpApi (params) {
     })
   })
 }
+
+export function archiveRsvpApi (rsvpId) {
+  cancel && cancel()
+  return authRequest().put(`/events/report/${rsvpId}`, { archived:1,
+    cancelToken: new CancelToken(function executor (c) {
+      cancel = c
+    })
+  })
+}
