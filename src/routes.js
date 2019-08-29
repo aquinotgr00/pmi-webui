@@ -141,6 +141,11 @@ var routes = [
     component: RsvpForm
   },
   {
+    path: '/rsvp/:rsvpId/edit',
+    name: 'Form RSVP',
+    component: RsvpForm
+  },
+  {
     path: '/rsvp/:category',
     name: 'RSVP',
     component: Rsvp
