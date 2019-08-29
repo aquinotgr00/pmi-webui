@@ -1,7 +1,7 @@
 import React from 'react'
 import { ActionButton } from './ActionButton'
 
-export class ArchiveActionButton extends React.Component {
+export class RejectActionButton extends React.Component {
   constructor(props) {
     super(props)
   
@@ -14,7 +14,7 @@ export class ArchiveActionButton extends React.Component {
   
   render() {
     return (
-      <ActionButton className='buka-table' onClick={this.onClick} />
+      <ActionButton className='delete-table' onClick={this.onClick} />
     )
   }
 }

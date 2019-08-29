@@ -14,9 +14,9 @@ export function listRsvpApi (params) {
   })
 }
 
-export function archiveRsvpApi (rsvpId) {
+export function updateRsvpApi (rsvpId, data) {
   cancel && cancel()
-  return authRequest().put(`/events/report/${rsvpId}`, { archived:1,
+  return authRequest().put(`/events/report/${rsvpId}`, { ...data,
     cancelToken: new CancelToken(function executor (c) {
       cancel = c
     })

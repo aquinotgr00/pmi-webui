@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
-import moment from 'moment'
+import { DateTime } from 'components/DateTime'
+import { ApproveActionButton, RejectActionButton } from 'components/ActionButtons'
 
 export function Pending (props) {
   const { data } = props
@@ -19,20 +20,17 @@ export function Pending (props) {
       <tbody>
         {data && data.map((rsvp, key) => {
           const {created_at, title, village_id, village, admin_id, admin, volunteer} = rsvp
-          const dateCreated = moment(created_at)
-
           return (
             <tr key={key}>
               <td>{key+1}</td>
-              <td>
-                {dateCreated.format('DD-MM-YYYY')}
-                <br/>
-                <small>{dateCreated.format('HH:mm')}</small>
-              </td>
+              <td><DateTime data={created_at} /></td>
               <td>{title}</td>
               <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
               <td>{admin_id?admin.name:volunteer.name}</td>
-              <td></td>
+              <td>
+                <ApproveActionButton />
+                <RejectActionButton />
+              </td>
             </tr>
           )}
         )}
