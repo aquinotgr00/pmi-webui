@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { Button, FormFeedback, FormGroup, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { AddNewActionButton, PaginationLink, Tool } from 'components'
 import { Active } from './Active'
 import { Pending } from './Pending'
 import { Archived } from './Archived'
 import { updateRsvpApi, listRsvpApi } from 'services/api'
+import { Formik, Form, Field, } from 'formik';
 
 export default class RsvpList extends Component {
   constructor (props) {
@@ -19,7 +20,8 @@ export default class RsvpList extends Component {
       from: 0,
       to: 0,
       numberOfEntries: 0,
-      rejectModalIsOpen: false
+      rejectModalIsOpen: false,
+      rejectRsvpId: null
     }
 
     this.loadRsvp = this.loadRsvp.bind(this)
@@ -108,8 +110,8 @@ export default class RsvpList extends Component {
     })
   }
 
-  handleReject() {
-    this.setState({rejectModalIsOpen:true});
+  handleReject(rejectRsvpId) {
+    this.setState({rejectModalIsOpen:true, rejectRsvpId});
   }
 
   toggleRejectModal() {
@@ -149,21 +151,60 @@ export default class RsvpList extends Component {
           : this.renderRsvpList(category)
         }
         <Modal isOpen={this.state.rejectModalIsOpen} toggle={this.toggleRejectModal} centered={true}>
-          <ModalHeader toggle={this.toggleRejectModal}>Tolak</ModalHeader>
+          <ModalHeader toggle={this.toggleRejectModal} tag='h1' >Tolak</ModalHeader>
           <ModalBody>
-            <FormGroup>
-              <Label for="rejection-reason">Alasan</Label>
-              <Input 
-                type="textarea" 
-                name="description" 
-                className="form-control" 
-                id="rejection-reason" 
-                rows="3" />
-            </FormGroup>
-            <div className="d-flex flex-row-reverse">
-              <Button onClick={this.toggleRejectModal} className="ml-4" color='success'>Kirim</Button>
-              <Button onClick={this.toggleRejectModal} className="btn-outline-secondary">Batal</Button>
-            </div>
+            <Formik 
+              initialValues={{approved:0, rejectionReason:'', rsvpId:this.state.rejectRsvpId}}
+              validateOnBlur={false}
+              validate={values=>{
+                let errors={}
+                if (!values.rejectionReason) {
+                  errors.rejectionReason = 'Alasan penolakan wajib diisi';
+                }
+                return errors
+              }}
+              onSubmit={(values, { setSubmitting }) => {
+                const {approved, rejectionReason:reason_rejection, rsvpId} = values
+                this.handleUpdate(rsvpId, {approved,reason_rejection})
+                setSubmitting(false)
+                this.toggleRejectModal()
+              }}
+              render={({
+                errors,
+                handleSubmit,
+                isSubmitting
+              }) => (
+                <Form>
+                  <FormGroup>
+                    <Label htmlFor="rejectionReason">Alasan</Label>
+                    <Field
+                      name='rejectionReason'
+                      render={({ field }) => (
+                        <Input 
+                          {...field}
+                          type="textarea" 
+                          id="rejectionReason" 
+                          rows="3"
+                          maxLength={255}
+                          invalid={errors.rejectionReason!==undefined}
+                        />
+                      )}
+                    />
+                    {errors.rejectionReason ? <FormFeedback>{errors.rejectionReason}</FormFeedback> : ''}
+                  </FormGroup>
+                  <div className="d-flex flex-row-reverse">
+                    <Button
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        handleSubmit()
+                      }}
+                      className="ml-4"
+                      color='success'>Kirim
+                    </Button>
+                    <Button onClick={this.toggleRejectModal} className="btn-outline-secondary" color='none'>Batal</Button>
+                  </div>
+                </Form>
+            )} />
           </ModalBody>
         </Modal>
       </>
