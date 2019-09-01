@@ -18,13 +18,12 @@ export default class AreaList extends Component {
     super(props)
     this.state = {
       searchFor: '',
-      provinceFilter: null,
       cityFilter: null,
-      cityFilterList: [],
       subdistrictFilter: null,
-      subdistrictFilterList: [],
       isLoading: false,
-      areaData: [],
+      cities:[],
+      subdistricts:[],
+      villages:[],
       error: null,
       isOpenDelete: false,
       dataId: null
@@ -36,14 +35,29 @@ export default class AreaList extends Component {
     this.handleFilterSubdistrict = this.handleFilterSubdistrict.bind(this)
     this.actionDelete = this.actionDelete.bind(this)
     this.toggleDelete = this.toggleDelete.bind(this)
+    this.loadCities = this.loadCities.bind(this)
+    this.loadSubdistricts = this.loadSubdistricts.bind(this)
+    this.loadVillages = this.loadVillages.bind(this)
   }
 
   componentDidMount() {
-    this.loadArea()
+    this.loadCities()
+    this.loadSubdistricts()
+    this.loadVillages()
   }
 
   goToPage(page) {
-    this.loadArea(page, this.state.searchFor)
+    const { title } = this.props
+    if(title === 'kabupaten-kota'){
+      this.loadCities(page, this.state.searchFor)
+    }
+    if(title === 'kecamatan'){
+      this.loadSubdistricts(page, this.state.searchFor, this.state.cityFilter)
+    }
+    if(title === 'kelurahan-desa'){
+      this.loadVillages(page, this.state.searchFor, this.state.cityFilter, this.state.subdistrictFilter)
+    }
+    
   }
 
   toggleDelete(dataId) {
@@ -54,9 +68,21 @@ export default class AreaList extends Component {
   }
 
   handleSearch(event) {
+    const { title } = this.props
     const searchKeyword = event.target.value
     this.setState({ searchFor: searchKeyword })
-    this.loadArea(this.state.page, searchKeyword, this.state.provinceFilter, this.state.cityFilter, this.state.subdistrictFilter)
+    
+    if (title === 'kabupaten-kota') {
+      this.loadCities(this.state.page, searchKeyword)  
+    }
+    
+    if(title === 'kecamatan'){
+      this.loadSubdistricts(this.state.page, searchKeyword, this.state.cityFilter)
+    }
+
+    if(title === 'kelurahan-desa'){
+      this.loadVillages(this.state.page, searchKeyword,this.state.cityFilter, this.state.subdistrictFilter)
+    }
   }
 
   handleReset() {
@@ -66,16 +92,18 @@ export default class AreaList extends Component {
     if (filter_sub !== null) {
       filter_sub.value = 0
     }
-    this.loadArea()
+    this.loadCities()
+    this.loadSubdistricts()
+    this.loadVillages()
   }
 
   handleFilterCity(event) {
-    let filterCity = event.target.value
-    if (filterCity === 0) {
-      filterCity = null;
+    let cityFilter = event.target.value
+    if (cityFilter === 0) {
+      cityFilter = null;
     }
-    this.setState({ cityFilter: filterCity })
-    this.loadArea(this.state.page, this.state.searchFor, this.state.provinceFilter, filterCity, this.state.subdistrictFilter)
+    this.setState({ cityFilter })
+    this.loadSubdistricts(this.state.page, this.state.searchFor,cityFilter)
   }
 
   handleFilterSubdistrict(event) {
@@ -84,55 +112,84 @@ export default class AreaList extends Component {
       filterSubdistrict = null;
     }
     this.setState({ subdistrictFilter: filterSubdistrict })
-    this.loadArea(this.state.page, this.state.searchFor, this.state.provinceFilter, this.state.cityFilter, filterSubdistrict)
+    this.loadVillages(this.state.page, this.state.searchFor,this.state.cityFilter,filterSubdistrict)
   }
 
-  async loadArea(page = 1, searchFor = '', provinceFilter = '', cityFilter = '', subdistrictFilter = '') {
-    const areaParams = new URLSearchParams()
+  async loadCities(page = 1, searchFor = ''){
     const { title } = this.props
-
+    const areaParams = new URLSearchParams()
     areaParams.append('page', page)
-
     if (searchFor) {
       areaParams.append('s', searchFor)
     }
-
-    if (provinceFilter) {
-      areaParams.append('p_id', provinceFilter)
-    }
-
-    if (cityFilter) {
-      areaParams.append('c_id', cityFilter)
-    }
-
-    if (subdistrictFilter) {
-      areaParams.append('s_id', subdistrictFilter)
-    }
-
-    this.setState({ isLoading: true, error: null })
-    let response = null
-    switch (title) {
-      case 'kabupaten-kota':
-        response = await listCityApi(areaParams)
-        break
-      case 'kecamatan':
-        response = await listSubdistrictApi(areaParams)
-        break
-      case 'kelurahan-desa':
-        response = await listVillageApi(areaParams)
-        break
-      default:
-        response = null
-        break
-    }
+    const response = await listCityApi(areaParams)
     if (response !== null) {
       const { status } = response.data
       if (status === 'success') {
         const { data } = response.data
-        const { current_page: currentPage, last_page: numberOfPages, data: areaData, from, to, total: numberOfEntries, filter_city: cityFilterList, filter_subdistrict: subdistrictFilterList } = data
-        this.setState({ isLoading: false, areaData, currentPage, numberOfPages, from, to, numberOfEntries, searchFor, cityFilterList, subdistrictFilterList })
-      } else {
-        this.setState({ isLoading: false, error: null })
+        if(title === 'kabupaten-kota'){
+          const { current_page: currentPage, last_page: numberOfPages, data: cities, from, to, total: numberOfEntries } = data
+          this.setState({ isLoading: false, cities, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
+        }else{
+          const {  data: cities } = data
+          this.setState({ cities })
+        }
+      }
+    }
+  }
+
+  async loadSubdistricts(page = 1, searchFor='',cityFilter=''){
+    const { title } = this.props
+    const areaParams = new URLSearchParams()
+    areaParams.append('page', page)
+    if (searchFor) {
+      areaParams.append('s', searchFor)
+    }
+    if (cityFilter) {
+      areaParams.append('c_id', cityFilter)
+    }
+    const response = await listSubdistrictApi(areaParams)
+    if (response !== null) {
+      const { status } = response.data
+      if (status === 'success') {
+        const { data } = response.data
+        if (title === 'kecamatan') {
+          const { current_page: currentPage, last_page: numberOfPages, data: subdistricts, from, to, total: numberOfEntries } = data
+          this.setState({ isLoading: false, subdistricts, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
+        }else{
+          const { data: subdistricts } = data
+          this.setState({ subdistricts })
+        }
+      }
+    }
+  }
+
+  async loadVillages(page = 1, searchFor ='',cityFilter='',subdistrictFilter=''){
+    const { title } = this.props
+    const areaParams = new URLSearchParams()
+    areaParams.append('page', page)
+    if (searchFor) {
+      areaParams.append('s', searchFor)
+    }
+    if (cityFilter) {
+      areaParams.append('c_id', cityFilter)
+    }
+    if (subdistrictFilter) {
+      areaParams.append('s_id', subdistrictFilter)
+    }
+    const response = await listVillageApi(areaParams)
+    if (response !== null) {
+      const { status } = response.data
+      if (status === 'success') {
+        const { data } = response.data
+        if(title === 'kelurahan-desa'){
+          const { current_page: currentPage, last_page: numberOfPages, data: villages, from, to, total: numberOfEntries } = data
+          this.setState({ isLoading: false, villages, currentPage, numberOfPages, from, to, numberOfEntries, searchFor })
+        }else{
+          const { data: villages } = data
+          this.setState({villages})
+        }
+        
       }
     }
   }
@@ -159,14 +216,26 @@ export default class AreaList extends Component {
       const { status } = response.data
       if (status === 'success') {
         this.toggleDelete()
-        this.loadArea()
+        this.loadCities()
+        this.loadSubdistricts()
+        this.loadVillages()
       }
     }
   }
 
   render() {
-    const { title, history } = this.props
-    const { areaData, currentPage, numberOfPages, from, to, numberOfEntries, cityFilterList, subdistrictFilterList, isOpenDelete } = this.state
+    const { title } = this.props
+    const { 
+      currentPage, 
+      numberOfPages, 
+      from, 
+      to, 
+      numberOfEntries, 
+      isOpenDelete,
+      cities,
+      subdistricts,
+      villages
+    } = this.state
     const { pathname } = this.props.location
 
     return (
@@ -174,7 +243,7 @@ export default class AreaList extends Component {
         {(title === 'kabupaten-kota') &&
           <CityList
             title={title}
-            data={areaData}
+            data={cities}
             path={pathname}
             from={from}
             to={to}
@@ -190,7 +259,7 @@ export default class AreaList extends Component {
 
         {(title === 'kecamatan') &&
           <SubdistrictList
-            data={areaData}
+            data={subdistricts}
             path={pathname}
             from={from}
             to={to}
@@ -201,7 +270,7 @@ export default class AreaList extends Component {
             handleSearch={this.handleSearch}
             title={title}
             handleReset={this.handleReset}
-            filterCity={cityFilterList}
+            filterCity={cities}
             handleFilterCity={this.handleFilterCity}
             toggle={this.toggleDelete}
             isOpen={isOpenDelete}
@@ -209,7 +278,7 @@ export default class AreaList extends Component {
         }
         {(title === 'kelurahan-desa') &&
           <UrbanVillageList
-            data={areaData}
+            data={villages}
             path={pathname}
             from={from}
             to={to}
@@ -220,8 +289,8 @@ export default class AreaList extends Component {
             handleSearch={this.handleSearch}
             title={title}
             handleReset={this.handleReset}
-            filterCity={cityFilterList}
-            filterSubdistrict={subdistrictFilterList}
+            filterCity={cities}
+            filterSubdistrict={subdistricts}
             handleFilterCity={this.handleFilterCity}
             handleFilterSubdistrict={this.handleFilterSubdistrict}
             toggle={this.toggleDelete}
