@@ -78,8 +78,6 @@ export default class MembershipList extends Component {
   }
 
   async loadMembers(page = 1, searchFor = '', parentFilter = '') {
-    const { type } = this.props.match.params
-
     const memberParams = new URLSearchParams()
     memberParams.append('page', page)
     memberParams.append('sub', 1)
