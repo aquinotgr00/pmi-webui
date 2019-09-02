@@ -82,7 +82,7 @@ export default class MembershipForm extends Component {
 
         const { history } = this.props
 
-        history.push(`/admin/membership`)
+        history.push(`/admin/settings/membership`)
       } else {
         // TODO : handle errors
         this.setState({ isLoading: false, error: null })

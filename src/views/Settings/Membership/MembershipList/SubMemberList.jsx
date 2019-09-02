@@ -3,7 +3,7 @@ import { EditActionButton } from "components"
 import { Table, Button } from "reactstrap"
 
 export function SubMemberList(props) {
-  const { data, pathname, isOpen } = props
+  const { data, pathname } = props
   return (
     <Table hover>
       <thead>

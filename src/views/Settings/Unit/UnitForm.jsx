@@ -65,7 +65,7 @@ export default class UnitForm extends Component {
 			const { status } = response.data
 			if (status === "success") {
 				const { history } = this.props
-				history.push(`/admin/units`)
+				history.push(`/admin/settings/units`)
 			}
 
 		} catch (error) {

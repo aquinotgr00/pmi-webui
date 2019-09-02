@@ -3,7 +3,7 @@ import { PaginationLink, AddNewActionButton, Tool, EditActionButton } from 'comp
 import { Row, Col, Table, Button } from 'reactstrap'
 
 export function CityList(props) {
-	const { path, title, history, isOpen } = props
+	const { path, title } = props
 	return (
 		<>
 			<Row>

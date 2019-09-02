@@ -73,7 +73,7 @@ export default class MembershipList extends Component {
       this.toggleDelete()
       this.loadMembers();
       const { history } = this.props
-      history.push(`/admin/membership`)
+      history.push(`/admin/settings/membership`)
     }
   }
 

@@ -18,55 +18,59 @@ import MembershipList from 'views/Settings/Membership/MembershipList'
 import MembershipForm from 'views/Settings/Membership/MembershipForm'
 import UnitList from 'views/Settings/Unit/UnitList'
 import UnitForm from 'views/Settings/Unit/UnitForm'
+import Profile from 'views/Settings/Profile'
 
 var routes = [
-  
   {
+    path: '/settings/profile',
+    name: 'Settings Profile',
+    component: Profile
+  },{
     path: '/dashboard/volunteer',
     name: 'Dashboard Relawan',
     component: DashboardVolunteer
   },{
-    path: '/units',
+    path: '/settings/units',
     name: 'Unit',
     component: UnitList
   },
   {
-    path: '/units/create',
+    path: '/settings/units/create',
     name: 'Create Unit',
     component: UnitForm
   },
   {
-    path: '/units/:unitId/edit',
+    path: '/settings/units/:unitId/edit',
     name: 'Edit Unit',
     component: UnitForm
   },
   {
-    path: '/membership',
+    path: '/settings/membership',
     name: 'Membership',
     component: MembershipList
   },
   {
-    path: '/membership/create',
+    path: '/settings/membership/create',
     name: 'Create Membership',
     component: MembershipForm
   },
   {
-    path: '/membership/:memberId/edit',
+    path: '/settings/membership/:memberId/edit',
     name: 'Edit Membership',
     component: MembershipForm
   },
   {
-    path: '/settings/:area',
+    path: '/settings/regions/:area',
     name: 'Setting Area',
     component: SettingsArea
   },
   {
-    path: '/settings/:area/create',
+    path: '/settings/regions/:area/create',
     name: 'Create Area',
     component: AreaForm
   },
   {
-    path: '/settings/:area/:areaId/edit',
+    path: '/settings/regions/:area/:areaId/edit',
     name: 'Edit Area',
     component: AreaForm
   },
@@ -149,21 +153,6 @@ var routes = [
     path: '/rsvp/:category',
     name: 'RSVP',
     component: Rsvp
-  },
-  {
-    path: '/units',
-    name: 'Unit',
-    component: UnitList
-  },
-  {
-    path: '/units/create',
-    name: 'Create Unit',
-    component: UnitForm
-  },
-  {
-    path: '/units/:unitId/edit',
-    name: 'Edit Unit',
-    component: UnitForm
   }
 ]
 export default routes

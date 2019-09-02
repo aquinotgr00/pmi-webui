@@ -13,10 +13,11 @@ export function login (credentials) {
 
       const { status, data } = loginResponse.data
       if (status === 'success') {
-        const { token } = data
+        const { token, profile } = data
         dispatch({
           type: 'LOGIN_SUCCESS',
-          token
+          token,
+          profile
         })
       } else {
         const { account } = data

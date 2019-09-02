@@ -87,7 +87,7 @@ export default class AreaForm extends Component {
                 if (typeof status !== 'undefined') {
                     if (status === 'success') {
                         const { history } = this.props
-                        history.push(`/admin/settings/${area}`)
+                        history.push(`/admin/settings/regions/${area}`)
                     }
                 }
             }
@@ -121,7 +121,7 @@ export default class AreaForm extends Component {
                 if (typeof status !== 'undefined') {
                     if (status === 'success') {
                         const { history } = this.props
-                        history.push(`/admin/settings/${area}`)
+                        history.push(`/admin/settings/regions/${area}`)
                     }
                 }
             }
