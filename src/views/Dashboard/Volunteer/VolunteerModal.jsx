@@ -6,7 +6,6 @@ import {
     Row,
     Col,
     Card,
-    CardBody,
     Table,
     Button
 } from 'reactstrap'

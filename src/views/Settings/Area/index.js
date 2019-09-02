@@ -14,7 +14,7 @@ export default function SettingsArea (props) {
         return (
           <Route
             key={index}
-            path={`/admin/settings/${c}`}
+            path={`/admin/settings/regions/${c}`}
             render={(props) => <AreaList {...props} title={area} />}
           />
         )

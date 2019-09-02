@@ -104,7 +104,7 @@ export function Sidebar() {
             <NavLink to='#' className='nav-link' id='settings'>Settings</NavLink>
             <UncontrolledCollapse toggler='#settings' tag='ul' className='list-unstyled'>
               <NavItem>
-                <NavLink to='/admin/membership'>
+                <NavLink to='/admin/settings/membership'>
                   Anggota
                   </NavLink>
               </NavItem>
@@ -112,18 +112,18 @@ export function Sidebar() {
                 <NavLink to='#' className='nav-link' id='master-wilayah'>Wilayah</NavLink>
                 <UncontrolledCollapse toggler='#master-wilayah' tag='ul' className='list-unstyled'>
                   <NavItem>
-                    <NavLink exact={true} activeClassName='active' to='/admin/settings/kabupaten-kota'>Kabupaten/Kota</NavLink>
+                    <NavLink exact={true} activeClassName='active' to='/admin/settings/regions/kabupaten-kota'>Kabupaten/Kota</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink to='/admin/settings/kecamatan'>Kecamatan</NavLink>
+                    <NavLink to='/admin/settings/regions/kecamatan'>Kecamatan</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink to='/admin/settings/kelurahan-desa'>Kelurahan/Desa</NavLink>
+                    <NavLink to='/admin/settings/regions/kelurahan-desa'>Kelurahan/Desa</NavLink>
                   </NavItem>
                 </UncontrolledCollapse>
               </NavItem>
               <NavItem>
-                <NavLink to='/admin/units' className='nav-link'>Unit</NavLink>
+                <NavLink to='/admin/settings/units' className='nav-link'>Unit</NavLink>
               </NavItem>
             </UncontrolledCollapse>
           </NavItem>

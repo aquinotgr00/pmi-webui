@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Main, PaginationLink } from 'components'
 import { Card, CardHeader, CardBody } from 'reactstrap'
 import {
-    listMembershipApi,
     getVolunteerList,
     getVolunteerApi,
     getAmountVolunteerApi,

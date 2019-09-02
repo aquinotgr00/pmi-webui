@@ -3,7 +3,7 @@ const user = (state = { isLoggingIn: false, token: null, showConfirmLogout: fals
     case 'LOGIN_REQUEST':
       return { ...state, isLoggingIn: true, loginError: null }
     case 'LOGIN_SUCCESS':
-      return { ...state, isLoggingIn: false, token: action.token }
+      return { ...state, isLoggingIn: false, token: action.token, profile: action.profile }
     case 'LOGIN_FAILURE':
       return { ...state, isLoggingIn: false, loginError: action.account }
     case 'LOGOUT_SUCCESS':

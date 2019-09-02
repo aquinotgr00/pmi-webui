@@ -3,9 +3,12 @@ import { connect } from 'react-redux'
 import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledDropdown } from 'reactstrap'
 import { withRouter } from 'react-router'
 import { showConfirmLogout } from 'actions'
+import { store } from '../store'
 
 function Header(props) {
   const { history } = props
+  const { profile } = store.getState().user
+  
   return (
     <>
       <header className='navbar navbar-expand-lg navbar-light pl-0 pt-4'>
@@ -34,10 +37,10 @@ function Header(props) {
         </UncontrolledDropdown>
         <UncontrolledDropdown>
           <DropdownToggle caret tag='a'>
-            admin 01
+            {profile.name}
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem>
+            <DropdownItem onClick={ () => { history.push('/admin/settings/profile') } }>
               Pengaturan
             </DropdownItem>
             <DropdownItem tag='a' onClick={() => props.dispatch(showConfirmLogout())}>

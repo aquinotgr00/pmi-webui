@@ -163,7 +163,7 @@ export default class UnitList extends Component {
 		if (status === 'success') {
 			this.toggleDelete()
 			const { history } = this.props
-			history.push(`/admin/units`)
+			history.push(`/admin/settings/units`)
 		}
 		this.loadUnits()
 	}

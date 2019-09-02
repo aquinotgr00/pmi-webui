@@ -239,7 +239,6 @@ export default class TransactionList extends Component {
                 <Button className="btn btn-line" onClick={this.handleExportExcel}>Excel</Button>
                 <ReactToPrint
                   trigger={() => <Button className="btn btn-line" >Print</Button>}
-                  content={() => this.componentRef}
                 />
               </ButtonGroup>
             </FormGroup>
@@ -259,8 +258,7 @@ export default class TransactionList extends Component {
         <TransactionTable
           data={transactionData}
           items={this.state.goodItems}
-          transaction={transaction}
-          ref={el => (this.componentRef = el)} />
+          transaction={transaction} />
       </>
     )
   }
