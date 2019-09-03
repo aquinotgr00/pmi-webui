@@ -50,8 +50,7 @@
     ]
   },
   "devDependencies": {
-    "faker": "^4.1.0",
-    "react-to-print": "^2.2.1"
+    "faker": "^4.1.0"
   },
   "standard": {
     "plugins": [
