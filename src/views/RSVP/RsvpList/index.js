@@ -144,7 +144,7 @@ export default class RsvpList extends Component {
     return (
       <>
         <Tool onSearch={this.handleSearch}>
-          {category === 'list-rsvp' && <AddNewActionButton path='buat-rsvp' /> }
+          {category === 'list-rsvp' && <AddNewActionButton path='create' /> }
         </Tool>
         {error
           ? <div>Error</div>

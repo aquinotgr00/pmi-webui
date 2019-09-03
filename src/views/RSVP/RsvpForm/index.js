@@ -4,12 +4,10 @@ import { Button, Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
 import { Formik, Form, Field, connect, getIn } from 'formik'
 import { Editor } from '@tinymce/tinymce-react'
 import Faker from 'faker'
-import { Main } from 'components'
-import ucwords from 'utils/string'
-import AddCampaignSchema from 'validators/addCampaign'
+import { Main, CitySelect, SubdistrictSelect, VillageSelect } from 'components'
+import AddRsvpSchema from 'validators/addRsvp'
 import UpdateCampaignSchema from 'validators/updateCampaign'
 import { createCampaignApi, getCampaignApi, updateCampaignApi } from 'services/api'
-import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -24,12 +22,16 @@ class RsvpForm extends Component {
   constructor (props) {
     super(props)
 
-    const { campaignType } = this.props.match.params
-
+    const { rsvpId, editMode } = this.props.match.params
+    console.log(rsvpId, editMode)
     this.state = {
+      isLoading:false,
+      error:null,
       rsvp: {
         title: '',
         description: '',
+        selectedCityId:'',
+        selectedSubdistrictId:'',
         village_id:''
       },
       previewImgUrl: require('assets/images/image-plus.svg')
@@ -37,6 +39,9 @@ class RsvpForm extends Component {
     this.loadRsvp = this.loadRsvp.bind(this)
     this.handleSaveRsvp = this.handleSaveRsvp.bind(this)
     this.handleFileUpload = this.handleFileUpload.bind(this)
+    this.handleCityChange = this.handleCityChange.bind(this)
+    this.handleSubdistrictChange = this.handleSubdistrictChange.bind(this)
+    this.handleVillageChange = this.handleVillageChange.bind(this)
   }
 
   componentDidMount () {
@@ -55,8 +60,21 @@ class RsvpForm extends Component {
     }
   }
 
+  handleCityChange (selectedCityId) {
+    this.setState({selectedCityId, selectedSubdistrictId:'', village_id:''})
+  }
+
+  handleSubdistrictChange(selectedSubdistrictId) {
+    this.setState({selectedSubdistrictId, village_id:''})
+  }
+
+  handleVillageChange(village_id) {
+    this.setState({village_id})
+  }
+
   async handleSaveRsvp (rsvp) {
-    
+    //this.setState({ isLoading: true, error: null })
+
   }
 
   render () {
@@ -67,6 +85,7 @@ class RsvpForm extends Component {
         <div className='row pl-3'>
           <Formik
             enableReinitialize
+            validationSchema={AddRsvpSchema}
             initialValues={rsvp}
             onSubmit={(values, { setSubmitting }) => {
               this.handleSaveRsvp(values)
@@ -82,6 +101,7 @@ class RsvpForm extends Component {
             }) => (
               <>
                 <Form className='col-md-6 col-lg7 pl-0' onSubmit={handleSubmit}>
+                  {JSON.stringify(values)}
                   <FormGroup>
                     <label htmlFor='title'>Judul Kejadian</label>
                     <Field
@@ -99,54 +119,22 @@ class RsvpForm extends Component {
                     <Row>
                       <Col md='6'>
                         <FormGroup>
-                          <label htmlFor='subdistrict'>Propinsi</label>
-                          <Input id="subdistrict" type="select" defaultValue='DKI Jakarta'>
+                          <label htmlFor='province'>Propinsi</label>
+                          <Input id="province" type="select" defaultValue='DKI Jakarta'>
                             <option>DKI Jakarta</option>
                           </Input>
                         </FormGroup>
                       </Col>
                       <Col md='6'>
-                        <FormGroup>
-                          <label htmlFor='subdistrict'>Kabupaten/Kota</label>
-                          <Input id="subdistrict" type="select">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                          </Input>
-                        </FormGroup>
+                        <CitySelect onChange={this.handleCityChange}/>
                       </Col>
                     </Row>
                     <Row>
                       <Col md='6'>
-                        <FormGroup>
-                          <label htmlFor='subdistrict'>Kecamatan</label>
-                          <Input id="subdistrict" type="select">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                          </Input>
-                        </FormGroup>
+                        <SubdistrictSelect cityId={this.state.selectedCityId} onChange={this.handleSubdistrictChange} />
                       </Col>
                       <Col md='6'>
-                        <FormGroup>
-                          <label htmlFor='village_id'>Kelurahan</label>
-                          <Field
-                            name='village_id'
-                            render={({ field })=>(
-                              <Input {...field} id="village_id" type="select">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                              </Input>
-                            )}
-                          />
-                        </FormGroup>
+                        <VillageSelect subdistrictId={this.state.selectedSubdistrictId} onChange={this.handleVillageChange} />
                       </Col>
                     </Row>
                   </div>
@@ -156,7 +144,7 @@ class RsvpForm extends Component {
                     <Field
                       name='description'
                       render={({ field }) => (
-                        <Input {...field} id="description" type="textarea" rows={4}/>
+                        <Input {...field} id="description" type="textarea" rows={4} invalid={errors.description !== undefined}/>
                       )}
                     />
                     {errors.description !== undefined ? <FormFeedback>{errors.description}</FormFeedback> : ''}
@@ -168,7 +156,7 @@ class RsvpForm extends Component {
                       const file = event.target.files[0]
 
                       if (file) {
-                        setFieldValue('image_file', file)
+                        setFieldValue('image', file)
                         generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
                       }
                     }}
@@ -178,7 +166,6 @@ class RsvpForm extends Component {
                     <Button type='button'
                       disabled={isSubmitting}
                       onClick={() => {
-                        setFieldValue('publish', 1, false)
                         handleSubmit()
                       }}
                       className='btn btn-success ml-4'
@@ -206,7 +193,7 @@ class RsvpForm extends Component {
                     <div className='invalid-feedback'>
                       {connect(function (props) {
                         const error = getIn(props.formik.errors, props.name)
-                        return error.image_file || null
+                        return error.image || null
                       })()}
                     </div>
                   </div>
