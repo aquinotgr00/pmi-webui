@@ -96,6 +96,7 @@ export default class UnitForm extends Component {
 		try {
 			const memberParams = new URLSearchParams()
 			memberParams.append('sub', 1)
+			memberParams.append('l', 1)
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {

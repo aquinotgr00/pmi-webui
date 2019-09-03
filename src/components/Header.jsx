@@ -37,7 +37,7 @@ function Header(props) {
         </UncontrolledDropdown>
         <UncontrolledDropdown>
           <DropdownToggle caret tag='a'>
-            
+            { (profile !== undefined) && profile.name }
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem onClick={ () => { history.push('/admin/settings/profile') } }>
