@@ -3,16 +3,17 @@ import { Table, Input } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ucwords from 'utils/string'
 
-export function TransactionTable(props){
-    let headings = [
-      'Tanggal Donasi',
-      'ID-Transaksi',
-      'Nama',
-      'Judul Donasi',
-      'Tipe Donasi',
-      'Status'
-    ]
-    return (
+export function TransactionTable(props) {
+  let headings = [
+    'Tanggal Donasi',
+    'ID-Transaksi',
+    'Nama',
+    'Judul Donasi',
+    'Tipe Donasi',
+    'Status'
+  ]
+  return (
+    <>
       <Table hover>
         <thead>
           <tr>
@@ -27,7 +28,7 @@ export function TransactionTable(props){
             return (
               <tr key={key}>
                 <td>
-                  <Input type="checkbox" value={item.id} className="check" />
+                  <Input type="checkbox" value={item.id} onClick={props.checkListItem} />
                 </td>
                 <td>{item.created_at}</td>
                 <td>
@@ -49,5 +50,6 @@ export function TransactionTable(props){
 
         </tbody>
       </Table>
-    )
+    </>
+  )
 }

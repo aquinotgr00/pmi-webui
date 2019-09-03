@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { PaginationLink } from 'components'
 import { Row, Col, Button, ButtonGroup, FormGroup, Input } from 'reactstrap'
-import { listTransactionApi, exportToExcel, exportToPdf } from 'services/api'
+import { listTransactionApi, exportToExcel, exportToPdf, exportToPrint } from 'services/api'
 import { TransactionTable } from './TransactionTable'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
-import ReactToPrint from 'react-to-print';
 
 export default class TransactionList extends Component {
   constructor(props) {
@@ -20,7 +19,8 @@ export default class TransactionList extends Component {
       goodItems: [],
       isLoading: false,
       data: [],
-      error: null
+      error: null,
+      checkList: []
     }
 
     this.loadTransaction = this.loadTransaction.bind(this)
@@ -31,7 +31,9 @@ export default class TransactionList extends Component {
     this.handleReset = this.handleReset.bind(this)
     this.handleExportExcel = this.handleExportExcel.bind(this)
     this.handleExportPdf = this.handleExportPdf.bind(this)
+    this.handleExportPrint = this.handleExportPrint.bind(this)
     this.goToPage = this.goToPage.bind(this)
+    this.checkListItem = this.checkListItem.bind(this)
   }
 
   componentDidMount() {
@@ -42,9 +44,22 @@ export default class TransactionList extends Component {
     this.loadTransaction(page, this.state.searchFor)
   }
 
+  checkListItem(e){
+    const { checkList } = this.state
+    let data = e.target.value
+    if (e.target.checked) {
+      if (checkList.indexOf(data) === -1) checkList.push(data)
+    }else{
+      var index = checkList.indexOf(data);
+      if (index !== -1) checkList.splice(index, 1);
+    }
+    this.setState({ checkList })
+  }
+
   async loadTransaction(page = 1, searchFor = '', title = '', statusFilter = '', startDate = '', finishDate = '') {
     const transactionParams = new URLSearchParams()
     const { transaction } = this.props
+
     switch (transaction) {
       case 'bulan-dana':
         transactionParams.append('t', 3)
@@ -143,9 +158,11 @@ export default class TransactionList extends Component {
     this.loadTransaction()
   }
 
-  async handleExportExcel() {
-    const exportParams = new URLSearchParams()
+  async handleExportPrint(){
+    const exportParams    = new URLSearchParams()
     const { transaction } = this.props
+    const { checkList }   = this.state
+
     switch (transaction) {
       case 'donasi-barang':
         exportParams.append('f', 0)
@@ -157,16 +174,32 @@ export default class TransactionList extends Component {
         exportParams.append('t', 3)
         break
     }
-    let response = await exportToExcel(exportParams)
-    const { url } = response.data.data
-    let btn_download = document.getElementById('btn-download-excel')
-    btn_download.setAttribute('href', url)
-    btn_download.click()
+    
+    if(checkList.length > 0){
+      let series = JSON.stringify(checkList)
+      exportParams.append('id',series)
+    }
+
+    let response = await exportToPrint(exportParams)
+    
+    const { html } = response.data.data
+    
+    var mywindow = window.open('', 'Print', 'height=600,width=800');
+    mywindow.document.write(html);
+
+    mywindow.document.close();
+    mywindow.focus()
+    mywindow.print();
+    mywindow.close();
+
+    return true;
   }
 
-  async handleExportPdf() {
+  async handleExportExcel() {
     const exportParams = new URLSearchParams()
     const { transaction } = this.props
+    const { checkList }   = this.state
+
     switch (transaction) {
       case 'donasi-barang':
         exportParams.append('f', 0)
@@ -177,6 +210,40 @@ export default class TransactionList extends Component {
       default:
         exportParams.append('t', 3)
         break
+    }
+    
+    if(checkList.length > 0){
+      let series = JSON.stringify(checkList)
+      exportParams.append('id',series)
+    }
+
+    let response = await exportToExcel(exportParams)
+    const { url } = response.data.data
+    let btn_download = document.getElementById('btn-download-excel')
+    btn_download.setAttribute('href', url)
+    btn_download.click()
+  }
+
+  async handleExportPdf() {
+    const exportParams = new URLSearchParams()
+    const { transaction } = this.props
+      const { checkList }   = this.state
+
+    switch (transaction) {
+      case 'donasi-barang':
+        exportParams.append('f', 0)
+        break
+      case 'donasi-dana':
+        exportParams.append('f', 1)
+        break
+      default:
+        exportParams.append('t', 3)
+        break
+    }
+    
+    if(checkList.length > 0){
+      let series = JSON.stringify(checkList)
+      exportParams.append('id',series)
     }
     let response = await exportToPdf(exportParams)
     const { url } = response.data.data
@@ -237,9 +304,7 @@ export default class TransactionList extends Component {
               <ButtonGroup>
                 <Button className="btn btn-line" onClick={this.handleExportPdf}>PDF</Button>
                 <Button className="btn btn-line" onClick={this.handleExportExcel}>Excel</Button>
-                <ReactToPrint
-                  trigger={() => <Button className="btn btn-line" >Print</Button>}
-                />
+                <Button className="btn btn-line" onClick={this.handleExportPrint}>Print</Button>
               </ButtonGroup>
             </FormGroup>
             <a href="#" id="btn-download-excel"></a>
@@ -256,6 +321,7 @@ export default class TransactionList extends Component {
         />
         {error}
         <TransactionTable
+          checkListItem={this.checkListItem}
           data={transactionData}
           items={this.state.goodItems}
           transaction={transaction} />
