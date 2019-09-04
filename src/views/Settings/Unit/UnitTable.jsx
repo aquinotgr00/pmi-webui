@@ -41,9 +41,9 @@ export function UnitTable(props) {
             <div className="form-group ml-3">
               <Input type="select" id="filterParent" onChange={props.handleFilterParent}>
                 <option value="0">Pilih Jenis Anggota</option>
-                {Object.values(memberData).map((parent, key) => {
+                {Object.values(memberData).map((member, key) => {
                   return (
-                    <option key={key} value={parent.id}>{parent.circular}</option>
+                    <option key={key} value={member.id}>{member.name}</option>
                   )
                 })}
               </Input>

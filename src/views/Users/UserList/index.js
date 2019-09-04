@@ -6,19 +6,22 @@ import { Donator } from './Donator'
 import { Volunteer } from './Volunteer'
 import { VolunteerModeration } from './VolunteerModeration'
 import {
-    listUserApi,
-    updateActiveUserApi,
-    getDonatorList,
-    getVolunteerList,
-    getSubdistrictListApi,
-    getUnitListApi,
-    exportVolunteerToPdfApi,
-    exportVolunteerProfilePdf,
-    postVolunteerUpdateApi
+  listUserApi,
+  updateActiveUserApi,
+  getDonatorList,
+  getVolunteerList,
+  listCityApi,
+  listMembershipApi,
+  getSubdistrictListApi,
+  getUnitListApi,
+  exportVolunteerToPdfApi,
+  exportVolunteerProfilePdf,
+  exportVolunteerToPrintApi,
+  postVolunteerUpdateApi
 } from 'services/api'
 
 export default class UserList extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       page: 1,
@@ -31,33 +34,35 @@ export default class UserList extends Component {
       filters: {},
       subdistricts: [],
       units: [],
-      selectedSubdistrict: 'null',
-      selectedUnit: 'null',
-      tooltipOpen: false,
+      cities: [],
+      memberships: [],
+      tooltipOpen: false
     }
-    this.selectInput = React.createRef()
+
     this.volunteerTable = React.createRef()
 
-    this.loadUser = this.loadUser.bind(this)
-    this.handleSearch = this.handleSearch.bind(this)
-    this.goToPage = this.goToPage.bind(this)
-    this.handleDisableEnable = this.handleDisableEnable.bind(this)
-    this.toggleProfileModal = this.toggleProfileModal.bind(this)
-    this.handleFilterChange = this.handleFilterChange.bind(this)
-    this.handleProvinceChange = this.handleProvinceChange.bind(this)
-    this.getUnitList = this.getUnitList.bind(this)
-    this.getSubdistrictList = this.getSubdistrictList.bind(this)
-    this.tooltipToggle = this.tooltipToggle.bind(this)
-    this.handleExportPdf = this.handleExportPdf.bind(this)
-    this.handlePrint = this.handlePrint.bind(this)
-    this.handleApprove = this.handleApprove.bind(this)
+    this.loadUser             = this.loadUser.bind(this)
+    this.handleSearch         = this.handleSearch.bind(this)
+    this.goToPage             = this.goToPage.bind(this)
+    this.handleDisableEnable  = this.handleDisableEnable.bind(this)
+    this.toggleProfileModal   = this.toggleProfileModal.bind(this)
+    this.handleFilterChange   = this.handleFilterChange.bind(this)
+    this.getCityList          = this.getCityList.bind(this)
+    this.getUnitList          = this.getUnitList.bind(this)
+    this.getSubdistrictList   = this.getSubdistrictList.bind(this)
+    this.getMembershipList    = this.getMembershipList.bind(this)
+    this.tooltipToggle        = this.tooltipToggle.bind(this)
+    this.handleExportPdf      = this.handleExportPdf.bind(this)
+    this.handleApprove        = this.handleApprove.bind(this)
+    this.handleExportPrint    = this.handleExportPrint.bind(this)
+    this.handleReset          = this.handleReset.bind(this)
   }
 
-  componentDidMount () {
-    this.loadUser()
+  componentDidMount() {
+    this.handleReset()
   }
 
-  async loadUser (page = 1, searchFor = '', filters = {}) {
+  async loadUser(page = 1, searchFor = '', filters = {}) {
     const userParams = new URLSearchParams()
     const { user } = this.props
 
@@ -102,61 +107,93 @@ export default class UserList extends Component {
     }
   }
 
-  tooltipToggle () {
-    this.setState({tooltipOpen: !this.state.tooltipOpen})
+  tooltipToggle() {
+    this.setState({ tooltipOpen: !this.state.tooltipOpen })
   }
 
-  toggleProfileModal (type = 'profile') {
+  toggleProfileModal(type = 'profile') {
     if (type === 'profile') {
       const modal = true
-      this.setState({modal})
+      this.setState({ modal })
     } else if (type === 'reject') {
       const rejectModal = true
-      this.setState({rejectModal})
+      this.setState({ rejectModal })
     }
   }
 
-  handleFilterChange (filters) {
-    this.setState({selectedSubdistricts:filters.sd, selectedUnit:filters.u})
+  handleFilterChange(filters) {
+    if (filters.c) {
+      const subdistrictParams = new URLSearchParams()
+      subdistrictParams.append('c_id', filters.c)
+      this.getSubdistrictList(subdistrictParams)
+    }
+    this.setState({ selectedSubdistricts: filters.sd, selectedUnit: filters.u, selectedCity: filters.c })
     this.loadUser(this.state.page, this.state.searchFor, { ...this.state.filters, ...filters })
   }
 
-  handleProvinceChange (filter) {
-    this.selectInput.current.selected = 'null'
-    delete this.state.filters.sd
-    delete this.state.filters.u
-    this.getSubdistrictList({c_id:filter.c})
-    this.getUnitList({c_id:filter.c})
-    this.loadUser(this.state.page, this.state.searchFor, { ...this.state.filters, ...filter })
+  handleReset(){
+    this.loadUser()
+    this.getCityList()
+    this.getUnitList()
+    this.getSubdistrictList()
+    this.getMembershipList()
   }
 
-  async getUnitList (param) {
+  async getMembershipList() {
+    const response = await listMembershipApi()
+    const { data: memberships } = response.data
+    this.setState({ memberships })
+  }
+
+  async getCityList(param) {
+    const response = await listCityApi(param)
+    const { data: cities } = response.data
+    this.setState({ cities })
+  }
+
+  async getUnitList(param) {
     const response = await getUnitListApi(param)
-    const { data } = response.data
-    this.setState({units:data})
+    const { data: units } = response.data
+    this.setState({ units })
   }
 
-  async getSubdistrictList (param) {
+  async getSubdistrictList(param) {
+    console.log(this.state.cityId)
     const response = await getSubdistrictListApi(param)
-    const { data } = response.data
-    this.setState({subdistricts:data})
+    const { data: subdistricts } = response.data
+    this.setState({ subdistricts })
   }
 
-  handleSearch (event) {
+  async handleExportPrint() {
+    const response = await exportVolunteerToPrintApi(this.state.filters)
+    const { html } = response.data.data
+
+    var mywindow = window.open('', 'Print', 'height=600,width=800');
+    mywindow.document.write(html);
+
+    mywindow.document.close();
+    mywindow.focus()
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+  }
+
+  handleSearch(event) {
     const searchKeyword = event.target.value
     this.loadUser(this.state.page, searchKeyword)
   }
 
-  goToPage (page) {
+  goToPage(page) {
     this.setState({ page })
     this.loadUser(page, this.state.searchFor)
   }
 
-  async handleDisableEnable(event){
+  async handleDisableEnable(event) {
     let params = event.target.value.split(',')
-    let oposite = (params[1] === 1)? 'disable' : 'enable'
-    let oposite_msg = (params[1] === 1)? 'Non-aktif' : 'Aktif'
-    const response = await updateActiveUserApi(params[0],oposite)
+    let oposite = (params[1] === 1) ? 'disable' : 'enable'
+    let oposite_msg = (params[1] === 1) ? 'Non-aktif' : 'Aktif'
+    const response = await updateActiveUserApi(params[0], oposite)
     const { status } = response.data
     if (status === 'success') {
       const { data } = response.data
@@ -165,16 +202,16 @@ export default class UserList extends Component {
     }
   }
 
-  async handleExportPdf (profile = null) {
+  async handleExportPdf(profile = null) {
     let response = { data: null }
     switch (true) {
-        case profile !== null:
-            response = await exportVolunteerProfilePdf(profile)
-            break
+      case profile !== null:
+        response = await exportVolunteerProfilePdf(profile)
+        break
 
-        default:
-            response = await exportVolunteerToPdfApi(this.state.filters)
-            break
+      default:
+        response = await exportVolunteerToPdfApi(this.state.filters)
+        break
     }
 
     const { status } = response.data
@@ -184,86 +221,83 @@ export default class UserList extends Component {
     }
   }
 
-  handlePrint () {}
-
-  handleApprove (volunteerId, data, index) {
+  handleApprove(volunteerId, data, index) {
     index--
     data._method = 'PUT'
     const response = postVolunteerUpdateApi(volunteerId, data)
     const userData = this.state.userData
     userData.splice(index, 1)
-    this.setState({userData})
+    this.setState({ userData })
     console.log(response);
   }
 
-  renderUserList (user) {
+  renderUserList(user) {
     const { userData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
 
     const { pathname } = this.props.location
     return (
       <>
-      <PaginationLink
-        rowFrom={from}
-        rowTo={to}
-        numberOfEntries={numberOfEntries}
-        currentPage={currentPage}
-        numberOfPages={numberOfPages}
-        onPageChange={this.goToPage}
-      />
-      { (user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} /> }
-      { (user === 'donator') && <Donator data={userData} path={pathname} /> }
-      { (user === 'volunteer') &&
-        <Volunteer
+        <PaginationLink
+          rowFrom={from}
+          rowTo={to}
+          numberOfEntries={numberOfEntries}
+          currentPage={currentPage}
+          numberOfPages={numberOfPages}
+          onPageChange={this.goToPage}
+        />
+        {(user === 'admin') && <Administrator data={userData} path={pathname} toggleEnable={this.handleDisableEnable} />}
+        {(user === 'donator') && <Donator data={userData} path={pathname} />}
+        {(user === 'volunteer') &&
+          <Volunteer
             forwadedRef={this.volunteerTable}
             data={userData}
             path={pathname}
             handleExportPdf={this.handleExportPdf}
             toggleProfileModal={this.toggleProfileModal}
             isOpen={this.state.modal}
-        /> }
-      { (user === 'volunteer-moderation') &&
-        <VolunteerModeration
-          data={userData}
-          path={pathname}
-          handleApprove={this.handleApprove}
-          toggleProfileModal={this.toggleProfileModal}
-          isOpen={this.state.modal}
-          rejectModalOpen={this.state.rejectModal}
-        /> }
+          />}
+        {(user === 'volunteer-moderation') &&
+          <VolunteerModeration
+            data={userData}
+            path={pathname}
+            handleApprove={this.handleApprove}
+            toggleProfileModal={this.toggleProfileModal}
+            isOpen={this.state.modal}
+            rejectModalOpen={this.state.rejectModal}
+          />}
       </>
     )
   }
 
-  render () {
+  render() {
     const { user, title } = this.props
-    const { error } = this.state
+    const { error, cities, subdistricts, units, memberships } = this.state
     return (
       <>
-      <Tool onSearch={this.handleSearch}>
-      {user === 'admin' &&
-        <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
-      }
-      </Tool>
-      {user === 'volunteer' &&
-        <VolunteerFilter
+        <Tool onSearch={this.handleSearch}>
+          {user === 'admin' &&
+            <AddNewActionButton path={`${user}/create`} tooltipText={`Tambah ${title} Baru`} />
+          }
+        </Tool>
+        {user === 'volunteer' &&
+          <VolunteerFilter
+            handleReset={this.handleReset}
             onChange={this.handleFilterChange}
-            onProvinceChange={this.handleProvinceChange}
-            subdistricts={this.state.subdistricts}
-            units={this.state.units}
-            selectInput={this.selectInput}
-            selectedSubdistrict={this.state.selectedSubdistrict}
-            selectedUnit={this.state.selectedUnit}
+            memberships={memberships}
+            cities={cities}
+            subdistricts={subdistricts}
+            units={units}
             tootltipOpen={this.state.tooltipOpen}
             tooltipToggle={this.tooltipToggle}
             handleExportPdf={this.handleExportPdf}
             volunteerTable={this.volunteerTable.current}
-            handlePrint={this.handlePrint}
-        />
-      }
-      {error
-        ? <div>Error</div>
-        : this.renderUserList(user)
-      }
+            handlePrint={this.handleExportPrint}
+          />
+        }
+        {error
+          ? <div>Error</div>
+          : this.renderUserList(user)
+        }
       </>
     )
   }

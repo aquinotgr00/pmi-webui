@@ -72,7 +72,7 @@ export default class DetailsTransaction extends Component {
   }
 
   render() {
-    const { id, name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, notes } = this.state.data
+    const { id, name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, image_url, notes } = this.state.data
     const { address } = this.state.data.donator || {}
 
     const details = [
@@ -139,7 +139,7 @@ export default class DetailsTransaction extends Component {
                 </Col>
               )
             })}
-            {(typeof payment_method !== 'undefined' && payment_method === 1) &&
+            {(image !== null) &&
               <Card className="card-transaction col-md-4">
                 <CardBody>
                   <CardTitle>
@@ -147,7 +147,7 @@ export default class DetailsTransaction extends Component {
                     <hr className="mt-1 mb-1" />
                     <div className="mb-2 hovereffect mt-3">
 
-                      <img src={image} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
+                      <img src={image_url} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
                       <div className="overlay-kwitansi btn-kwitansi">
                         <span>
                           <button onClick={this.toggleImage} className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></button>
@@ -162,9 +162,6 @@ export default class DetailsTransaction extends Component {
                 </CardBody>
               </Card>
             }
-            <div>
-
-            </div>
           </Row>
           <Row>
             <Col>
@@ -179,7 +176,7 @@ export default class DetailsTransaction extends Component {
             <Col>
               <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
                 <ModalBody className="mb-0 p-0">
-                  <img src={image} style={{ width: '100%' }} />
+                  <img src={image_url} style={{ width: '100%' }} />
                 </ModalBody>
                 <ModalFooter>
                   <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}

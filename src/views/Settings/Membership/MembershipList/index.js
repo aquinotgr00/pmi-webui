@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import { Main } from "components"
-import { MemberList } from "./MemberList"
 import { SubMemberList } from "./SubMemberList"
 import { PaginationLink, AddNewActionButton, Tool } from 'components'
 import { listMembershipApi, deleteMembershipApi } from 'services/api'
@@ -65,7 +64,6 @@ export default class MembershipList extends Component {
   }
 
   async actionDelete() {
-    const { type } = this.props.match.params
     const { dataId }  = this.state
     const response = await deleteMembershipApi(dataId)
     const { status } = response.data
@@ -80,14 +78,13 @@ export default class MembershipList extends Component {
   async loadMembers(page = 1, searchFor = '', parentFilter = '') {
     const memberParams = new URLSearchParams()
     memberParams.append('page', page)
-    memberParams.append('sub', 1)
-    
+
     if (searchFor) {
       memberParams.append('s', searchFor)
     }
 
     if (parentFilter) {
-      memberParams.append('l', parentFilter)
+      memberParams.append('p_id', parentFilter)
     }
 
     this.setState({ isLoading: true, error: null })

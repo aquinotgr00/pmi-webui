@@ -131,7 +131,7 @@ export default class UnitList extends Component {
 	async loadMembership() {
 		try {
 			const memberParams = new URLSearchParams()
-			memberParams.append('sub', 1)
+			memberParams.append('l', '[0,1]')
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {

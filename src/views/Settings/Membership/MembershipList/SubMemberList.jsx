@@ -20,7 +20,7 @@ export function SubMemberList(props) {
               <tr key={key}>
                 <td>{key + 1}</td>
                 <td>
-                  { member.circular  }
+                  { member.name  }
                 </td>
                 <td>
                   <EditActionButton path={`${pathname}/${member.id}/edit`} />

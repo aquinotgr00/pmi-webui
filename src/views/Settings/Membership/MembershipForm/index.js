@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import ucwords from "utils/string"
 import { Main } from "components"
-import { MemberForm } from "./MemberForm"
 import { SubMemberForm } from "./SubMemberForm"
 import {
   storeMembershipApi,
@@ -30,13 +29,13 @@ export default class MembershipForm extends Component {
     if (memberId) {
       this.loadMember(memberId)
     }
-    this.loadParentMembers(0)
+    this.loadParentMembers()
   }
 
-  async loadParentMembers(parentId) {
+  async loadParentMembers() {
     try {
       const memberParams = new URLSearchParams()
-      memberParams.append('l', parentId)
+      memberParams.append('l', '[0]')
       const response = await listMembershipApi(memberParams)
       const { status } = response.data
       if (status === "success") {

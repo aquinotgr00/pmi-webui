@@ -35,3 +35,7 @@ export function exportVolunteerToPdfApi (params) {
 export function exportVolunteerProfilePdf (volunteerId) {
     return authRequest().get(`export-volunteers/print-profile/${volunteerId}`)
 }
+
+export function exportVolunteerToPrintApi (params) {
+  return authRequest().get('export-volunteers/print-html',{params})
+}

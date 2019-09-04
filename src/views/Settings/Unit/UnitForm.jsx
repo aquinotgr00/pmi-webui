@@ -16,10 +16,7 @@ export default class UnitForm extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			parentFilter: null,
-			subFilter: null,
-			cityFilter: null,
-			parentData: [],
+			memberData: [],
 			cityData: [],
 			unit: {
 				name: '',
@@ -33,7 +30,6 @@ export default class UnitForm extends Component {
 		this.loadCities = this.loadCities.bind(this)
 		this.loadUnit = this.loadUnit.bind(this)
 		this.handleSaveUnit = this.handleSaveUnit.bind(this)
-		this.handleFilterParent = this.handleFilterParent.bind(this)
 	}
 
 	componentDidMount() {
@@ -41,18 +37,8 @@ export default class UnitForm extends Component {
 		if (unitId) {
 			this.loadUnit(unitId)
 		}
-		this.loadMembership(0)
+		this.loadMembership()
 		this.loadCities()
-	}
-
-	handleFilterParent(event) {
-		const parentFilter = event.target.value
-		if (parentFilter === '0') {
-			this.setState({ parentFilter: null })
-		} else {
-			this.setState({ parentFilter })
-			this.loadMembership(parentFilter)
-		}
 	}
 
 	async handleSaveUnit(values) {
@@ -95,13 +81,12 @@ export default class UnitForm extends Component {
 	async loadMembership() {
 		try {
 			const memberParams = new URLSearchParams()
-			memberParams.append('sub', 1)
-			memberParams.append('l', 1)
+			memberParams.append('l', '[1]')
 			const response = await listMembershipApi(memberParams)
 			const { status } = response.data
 			if (status === "success") {
-				const { data: parentData } = response.data
-				this.setState({ parentData })
+				const { data: memberData } = response.data
+				this.setState({ memberData })
 			}
 		} catch (error) {
 			console.log(error)
@@ -125,7 +110,7 @@ export default class UnitForm extends Component {
 	render() {
 		const { unitId } = this.props.match.params
 		const title = (unitId) ? "Edit Unit" : "Tambah Unit"
-		const { parentData, cityData, unit } = this.state
+		const { memberData, cityData, unit } = this.state
 		return (
 			<Main title={title}>
 				<Formik
@@ -184,16 +169,11 @@ export default class UnitForm extends Component {
 											{...field} 
 											id='membership_id' 
 											invalid={errors.membership_id !== undefined} 
-											onChange={e => {
-												const membershipId = e.target.value
-												this.handleFilterParent(e)
-												form.setFieldValue('membership_id', membershipId)
-											}}
 											>
 												<option value="0">Pilih Jenis Anggota</option>
-												{parentData.map((parent, key) => {
+												{memberData.map((member, key) => {
 													return (
-														<option key={key} value={parent.id}>{parent.circular}</option>
+														<option key={key} value={member.id}>{member.name}</option>
 													)
 												})}
 											</Input>
