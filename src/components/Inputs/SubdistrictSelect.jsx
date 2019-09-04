@@ -53,7 +53,7 @@ export class SubdistrictSelect extends Component {
     return (
       <FormGroup>
         <label htmlFor='subdistrict'>Kecamatan</label>
-        <Input id='subdistrict' type='select' onChange={this.handleChange} defaultValue=''>
+        <Input id='subdistrict' type='select' onChange={this.handleChange} value={this.props.value} disabled={this.props.disabled}>
           <option value=''>Pilih Kecamatan</option>
           {subdistricts.map(subdistrict=><option value={subdistrict.id} key={subdistrict.id}>{subdistrict.name}</option>)}
         </Input>

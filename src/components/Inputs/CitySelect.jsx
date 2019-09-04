@@ -46,7 +46,13 @@ export class CitySelect extends Component {
     return (
       <FormGroup>
         <label htmlFor='city'>Kabupaten/Kota</label>
-        <Input id='city' type='select' onChange={this.handleChange} defaultValue=''>
+        <Input
+          id='city'
+          type='select'
+          onChange={this.handleChange}
+          value={this.props.value}
+          disabled={this.props.disabled}
+        >
           <option value=''>Pilih Kabupaten/Kota</option>
           {cities.map(city=><option value={city.id} key={city.id}>{city.name}</option>)}
         </Input>
