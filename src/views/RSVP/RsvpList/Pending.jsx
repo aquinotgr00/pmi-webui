@@ -2,6 +2,7 @@ import React from 'react'
 import { Table } from 'reactstrap'
 import { DateTime } from 'components/DateTime'
 import { ApproveActionButton, RejectActionButton } from 'components/ActionButtons'
+import { Link } from 'react-router-dom'
 
 export function Pending (props) {
   const { data } = props
@@ -24,7 +25,7 @@ export function Pending (props) {
             <tr key={key}>
               <td>{key+1}</td>
               <td><DateTime data={created_at} /></td>
-              <td>{title}</td>
+              <td><Link to={`approval/${id}`}>{title}</Link></td>
               <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
               <td>{admin_id?admin.name:volunteer.name}</td>
               <td>

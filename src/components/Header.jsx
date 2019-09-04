@@ -21,7 +21,6 @@ function Header(props) {
           />
         }
         <div className="mr-md-auto align-self-stretch">
-          {(props.back) && <a href={props.back} className="btn-table btn-back back-head mt-1" title="kembali"></a>}
           <div className="mr-md-auto align-self-stretch">
             <h1>{props.title}</h1>
           </div>
