@@ -41,7 +41,6 @@ class RsvpForm extends Component {
     this.handleSubdistrictChange = this.handleSubdistrictChange.bind(this)
     this.handleVillageChange = this.handleVillageChange.bind(this)
     this.confirmRejection = this.confirmRejection.bind(this)
-    this.handleApprove = this.handleApprove.bind(this)
     this.handleReject = this.handleReject.bind(this)
     this.toggleRejectModal = this.toggleRejectModal.bind(this)
   }
@@ -130,10 +129,6 @@ class RsvpForm extends Component {
     this.setState({rejectModalIsOpen:!this.state.rejectModalIsOpen});
   }
 
-  handleApprove() {
-    this.handleSave({approved:1})
-  }
-
   confirmRejection(values, { setSubmitting }) {
     const {approved, rejectionReason:reason_rejection} = values
     this.handleSave({approved,reason_rejection})
@@ -154,8 +149,8 @@ class RsvpForm extends Component {
               validationSchema={AddRsvpSchema}
               initialValues={rsvp}
               onSubmit={(values, { setSubmitting }) => {
-                const { title, description, village_id, image } = values
-                this.handleSaveRsvp({title, description, village_id, image})
+                const { title, description, village_id, image, approved } = values
+                this.handleSaveRsvp({title, description, village_id, image, ...(editMode==='approval' && {approved})})
                 setSubmitting(false)
               }}
             >
@@ -245,7 +240,16 @@ class RsvpForm extends Component {
                     <div className='d-flex flex-row-reverse mt-4'>
                     { editMode==='create' && <PublishButton disabled={isSubmitting} onClick={()=>{ handleSubmit() } } /> }
                     { editMode==='edit' && <SaveButton disabled={isSubmitting} onClick={()=>{ handleSubmit() } } /> }
-                    { editMode==='approval' && <ApprovalButtons disabled={isSubmitting} onReject={this.handleReject} onApprove={this.handleApprove} /> }
+                    { editMode==='approval' && 
+                      <ApprovalButtons
+                        disabled={isSubmitting}
+                        onReject={this.handleReject}
+                        onApprove={() => {
+                          setFieldValue('approved', 1, false)
+                          handleSubmit()
+                        }}
+                      />
+                    }
 
                     </div>
 
