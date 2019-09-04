@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { Button, FormFeedback, FormGroup, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap'
-import { AddNewActionButton, PaginationLink, Tool } from 'components'
-import { Active } from './Active'
-import { Pending } from './Pending'
-import { Archived } from './Archived'
+import { Formik, Form, Field, } from 'formik'
+import { AddNewActionButton, PaginationLink, RejectionModal, Tool } from 'components'
+import { Active, Pending, Archived } from './tables'
 import { updateRsvpApi, listRsvpApi } from 'services/api'
-import { Formik, Form, Field, } from 'formik';
 
 export default class RsvpList extends Component {
   constructor (props) {
@@ -32,6 +30,7 @@ export default class RsvpList extends Component {
     this.handleUpdate = this.handleUpdate.bind(this)
     this.toggleRejectModal = this.toggleRejectModal.bind(this)
     this.handleReject = this.handleReject.bind(this)
+    this.confirmRejection = this.confirmRejection.bind(this)
   }
 
   componentDidMount () {
@@ -118,6 +117,13 @@ export default class RsvpList extends Component {
     this.setState({rejectModalIsOpen:!this.state.rejectModalIsOpen});
   }
 
+  confirmRejection(values, { setSubmitting }) {
+    const {approved, rejectionReason:reason_rejection, rsvpId} = values
+    this.handleUpdate(rsvpId, {approved,reason_rejection})
+    setSubmitting(false)
+    this.toggleRejectModal()
+  }
+
   renderRsvpList (category) {
     const { rsvpData, currentPage, numberOfPages, from, to, numberOfEntries } = this.state
 
@@ -144,69 +150,18 @@ export default class RsvpList extends Component {
     return (
       <>
         <Tool onSearch={this.handleSearch}>
-          {category === 'list-rsvp' && <AddNewActionButton path='buat-rsvp' /> }
+          {category === 'list-rsvp' && <AddNewActionButton path='create' /> }
         </Tool>
         {error
           ? <div>Error</div>
           : this.renderRsvpList(category)
         }
-        <Modal isOpen={this.state.rejectModalIsOpen} toggle={this.toggleRejectModal} centered={true}>
-          <ModalHeader toggle={this.toggleRejectModal} tag='h1' >Tolak</ModalHeader>
-          <ModalBody>
-            <Formik 
-              initialValues={{approved:0, rejectionReason:'', rsvpId:this.state.rejectRsvpId}}
-              validateOnBlur={false}
-              validate={values=>{
-                let errors={}
-                if (!values.rejectionReason) {
-                  errors.rejectionReason = 'Alasan penolakan wajib diisi';
-                }
-                return errors
-              }}
-              onSubmit={(values, { setSubmitting }) => {
-                const {approved, rejectionReason:reason_rejection, rsvpId} = values
-                this.handleUpdate(rsvpId, {approved,reason_rejection})
-                setSubmitting(false)
-                this.toggleRejectModal()
-              }}
-              render={({
-                errors,
-                handleSubmit,
-                isSubmitting
-              }) => (
-                <Form>
-                  <FormGroup>
-                    <Label htmlFor="rejectionReason">Alasan</Label>
-                    <Field
-                      name='rejectionReason'
-                      render={({ field }) => (
-                        <Input 
-                          {...field}
-                          type="textarea" 
-                          id="rejectionReason" 
-                          rows="3"
-                          maxLength={255}
-                          invalid={errors.rejectionReason!==undefined}
-                        />
-                      )}
-                    />
-                    {errors.rejectionReason ? <FormFeedback>{errors.rejectionReason}</FormFeedback> : ''}
-                  </FormGroup>
-                  <div className="d-flex flex-row-reverse">
-                    <Button
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        handleSubmit()
-                      }}
-                      className="ml-4"
-                      color='success'>Kirim
-                    </Button>
-                    <Button onClick={this.toggleRejectModal} className="btn-outline-secondary" color='none'>Batal</Button>
-                  </div>
-                </Form>
-            )} />
-          </ModalBody>
-        </Modal>
+        <RejectionModal
+          isOpen={this.state.rejectModalIsOpen}
+          toggle={this.toggleRejectModal}
+          initialValues={{approved:0, rejectionReason:'', rsvpId:this.state.rejectRsvpId}}
+          onSubmit={this.confirmRejection}
+        />
       </>
     )
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Table } from 'reactstrap'
 import { EditActionButton, ArchiveActionButton } from 'components/ActionButtons'
 import { DateTime } from 'components/DateTime'
+import { Link } from 'react-router-dom'
 
 export function Active (props) {
   const { data } = props
@@ -24,11 +25,11 @@ export function Active (props) {
             <tr key={key}>
               <td>{key+1}</td>
               <td><DateTime data={id===1?null:created_at} /></td>
-              <td>{title}</td>
+              <td><Link to={`detail/${id}`}>{title}</Link></td>
               <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
               <td>{participants_count}</td>
               <td>
-                <EditActionButton path={`${id}/edit`} />
+                <EditActionButton path={`edit/${id}`} />
                 {id!==1 && <ArchiveActionButton onClick={props.onArchive} id={id} />}
               </td>
             </tr>

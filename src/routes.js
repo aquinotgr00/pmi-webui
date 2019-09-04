@@ -10,6 +10,7 @@ import Donations from 'views/Donations'
 import Dashboard from 'views/Dashboard'
 import Rsvp from 'views/RSVP'
 import RsvpForm from 'views/RSVP/RsvpForm'
+import RsvpDetail from 'views/RSVP/RsvpDetail'
 import DashboardVolunteer from 'views/Dashboard/Volunteer'
 import SettingsArea from 'views/Settings/Area'
 import AreaForm from 'views/Settings/Area/AreaForm'
@@ -134,19 +135,19 @@ var routes = [
     component: Dashboard
   },
   {
-    path: '/rsvp/buat-rsvp',
-    name: 'Form RSVP',
-    component: RsvpForm
-  },
-  {
-    path: '/rsvp/:rsvpId/edit',
-    name: 'Form RSVP',
-    component: RsvpForm
-  },
-  {
-    path: '/rsvp/:category',
+    path: '/rsvp/:category(list-rsvp|moderasi|arsip)',
     name: 'RSVP',
     component: Rsvp
+  },
+  {
+    path: '/rsvp/:editMode(create|edit|approval)?/:rsvpId?',
+    name: 'Form RSVP',
+    component: RsvpForm
+  },
+  {
+    path: '/rsvp/:viewMode(detail|archive)/:rsvpId',
+    name: 'Detail RSVP',
+    component: RsvpDetail
   }
 ]
 export default routes
