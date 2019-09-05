@@ -6,8 +6,12 @@ function renderListElement (data) {
 	if (Object.keys(data).length > 0) {
 		const subdisArray = Object.values(data)
 		return subdisArray.map((sub, key) => {
+				const { parent_member } = sub
 				return sub.name ? (
-					<option key={key} value={sub.id}>{sub.name}</option>
+					<option key={key} value={sub.id}>
+					{(parent_member)? parent_member.name+' >> ' : ''}
+					{sub.name}
+					</option>
 				) : ( null )
 			}
 		)
@@ -21,7 +25,7 @@ export function VolunteerFilter (props) {
 			  <Col md>
 				<FormGroup>
 				  <Label htmlFor="type">Jenis Anggota</Label>
-					<Input type='select' onChange={e => props.onChange({t: e.target.value === 'null' ? null:e.target.value})}>
+					<Input id="select-member" type='select' onChange={e => props.onChange({t: e.target.value === 'null' ? null:e.target.value})}>
 						<option value='null'>Pilih Jenis Anggota</option>
 						{renderListElement(props.memberships)}
 					</Input>
@@ -30,7 +34,7 @@ export function VolunteerFilter (props) {
 			  <Col md>
 				<div className="form-group">
 				  <Label htmlFor="exampleInputCategoryRelatedTag">Kota/Kabupaten</Label>
-				  <Input type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({c: e.target.value === 'null' ? null:e.target.value})}>
+				  <Input id="select-city" type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({c: e.target.value === 'null' ? null:e.target.value})}>
 					  <option value='null'>Pilih Kota/Kabupaten</option>
 					  {renderListElement(props.cities)}
 				  </Input>
@@ -39,7 +43,7 @@ export function VolunteerFilter (props) {
 			  <Col md>
 				<div className="form-group">
 				  <Label htmlFor="exampleInputCategoryRelatedTag">Kecamatan</Label>
-          <Input type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({sd: e.target.value === 'null' ? null:e.target.value})}>
+          <Input id="select-subdistrict" type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({sd: e.target.value === 'null' ? null:e.target.value})}>
 					  <option value='null'>Pilih Kecamatan</option>
 					  {renderListElement(props.subdistricts)}
           </Input>
@@ -48,7 +52,7 @@ export function VolunteerFilter (props) {
 			  <Col md>
 				<div className="form-group">
 				  <Label htmlFor="exampleInputCategoryRelatedTag">Unit</Label>
-				  <Input type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({u: e.target.value === 'null' ? null:e.target.value})}>
+				  <Input id="select-unit" type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({u: e.target.value === 'null' ? null:e.target.value})}>
 					  <option value='null'>Pilih Unit</option>
 					  {renderListElement(props.units)}
 				  </Input>

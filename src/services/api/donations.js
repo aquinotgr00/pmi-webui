@@ -60,11 +60,7 @@ export function showTransaction (transactionId) {
 }
 
 export function updateTransaction (transactionId, data) {
-  return authRequest().post('/donations/update-details/' + transactionId, data)
-}
-
-export function updateInfoTransaction (transactionId, data) {
-  return authRequest().post('/donations/update-info/' + transactionId, data)
+  return authRequest().post('/donations/update/' + transactionId, data)
 }
 
 export function exportToExcel (params) {

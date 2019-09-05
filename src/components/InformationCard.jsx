@@ -51,8 +51,7 @@ export class InformationCard extends Component {
             isOpen={this.state.isOpen}
             items={this.props.items}
             id={this.props.id} data={this.props.data}
-            handleSubmitDetails={this.props.handleSubmitDetails}
-            handleSubmitInfo={this.props.handleSubmitInfo}
+            updateDonation={this.props.updateDonation}
           />
         }
         {this.props.index === 2 &&
@@ -62,8 +61,7 @@ export class InformationCard extends Component {
             items={this.props.items}
             id={this.props.id}
             data={this.props.data}
-            handleSubmitDetails={this.props.handleSubmitDetails}
-            handleSubmitInfo={this.props.handleSubmitInfo}
+            updateDonation={this.props.updateDonation}
           />
         }
       </>

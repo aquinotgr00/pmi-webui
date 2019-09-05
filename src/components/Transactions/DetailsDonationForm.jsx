@@ -20,7 +20,7 @@ export function DetailsDonationForm(props) {
 					initialValues={initialValues}
 					validationSchema={detailsDonationSchema}
 					onSubmit={(values, { setSubmitting }) => {
-						props.handleSubmitDetails(props.id, values)
+						props.updateDonation(props.id, values)
 						setSubmitting(false)
 					}}
 				>

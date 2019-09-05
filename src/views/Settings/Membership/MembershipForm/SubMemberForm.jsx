@@ -2,9 +2,10 @@ import React from 'react'
 import { Button, FormGroup, FormFeedback, Input } from 'reactstrap'
 import { Formik, Form, Field } from "formik"
 import MembershipSchema from "validators/membership"
+import { OptionMembership } from "components"
 
 export function SubMemberForm(props) {
-	const { member } = props
+	const { member, parents } = props
 	return (
 		<Formik
 			enableReinitialize
@@ -38,11 +39,7 @@ export function SubMemberForm(props) {
 								render={({ field }) => (
 									<Input type="select" {...field} id='parent_id' invalid={errors.parent_id !== undefined} >
 										<option value="0">Pilih Jenis Anggota</option>
-										{Object.values(props.parents).map((parent,key) => {
-											return(
-												<option key={key} value={parent.id}>{parent.name}</option>
-											)
-										})}
+										<OptionMembership membership={parents} mode="1" />
 									</Input>
 								)}
 							/>

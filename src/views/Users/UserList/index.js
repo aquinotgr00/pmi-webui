@@ -41,21 +41,21 @@ export default class UserList extends Component {
 
     this.volunteerTable = React.createRef()
 
-    this.loadUser             = this.loadUser.bind(this)
-    this.handleSearch         = this.handleSearch.bind(this)
-    this.goToPage             = this.goToPage.bind(this)
-    this.handleDisableEnable  = this.handleDisableEnable.bind(this)
-    this.toggleProfileModal   = this.toggleProfileModal.bind(this)
-    this.handleFilterChange   = this.handleFilterChange.bind(this)
-    this.getCityList          = this.getCityList.bind(this)
-    this.getUnitList          = this.getUnitList.bind(this)
-    this.getSubdistrictList   = this.getSubdistrictList.bind(this)
-    this.getMembershipList    = this.getMembershipList.bind(this)
-    this.tooltipToggle        = this.tooltipToggle.bind(this)
-    this.handleExportPdf      = this.handleExportPdf.bind(this)
-    this.handleApprove        = this.handleApprove.bind(this)
-    this.handleExportPrint    = this.handleExportPrint.bind(this)
-    this.handleReset          = this.handleReset.bind(this)
+    this.loadUser = this.loadUser.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
+    this.goToPage = this.goToPage.bind(this)
+    this.handleDisableEnable = this.handleDisableEnable.bind(this)
+    this.toggleProfileModal = this.toggleProfileModal.bind(this)
+    this.handleFilterChange = this.handleFilterChange.bind(this)
+    this.getCityList = this.getCityList.bind(this)
+    this.getUnitList = this.getUnitList.bind(this)
+    this.getSubdistrictList = this.getSubdistrictList.bind(this)
+    this.getMembershipList = this.getMembershipList.bind(this)
+    this.tooltipToggle = this.tooltipToggle.bind(this)
+    this.handleExportPdf = this.handleExportPdf.bind(this)
+    this.handleApprove = this.handleApprove.bind(this)
+    this.handleExportPrint = this.handleExportPrint.bind(this)
+    this.handleReset = this.handleReset.bind(this)
   }
 
   componentDidMount() {
@@ -131,12 +131,24 @@ export default class UserList extends Component {
     this.loadUser(this.state.page, this.state.searchFor, { ...this.state.filters, ...filters })
   }
 
-  handleReset(){
+  handleReset() {
     this.loadUser()
     this.getCityList()
     this.getUnitList()
     this.getSubdistrictList()
     this.getMembershipList()
+
+    const { user } = this.props
+    if (user === 'volunteer') {
+      let select_member   = document.getElementById('select-member')
+      select_member.value = null
+      let select_city     = document.getElementById('select-city')
+      select_city.value   = null
+      let select_subdistrict    = document.getElementById('select-subdistrict')
+      select_subdistrict.value  = null
+      let select_unit           = document.getElementById('select-unit')
+      select_unit.value         = null
+    }
   }
 
   async getMembershipList() {

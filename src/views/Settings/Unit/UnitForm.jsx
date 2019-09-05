@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Main } from "components"
 import { Button, FormGroup, FormFeedback, Input } from 'reactstrap'
 import { Formik, Form, Field } from "formik"
+import { OptionMembership } from 'components'
 import {
 	listCityApi,
 	listMembershipApi,
@@ -9,7 +10,6 @@ import {
 	storeUnitApi,
 	updateUnitApi
 } from 'services/api'
-
 import UnitSchema from "validators/unit"
 
 export default class UnitForm extends Component {
@@ -171,11 +171,7 @@ export default class UnitForm extends Component {
 											invalid={errors.membership_id !== undefined} 
 											>
 												<option value="0">Pilih Jenis Anggota</option>
-												{memberData.map((member, key) => {
-													return (
-														<option key={key} value={member.id}>{member.name}</option>
-													)
-												})}
+												<OptionMembership membership={memberData} mode="2"/>
 											</Input>
 										)}
 									/>
