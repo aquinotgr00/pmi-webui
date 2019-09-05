@@ -1,6 +1,5 @@
 import Users from 'views/Users'
 import Donators from 'views/Donators'
-import Volunteers from 'views/Volunteers'
 import Campaigns from 'views/Campaigns'
 import Transactions from 'views/Transactions'
 import DetailsTransaction from 'views/Transactions/DetailsTransaction'
@@ -94,11 +93,6 @@ var routes = [
     path: '/donators',
     name: 'Donators',
     component: Donators
-  },
-  {
-    path: '/volunteers',
-    name: 'Volunteers',
-    component: Volunteers
   },
   {
     path: '/campaigns/:campaign',

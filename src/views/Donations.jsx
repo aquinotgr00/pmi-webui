@@ -110,7 +110,7 @@ class Donations extends React.Component {
 	async handleStoreDonation(value) {
 		value.category = 1
 		const storeResponse = await storeApi(value)
-		const { status } = storeResponse.data
+		const { status, data } = storeResponse.data
 		if (status === 'success') {
 			this.setState({ redirect: true })
 		} else {

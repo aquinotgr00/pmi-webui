@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tool, AddNewActionButton, PaginationLink, EditActionButton, ConfirmModal } from 'components'
+import { Tool, AddNewActionButton, PaginationLink, EditActionButton, ConfirmModal, OptionMembership } from 'components'
 import { Table, Input,Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 export function UnitTable(props) {
@@ -41,11 +41,7 @@ export function UnitTable(props) {
             <div className="form-group ml-3">
               <Input type="select" id="filterParent" onChange={props.handleFilterParent}>
                 <option value="0">Pilih Jenis Anggota</option>
-                {Object.values(memberData).map((parent, key) => {
-                  return (
-                    <option key={key} value={parent.id}>{parent.circular}</option>
-                  )
-                })}
+                <OptionMembership membership={memberData} mode="2" />
               </Input>
             </div>
 

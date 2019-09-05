@@ -6,8 +6,12 @@ function renderListElement (data) {
 	if (Object.keys(data).length > 0) {
 		const subdisArray = Object.values(data)
 		return subdisArray.map((sub, key) => {
+				const { parent_member } = sub
 				return sub.name ? (
-					<option key={key} value={sub.id}>{sub.name}</option>
+					<option key={key} value={sub.id}>
+					{(parent_member)? parent_member.name+' >> ' : ''}
+					{sub.name}
+					</option>
 				) : ( null )
 			}
 		)
@@ -21,44 +25,25 @@ export function VolunteerFilter (props) {
 			  <Col md>
 				<FormGroup>
 				  <Label htmlFor="type">Jenis Anggota</Label>
-					<Input type='select' onChange={e => props.onChange({t: e.target.value === 'null' ? null:e.target.value})}>
+					<Input id="select-member" type='select' onChange={e => props.onChange({t: e.target.value === 'null' ? null:e.target.value})}>
 						<option value='null'>Pilih Jenis Anggota</option>
-						<option>PALANG MERAH REMAJA</option>
-						<option>KORPS SUKARELA</option>
-						<option>TENAGA SUKARELA</option>
-						<option>PENGURUS</option>
+						{renderListElement(props.memberships)}
 					</Input>
 				</FormGroup>
 			  </Col>
 			  <Col md>
 				<div className="form-group">
-				  <Label htmlFor="exampleInputCategoryRelatedTag">SubJenis Anggota</Label>
-				  <Input type='select' onChange={e => props.onChange({st: e.target.value === 'null' ? null:e.target.value})}>
-					  <option value='null'>Pilih Sub Jenis Anggota</option>
-					  <option>MULA</option>
-					  <option>MADYA</option>
-					  <option>WIRA</option>
-				  </Input>
-				</div>
-			  </Col>
-			  <Col md>
-				<div className="form-group">
 				  <Label htmlFor="exampleInputCategoryRelatedTag">Kota/Kabupaten</Label>
-				  <Input type='select' onChange={e => props.onProvinceChange({c: e.target.value === 'null' ? null:e.target.value})}>
+				  <Input id="select-city" type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({c: e.target.value === 'null' ? null:e.target.value})}>
 					  <option value='null'>Pilih Kota/Kabupaten</option>
-					  <option value='151'>JAKARTA BARAT</option>
-					  <option value='152'>JAKARTA PUSAT</option>
-					  <option value='153'>JAKARTA SELATAN</option>
-					  <option value='154'>JAKARTA TIMUR</option>
-					  <option value='155'>JAKARTA UTARA</option>
-					  <option value='189'>KEP. SERIBU</option>
+					  {renderListElement(props.cities)}
 				  </Input>
 				</div>
 			  </Col>
 			  <Col md>
 				<div className="form-group">
 				  <Label htmlFor="exampleInputCategoryRelatedTag">Kecamatan</Label>
-          <Input type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({sd: e.target.value === 'null' ? null:e.target.value})}>
+          <Input id="select-subdistrict" type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({sd: e.target.value === 'null' ? null:e.target.value})}>
 					  <option value='null'>Pilih Kecamatan</option>
 					  {renderListElement(props.subdistricts)}
           </Input>
@@ -67,7 +52,7 @@ export function VolunteerFilter (props) {
 			  <Col md>
 				<div className="form-group">
 				  <Label htmlFor="exampleInputCategoryRelatedTag">Unit</Label>
-				  <Input type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({u: e.target.value === 'null' ? null:e.target.value})}>
+				  <Input id="select-unit" type='select' ref={props.selectInput} defaultValue='null' onChange={e => props.onChange({u: e.target.value === 'null' ? null:e.target.value})}>
 					  <option value='null'>Pilih Unit</option>
 					  {renderListElement(props.units)}
 				  </Input>
@@ -75,7 +60,7 @@ export function VolunteerFilter (props) {
 			  </Col>
 			  <Col xs>
 				<div className="mt-reset">
-				  <button className="btn circle-table btn-reset" data-toggle="tooltip" id='buttonTooltip'>
+				  <button className="btn circle-table btn-reset" data-toggle="tooltip" id='buttonTooltip' onClick={props.handleReset}>
 				  </button>
           <Tooltip placement='top' isOpen={props.tootltipOpen} target="buttonTooltip" toggle={props.tooltipToggle}>
             Reset
@@ -89,10 +74,7 @@ export function VolunteerFilter (props) {
 				  </div>
 				  <div className="btn-group" role="group" aria-label="#">
 					<Button onClick={() => props.handleExportPdf()} className="btn btn-line">PDF</Button>
-                    <ReactToPrint
-                        trigger={() => <Button className="btn btn-line" >Print</Button>}
-                        content={() => props.volunteerTable}
-                    />
+					<Button onClick={() => props.handlePrint() } className="btn btn-line" >Print</Button>
 				  </div>
 				</div> 
 			  </Col>

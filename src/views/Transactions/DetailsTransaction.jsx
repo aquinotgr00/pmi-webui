@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { Main, InformationCard } from 'components'
 import { Row, Col, Card, CardBody, CardTitle, Modal, ModalBody, ModalFooter, Button } from 'reactstrap'
-import { showTransaction } from 'services/api'
 import { FundraisingTable } from './FundraisingTable'
 import { NonFundraisingTable } from './NonFundraisingTable'
-import { updateTransaction, updateInfoTransaction } from 'services/api'
+import { showTransaction, updateTransaction } from 'services/api'
 
 export default class DetailsTransaction extends Component {
 
@@ -12,11 +11,12 @@ export default class DetailsTransaction extends Component {
     super(props)
     this.state = {
       data: [],
+      campaign: [],
+      donator: [],
       isOpen: false,
     }
     this.toggleImage = this.toggleImage.bind(this)
-    this.handleSubmitDetails = this.handleSubmitDetails.bind(this)
-    this.handleSubmitInfo = this.handleSubmitInfo.bind(this)
+    this.updateDonation = this.updateDonation.bind(this)
   }
 
   componentDidMount() {
@@ -28,41 +28,26 @@ export default class DetailsTransaction extends Component {
     const response = await showTransaction(transactionId)
     const { data, status } = response.data
     if (status === 'success') {
-      this.setState({ data })
+      const { campaign, donator } = data
+      this.setState({ data, campaign, donator })
     }
   }
 
-  async handleSubmitDetails(id, values) {
+  async updateDonation(id, values) {
     try {
       const response = await updateTransaction(id, values)
       const { data, status } = response.data
       if (status === 'success') {
+
+        this.setState({ data })
+
         let close = document.getElementById('btn-cancel')
         if (typeof close !== 'undefined') {
           close.click()
         }
-        this.setState({ data })
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
-  async handleSubmitInfo(id, values) {
-    try {
-      const response = await updateInfoTransaction(id, values)
-      const { data, status } = response.data
-      if (status === 'success') {
-        let close = document.getElementById('btn-cancel')
-
-        if (typeof close !== 'undefined') {
-          close.click()
-        }
-        this.setState({ data })
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) { }
   }
 
   toggleImage() {
@@ -72,8 +57,9 @@ export default class DetailsTransaction extends Component {
   }
 
   render() {
-    const { id, name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, notes } = this.state.data
-    const { address } = this.state.data.donator || {}
+    const { campaign, donator, data } = this.state
+    const { id, name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, image_url, notes, pick_method_text, donation_items } = data
+    const { get_type } = campaign
 
     const details = [
       {
@@ -86,7 +72,7 @@ export default class DetailsTransaction extends Component {
           },
           {
             label: 'Alamat',
-            text: address
+            text: (donator) ? donator.address : ''
           },
           {
             label: 'No Tlp',
@@ -104,7 +90,7 @@ export default class DetailsTransaction extends Component {
         items: [
           {
             label: 'Tipe Donasi',
-            text: (typeof this.state.data.campaign !== 'undefined') ? this.state.data.campaign.get_type.name : ''
+            text: (get_type) ? get_type.name : ' '
           },
           {
             label: 'Metode Transfer',
@@ -133,13 +119,12 @@ export default class DetailsTransaction extends Component {
                     items={detail.items}
                     index={detail.index} id={id}
                     data={this.state.data}
-                    handleSubmitDetails={this.handleSubmitDetails}
-                    handleSubmitInfo={this.handleSubmitInfo}
+                    updateDonation={this.updateDonation}
                   />
                 </Col>
               )
             })}
-            {(typeof payment_method !== 'undefined' && payment_method === 1) &&
+            {(image !== null) &&
               <Card className="card-transaction col-md-4">
                 <CardBody>
                   <CardTitle>
@@ -147,7 +132,7 @@ export default class DetailsTransaction extends Component {
                     <hr className="mt-1 mb-1" />
                     <div className="mb-2 hovereffect mt-3">
 
-                      <img src={image} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
+                      <img src={image_url} alt="foto bukti pembayaran" className="img-fluid img-thumbnail img-kwitansi-size" />
                       <div className="overlay-kwitansi btn-kwitansi">
                         <span>
                           <button onClick={this.toggleImage} className="btn btn-table circle-table view-img mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Lihat Gambar"></button>
@@ -162,24 +147,31 @@ export default class DetailsTransaction extends Component {
                 </CardBody>
               </Card>
             }
-            <div>
-
-            </div>
           </Row>
           <Row>
             <Col>
-              {typeof this.state.data.campaign !== 'undefined' && this.state.data.campaign.fundraising === 1 ? (
-                <FundraisingTable data={this.state.data} amount={amount} />
-              ) : (
-                  <NonFundraisingTable data={this.state.data} amount={amount} />
-                )}
+              {(campaign) &&
+                <>
+                  {(campaign.fundraising === 1) &&
+                    <FundraisingTable data={campaign} amount={amount} />
+                  }
+                  {(campaign.fundraising === 0) &&
+                    <NonFundraisingTable
+                      data={campaign}
+                      pick_method_text={pick_method_text}
+                      donation_items={donation_items}
+                      amount={amount}
+                    />
+                  }
+                </>
+              }
             </Col>
           </Row>
           <Row>
             <Col>
               <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
                 <ModalBody className="mb-0 p-0">
-                  <img src={image} style={{ width: '100%' }} />
+                  <img src={image_url} style={{ width: '100%' }} />
                 </ModalBody>
                 <ModalFooter>
                   <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}
