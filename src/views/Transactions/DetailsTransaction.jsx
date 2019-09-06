@@ -38,8 +38,8 @@ export default class DetailsTransaction extends Component {
       const response = await updateTransaction(id, values)
       const { data, status } = response.data
       if (status === 'success') {
-
-        this.setState({ data })
+        const { campaign, donator } = data
+        this.setState({ data, campaign, donator })
 
         let close = document.getElementById('btn-cancel')
         if (typeof close !== 'undefined') {
@@ -58,7 +58,23 @@ export default class DetailsTransaction extends Component {
 
   render() {
     const { campaign, donator, data } = this.state
-    const { id, name, email, phone, invoice_id, amount, payment_method, payment_method_text, status_text, image, image_url, notes, pick_method_text, donation_items } = data
+    const {
+      id,
+      name,
+      email,
+      phone,
+      invoice_id,
+      amount,
+      manual_transaction,
+      payment_method_text,
+      status_text,
+      image,
+      image_url,
+      notes,
+      pick_method_text,
+      donation_items
+    } = data
+
     const { get_type } = campaign
 
     const details = [
@@ -102,7 +118,7 @@ export default class DetailsTransaction extends Component {
           },
           {
             label: 'Catatan',
-            text: notes
+            text: (notes)? notes : ''
           }
         ]
       }
@@ -153,7 +169,7 @@ export default class DetailsTransaction extends Component {
               {(campaign) &&
                 <>
                   {(campaign.fundraising === 1) &&
-                    <FundraisingTable data={campaign} amount={amount} />
+                    <FundraisingTable data={campaign} amount={amount} payment_method_text={payment_method_text} />
                   }
                   {(campaign.fundraising === 0) &&
                     <NonFundraisingTable

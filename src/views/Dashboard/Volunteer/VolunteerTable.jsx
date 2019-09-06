@@ -20,7 +20,7 @@ export function VolunteerTable(props) {
                 <tbody>
                     {data.map((item, key) => {
                         const { unit } = item
-                        const { membership } = unit || null
+                        const { membership } = unit
                         return (
                             <tr key={key}>
                                 <td>{key + 1}</td>

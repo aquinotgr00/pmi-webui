@@ -3,8 +3,11 @@ import { Button, FormGroup, Label, Modal, ModalHeader, ModalBody, FormFeedback }
 import { Formik, Form, Field } from 'formik'
 import DatePicker from 'react-datepicker'
 import ExtendDurationSchema from 'validators/extendDuration'
+import moment from 'moment'
 
 export function CampaignDurationModal(props) {
+  const { initialCampaign : campaign } = props
+
   return (
     <>
       <Modal isOpen={props.durationOpen}>
@@ -15,7 +18,7 @@ export function CampaignDurationModal(props) {
           <Formik
             enableReinitialize
             validationSchema={ExtendDurationSchema}
-            initialValues={props.initialCampaign}
+            initialValues={campaign}
             onSubmit={(values, { setSubmitting }) => {
               props.handleSubmitFinishCampaign(values.id, values)
               setSubmitting(false)
@@ -40,7 +43,7 @@ export function CampaignDurationModal(props) {
                             selected={values.finish_campaign}
                             onChange={date => setFieldValue('finish_campaign', date)}
                             className='form-control react-datepicker' placeholder='Tanggal Selesai'
-                            dateFormat="yyyy-MM-dd"
+                            dateFormat="dd MMM yyyy"
                             invalid={errors.finish_campaign !== undefined}
                           />
                         )}
