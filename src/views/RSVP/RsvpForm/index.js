@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
 import { Formik, Form, Field, connect, getIn } from 'formik'
 import Faker from 'faker'
-import { Main, CitySelect, RejectionModal, SubdistrictSelect, VillageSelect } from 'components'
+import { Main, ImagePickerPreview, CitySelect, RejectionModal, SubdistrictSelect, VillageSelect } from 'components'
 import AddRsvpSchema from 'validators/addRsvp'
 import UpdateRsvpSchema from 'validators/updateRsvp'
 import { ApprovalButtons, PublishButton, SaveButton } from './Buttons'
@@ -60,7 +60,7 @@ class RsvpForm extends Component {
       const { status } = response.data
       if (status === 'success') {
         const { data: rsvp } = response.data
-        const previewImgUrl = (rsvp.image === null) ? require('assets/images/image-plus.svg') : rsvp.image_url
+        const previewImgUrl = rsvp.image?rsvp.image_url:require('assets/images/image-plus.svg')
         const { village } = rsvp
         this.setState({
           isLoading: false,
@@ -257,10 +257,15 @@ class RsvpForm extends Component {
 
                   <div className='col-md-4 col-lg-5 pl-5 grs'>
                     <div className='mb-4'>
-                      <label>Gambar Utama</label>
+                      <label>Gambar Utama {rsvp.image===undefined?'':rsvp.image.length}</label>
                       <div className='mb-2'>
                         <label htmlFor='file-input' >
-                          <img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
+                          {
+                            rsvp.image
+                            ?<ImagePickerPreview url={previewImgUrl} />
+                            :<img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
+                          }
+                          
                         </label>
                       </div>
                       <small>
