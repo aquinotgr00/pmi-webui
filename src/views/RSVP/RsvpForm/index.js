@@ -19,8 +19,6 @@ class RsvpForm extends Component {
   constructor (props) {
     super(props)
 
-    const { rsvpId, editMode } = this.props.match.params
-    console.log(rsvpId, editMode)
     this.state = {
       isLoading:false,
       error:null,
@@ -94,7 +92,6 @@ class RsvpForm extends Component {
     this.setState({ isLoading: true, error: null })
     try {
       const response = await (rsvpId?updateRsvpApi(rsvpId,rsvp):createRsvpApi(rsvp))
-      console.log(response)
       const { status } = response.data
       if (status === 'success') {
 
@@ -224,7 +221,7 @@ class RsvpForm extends Component {
                         if (file) {
                           setFieldValue('image_file', file)
                           generatePreviewImgUrl(file, previewImgUrl => { 
-                            this.setState({ rsvp:{...rsvp, image:file}, previewImgUrl }) 
+                            this.setState({ previewImgUrl }) 
                           })
                         }
                       }}
@@ -254,7 +251,7 @@ class RsvpForm extends Component {
                       <div className='mb-2'>
                         <label htmlFor='file-input' >
                           {
-                            rsvp.image
+                            values.image_file
                             ?<ImagePickerPreview url={previewImgUrl} />
                             :<img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
                           }
