@@ -146,11 +146,11 @@ class RsvpForm extends Component {
           <div className='row pl-3'>
             <Formik
               enableReinitialize
-              validationSchema={AddRsvpSchema}
+              validationSchema={rsvp.id?UpdateRsvpSchema:AddRsvpSchema}
               initialValues={rsvp}
               onSubmit={(values, { setSubmitting }) => {
-                const { title, description, village_id, image, approved } = values
-                this.handleSaveRsvp({title, description, village_id, image, ...(editMode==='approval' && {approved})})
+                const { title, description, village_id, image_file, approved } = values
+                this.handleSaveRsvp({title, description, village_id, image_file, ...(editMode==='approval' && {approved})})
                 setSubmitting(false)
               }}
             >
@@ -231,7 +231,7 @@ class RsvpForm extends Component {
                         const file = event.target.files[0]
 
                         if (file) {
-                          setFieldValue('image', file)
+                          setFieldValue('image_file', file)
                           generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
                         }
                       }}
@@ -271,7 +271,7 @@ class RsvpForm extends Component {
                       <div className='invalid-feedback'>
                         {connect(function (props) {
                           const error = getIn(props.formik.errors, props.name)
-                          return error.image || null
+                          return error.image_file || null
                         })()}
                       </div>
                     </div>
