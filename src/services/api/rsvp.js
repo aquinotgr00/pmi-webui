@@ -19,7 +19,7 @@ function buildRsvpFormData (rsvp) {
   formData.append('title', rsvp.title)
   formData.append('village_id', rsvp.village_id)
   formData.append('description', rsvp.description)
-  formData.append('image_file', rsvp.image_file)
+  formData.append('image_file', rsvp.image)
 
   return formData
 }
@@ -33,8 +33,11 @@ export function createRsvpApi (rsvp) {
 export function updateRsvpApi (rsvpId, rsvp) {
   console.log(rsvp)
   const formData = buildRsvpFormData(rsvp)
-  if (!rsvp.image_file) {
+  if (!rsvp.image) {
     formData.delete('image_file')
+  }
+  if (!rsvp.village_id) {
+    formData.delete('village_id')
   }
   formData.append('_method', 'put')
   return authRequest().post(`/events/report/${rsvpId}`, formData)
