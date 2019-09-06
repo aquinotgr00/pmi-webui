@@ -36,7 +36,6 @@ class RsvpForm extends Component {
     }
     this.loadRsvp = this.loadRsvp.bind(this)
     this.handleSaveRsvp = this.handleSaveRsvp.bind(this)
-    this.handleFileUpload = this.handleFileUpload.bind(this)
     this.handleCityChange = this.handleCityChange.bind(this)
     this.handleSubdistrictChange = this.handleSubdistrictChange.bind(this)
     this.handleVillageChange = this.handleVillageChange.bind(this)
@@ -75,14 +74,6 @@ class RsvpForm extends Component {
       }
     } catch (error) {
       // TODO : handle error
-    }
-  }
-
-  handleFileUpload (event) {
-    const file = event.target.files[0]
-
-    if (file) {
-      generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
     }
   }
 
@@ -232,7 +223,9 @@ class RsvpForm extends Component {
 
                         if (file) {
                           setFieldValue('image_file', file)
-                          generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
+                          generatePreviewImgUrl(file, previewImgUrl => { 
+                            this.setState({ rsvp:{...rsvp, image:file}, previewImgUrl }) 
+                          })
                         }
                       }}
                     />
@@ -257,7 +250,7 @@ class RsvpForm extends Component {
 
                   <div className='col-md-4 col-lg-5 pl-5 grs'>
                     <div className='mb-4'>
-                      <label>Gambar Utama {rsvp.image===undefined?'':rsvp.image.length}</label>
+                      <label>Gambar Utama</label>
                       <div className='mb-2'>
                         <label htmlFor='file-input' >
                           {
