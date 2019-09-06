@@ -4,7 +4,5 @@ export default Yup.object().shape({
   title: Yup.string()
     .required('Judul harus diisi'),
   description: Yup.string()
-    .required('Deskripsi harus diisi'),
-  image: Yup.mixed()
-    .required('Harap upload gambar')
+    .required('Deskripsi harus diisi')
 })
