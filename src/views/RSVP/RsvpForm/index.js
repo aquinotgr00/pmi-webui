@@ -137,8 +137,8 @@ class RsvpForm extends Component {
               validationSchema={rsvp.id?UpdateRsvpSchema:AddRsvpSchema}
               initialValues={rsvp}
               onSubmit={(values, { setSubmitting }) => {
-                const { title, description, village_id, image_file, approved } = values
-                this.handleSaveRsvp({title, description, village_id, image_file, ...(editMode==='approval' && {approved})})
+                const { title, description, village_id, image, approved } = values
+                this.handleSaveRsvp({title, description, village_id, image, ...(editMode==='approval' && {approved})})
                 setSubmitting(false)
               }}
             >
@@ -219,7 +219,7 @@ class RsvpForm extends Component {
                         const file = event.target.files[0]
 
                         if (file) {
-                          setFieldValue('image_file', file)
+                          setFieldValue('image', file)
                           generatePreviewImgUrl(file, previewImgUrl => { 
                             this.setState({ previewImgUrl }) 
                           })
@@ -251,7 +251,7 @@ class RsvpForm extends Component {
                       <div className='mb-2'>
                         <label htmlFor='file-input' >
                           {
-                            values.image_file
+                            values.image
                             ?<ImagePickerPreview url={previewImgUrl} />
                             :<img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
                           }
