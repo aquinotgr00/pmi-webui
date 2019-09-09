@@ -174,7 +174,7 @@ export default class DashboardVolunteer extends Component {
                         toggleModal={this.toggleModal}
                     />
                 </Card>
-                <a href="#" target='_blank' id="btn-download-pdf"></a>
+                <a href="#" target='_blank' id="btn-download-pdf" alt="download"></a>
             </Main>
         )
     }

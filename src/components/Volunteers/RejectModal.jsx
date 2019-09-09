@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Label, Input, Button, Modal, ModalHeader, ModalBody, FormGroup } from 'reactstrap'
 
 export class RejectModal extends React.Component {
@@ -38,7 +37,7 @@ export class RejectModal extends React.Component {
             <div className="d-flex flex-row-reverse">
               <Button onClick={() => {
                   this.toggle()
-                  this.state.description = ''
+                  this.setState({ description:'' })
                   this.props.handleApprove(this.props.volunteerId, {verified: 0, description: this.state.description}, this.props.key)
                 }} className="ml-4" color='success'>Kirim</Button>
               <Button onClick={this.toggle} className="btn-outline-secondary">Batal</Button>

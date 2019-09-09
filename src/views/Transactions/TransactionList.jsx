@@ -307,8 +307,8 @@ export default class TransactionList extends Component {
                 <Button className="btn btn-line" onClick={this.handleExportPrint}>Print</Button>
               </ButtonGroup>
             </FormGroup>
-            <a href="#" id="btn-download-excel"></a>
-            <a href="#" target='_blank' id="btn-download-pdf"></a>
+            <a href="#" id="btn-download-excel" alt="" />
+            <a href="#" target='_blank' id="btn-download-pdf" alt="" />
           </Col>
         </Row>
         <PaginationLink

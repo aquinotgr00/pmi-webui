@@ -3,8 +3,9 @@ import { Table } from 'reactstrap'
 import { formatCurrency } from 'utils/number'
 
 export function FundraisingTable(props) {
-	const { title, image, get_type, payment_method_text } = props.data
-	
+	const { payment_method_text, amount, data } = props
+	const { title, image, get_type } 	= data
+
 	return (
 		<Table>
 			<thead>
@@ -24,13 +25,13 @@ export function FundraisingTable(props) {
 					<td>{title}</td>
 					<td>{(get_type)? get_type.name : '' }</td>
 					<td>{payment_method_text}</td>
-					<td>{formatCurrency(props.amount)}</td>
+					<td>{formatCurrency(amount)}</td>
 				</tr>
 				<tr>
 					<th><h1>Total :</h1></th>
 					<td colSpan="3"></td>
 					<td>
-						<h1>{formatCurrency(props.amount)}</h1>
+						<h1>{formatCurrency(amount)}</h1>
 					</td>
 				</tr>
 			</tbody>

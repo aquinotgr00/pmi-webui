@@ -89,7 +89,7 @@ export default class CampaignView extends Component {
   }
 
   render() {
-    const { type_id, title, description, image, ranges_donation: rangeDonation, amount_goal: goal, amount_real: realAmount } = this.state.campaign
+    const { type_id, title, description, image, image_url, ranges_donation: rangeDonation, amount_goal: goal, amount_real: realAmount, fundraising } = this.state.campaign
     const list_donators = this.state.donators || {}
 
     let donationType = '-'
@@ -120,14 +120,18 @@ export default class CampaignView extends Component {
                 <label>Rentang Waktu</label>
                 <p>{rangeDonation}</p>
               </div>
-              <div className='col-sm-3 form-group'>
-                <label>Donasi Terkumpul</label>
-                <p>{realAmount ? formatCurrency(realAmount) : '-'}</p>
-              </div>
-              <div className='col-sm-3 form-group'>
-                <label>Target Donasi</label>
-                <p>{goal ? formatCurrency(goal) : '-'}</p>
-              </div>
+              {(fundraising === 1) &&
+                <>
+                  <div className='col-sm-3 form-group'>
+                    <label>Donasi Terkumpul</label>
+                    <p>{realAmount ? formatCurrency(realAmount) : '-'}</p>
+                  </div>
+                  <div className='col-sm-3 form-group'>
+                    <label>Target Donasi</label>
+                    <p>{goal ? formatCurrency(goal) : '-'}</p>
+                  </div>
+                </>
+              }
             </div>
 
             <div>
@@ -174,13 +178,13 @@ export default class CampaignView extends Component {
             <div className='mb-4'>
               <label>Gambar Utama</label>
               <div className='mb-2 hovereffect'>
-                <img className='img-fluid img-thumbnail img-featured-size' src={image} alt='' />
+                <img className='img-fluid img-thumbnail img-featured-size' src={image_url} alt='' />
                 <div className='overlay btn-img'>
                   <span>
-                    <a href='#' onClick={this.toggleImage} className='btn btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
+                    <button type="button" onClick={this.toggleImage} className='btn-none btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
                   </span>
                   <span data-toggle='modal' role='button' data-target='#ModalMediaLibrary'>
-                    <a href='#' className='btn btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
+                    <button type="button" className='btn-none btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
                   </span>
                 </div>
               </div>
@@ -194,7 +198,7 @@ export default class CampaignView extends Component {
         </div>
         <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
           <ModalBody className="mb-0 p-0">
-            <img src={image} style={{ width: '100%' }} />
+            <img src={image_url} style={{ width: '100%' }} />
           </ModalBody>
           <ModalFooter>
             <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}

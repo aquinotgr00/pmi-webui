@@ -23,7 +23,7 @@ export function DonasiDana (props) {
       <tbody>
         {data && data.map((campaign, key) => (
           <tr key={key}>
-            <th><img src={campaign.image} alt='' /></th>
+            <th><img src={campaign.image_url} alt='' /></th>
             <td><ViewActionButton path={`${path}/${campaign.id}`} title={campaign.formatted_title} /></td>
             <td>{campaign.get_type.name}</td>
             <td>{campaign.ranges_donation}</td>

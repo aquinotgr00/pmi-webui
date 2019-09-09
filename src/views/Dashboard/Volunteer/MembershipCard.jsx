@@ -44,7 +44,7 @@ export function MembershipCard(props) {
                                             <Col key={key} md="4" className="grs-right">
                                                 <Row>
                                                     <Col md="3">
-                                                        <img src={require(`assets/images/${thumbnail}.svg`)} className="img-collapse" />
+                                                        <img src={require(`assets/images/${thumbnail}.svg`)} className="img-collapse" alt="" />
                                                     </Col>
                                                     <Col md="9" className="pl-0">
                                                         <label className="mb-0">{submember.title}</label>
@@ -59,7 +59,7 @@ export function MembershipCard(props) {
                                             <Col md="4" className="grs-right">
                                                 <Row>
                                                     <Col md="3">
-                                                        <img src={require(`assets/images/male.svg`)} className="img-collapse" />
+                                                        <img src={require(`assets/images/male.svg`)} className="img-collapse" alt="" />
                                                     </Col>
                                                     <Col md="9" className="pl-0">
                                                         <label className="mb-0">Laki-laki</label>
@@ -70,7 +70,7 @@ export function MembershipCard(props) {
                                             <Col md="4" className="grs-right">
                                                 <Row>
                                                     <Col md="3">
-                                                        <img src={require(`assets/images/female.svg`)} className="img-collapse" />
+                                                        <img src={require(`assets/images/female.svg`)} className="img-collapse" alt="" />
                                                     </Col>
                                                     <Col md="9" className="pl-0">
                                                         <label className="mb-0">Perempuan</label>

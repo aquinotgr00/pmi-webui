@@ -13,7 +13,6 @@ export function Volunteer (props) {
           <th>Nama</th>
           <th>Jenis Kelamin</th>
           <th>Jenis Anggota</th>
-          <th>Sub Jenis Anggota</th>
           <th>Kabupaten/Kota</th>
           <th>Unit</th>
           <th>Aksi</th>
@@ -22,12 +21,8 @@ export function Volunteer (props) {
       <tbody>
         {props.data.map((volunteer, key) => {
             key++
-            const { membership } = volunteer.unit
-            let memberType = membership.name
-            let subMemberType = membership.name
-            if(membership.parent_member) {
-              memberType = membership.parent_member.name
-            }
+            const { unit } = volunteer
+            const { membership } = unit
             return (
                 <tr key={key}>
                     <td>{key}</td>
@@ -41,10 +36,9 @@ export function Volunteer (props) {
                         />
                     </td>
                     <td>{volunteer.gender}</td>
-                    <td>{volunteer.unit === null ? '':memberType}</td>
-                    <td>{memberType === subMemberType ? '':subMemberType}</td>
+                    <td>{(membership)? membership.name : '' }</td>
                     <td>{volunteer.city}</td>
-                    <td>{volunteer.unit === null ? '':volunteer.unit.name}</td>
+                    <td>{(unit)? unit.name : '' }</td>
                     <td>
                         <EditActionButton
                           path={`${path}/${volunteer.id}/edit`}
