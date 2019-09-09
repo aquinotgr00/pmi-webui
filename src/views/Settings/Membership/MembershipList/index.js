@@ -4,7 +4,6 @@ import { SubMemberList } from "./SubMemberList"
 import { PaginationLink, AddNewActionButton, Tool } from 'components'
 import { listMembershipApi, deleteMembershipApi } from 'services/api'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
-import ucwords from "utils/string"
 
 export default class MembershipList extends Component {
   constructor(props) {

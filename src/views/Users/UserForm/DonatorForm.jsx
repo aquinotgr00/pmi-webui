@@ -129,15 +129,15 @@ export class DonatorForm extends Component {
               </div>
               <div className="col-md mt-2">
                 <span data-toggle="modal" role="button" data-target="#EditCustomerInfo">
-                  <a href="#"
-                    className="btn btn-edit-frm float-right"
+                  <button
+                    className="btn-none btn-edit-frm float-right"
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Edit Info Donatur"
                     data-original-title="Edit Info Donatur"
                     onClick={this.toggleEditDonator}
                   >
-                  </a>
+                  </button>
                 </span>
               </div>
             </Row>

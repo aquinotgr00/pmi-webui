@@ -6,8 +6,8 @@ import detailsDonationSchema from 'validators/detailsDonation'
 
 export function DetailsDonationForm(props) {
 
-	const { manual_transaction, status, notes } = props.data
-	let initialValues = { manual_transaction, status, notes }
+	const { manual_payment, status, notes } = props.data
+	let initialValues = { manual_payment, status, notes }
 
 	return (
 		<Modal isOpen={props.isOpen} toggle={props.toggle}>
@@ -32,21 +32,21 @@ export function DetailsDonationForm(props) {
 							<Form onSubmit={handleSubmit}>
 
 								<FormGroup>
-									<label htmlFor="manual_transaction">Metode Transfer</label>
+									<label htmlFor="manual_payment">Metode Transfer</label>
 									<Field
-										name="manual_transaction"
+										name="manual_payment"
 										render={({ field }) => (
 											<Input
 												{...field}
-												type="select" id="manual_transaction"
-												invalid={errors.manual_transaction !== undefined} >
+												type="select" id="manual_payment"
+												invalid={errors.manual_payment !== undefined} >
 												<option value="">Pilih Metode</option>
 												<option value="1">Manual Transfer</option>
 												<option value="0">Otomatis Transfer</option>
 											</Input>
 										)} />
 
-									{errors.manual_transaction !== undefined ? <FormFeedback>{errors.manual_transaction}</FormFeedback> : ''}
+									{errors.manual_payment !== undefined ? <FormFeedback>{errors.manual_payment}</FormFeedback> : ''}
 								</FormGroup>
 
 								<FormGroup>

@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import ucwords from "utils/string"
 import { Main } from "components"
 import { SubMemberForm } from "./SubMemberForm"
 import {

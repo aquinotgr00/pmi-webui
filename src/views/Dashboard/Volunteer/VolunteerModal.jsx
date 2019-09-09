@@ -28,7 +28,7 @@ export function VolunteerModal(props) {
                 <ModalBody>
                     <Row>
                         <Col md="4">
-                            <img className="img-fluid img-thumbnail img-profil mb-3" src={volunteer.image} alt="User profile picture" />
+                            <img className="img-fluid img-thumbnail img-profil mb-3" src={volunteer.image} alt="User profile" />
                             <h1>{ volunteer.name }</h1>
                             <p>{(user.email) && user.email }</p>
                             <hr />

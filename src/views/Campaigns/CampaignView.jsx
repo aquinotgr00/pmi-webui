@@ -181,10 +181,10 @@ export default class CampaignView extends Component {
                 <img className='img-fluid img-thumbnail img-featured-size' src={image_url} alt='' />
                 <div className='overlay btn-img'>
                   <span>
-                    <a href='#' onClick={this.toggleImage} className='btn btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
+                    <button type="button" onClick={this.toggleImage} className='btn-none btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
                   </span>
                   <span data-toggle='modal' role='button' data-target='#ModalMediaLibrary'>
-                    <a href='#' className='btn btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
+                    <button type="button" className='btn-none btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
                   </span>
                 </div>
               </div>
@@ -198,7 +198,7 @@ export default class CampaignView extends Component {
         </div>
         <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
           <ModalBody className="mb-0 p-0">
-            <img src={image} style={{ width: '100%' }} />
+            <img src={image_url} style={{ width: '100%' }} />
           </ModalBody>
           <ModalFooter>
             <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}

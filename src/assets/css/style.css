@@ -868,11 +868,11 @@ footer p {
     width: 100%;
 }
 
-a[aria-expanded="false"]>.fa-arrow{
+button[aria-expanded="false"]>.fa-arrow{
     transition-duration: 0.5s;
 }
 
-a[aria-expanded="true"]>.fa-arrow{
+button[aria-expanded="true"]>.fa-arrow{
     transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
@@ -884,4 +884,13 @@ a[aria-expanded="true"]>.fa-arrow{
     
     width: 1px;
     height: 1px;
+}
+
+.btn-none{
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	outline: inherit;
 }

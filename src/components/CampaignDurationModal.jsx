@@ -3,7 +3,6 @@ import { Button, FormGroup, Label, Modal, ModalHeader, ModalBody, FormFeedback }
 import { Formik, Form, Field } from 'formik'
 import DatePicker from 'react-datepicker'
 import ExtendDurationSchema from 'validators/extendDuration'
-import moment from 'moment'
 
 export function CampaignDurationModal(props) {
   const { initialCampaign : campaign } = props

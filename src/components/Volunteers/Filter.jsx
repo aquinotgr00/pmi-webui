@@ -1,6 +1,5 @@
 import React from 'react'
 import { Row, Col, Label, FormGroup, Input, Tooltip, Button } from 'reactstrap'
-import ReactToPrint from 'react-to-print'
 
 function renderListElement (data) {
 	if (Object.keys(data).length > 0) {

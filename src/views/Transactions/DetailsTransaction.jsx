@@ -65,7 +65,6 @@ export default class DetailsTransaction extends Component {
       phone,
       invoice_id,
       amount,
-      manual_transaction,
       payment_method_text,
       status_text,
       image,

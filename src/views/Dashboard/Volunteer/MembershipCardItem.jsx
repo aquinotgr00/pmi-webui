@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Card, CardBody } from 'reactstrap'
 
 export function MembershipCardItem(props) {
-    const { title, amount, collapse, index, shown } = props
+    const { title, amount, index, shown } = props
     return (
         <>
             <Card>
@@ -11,19 +11,17 @@ export function MembershipCardItem(props) {
                         <Col md="7">
                             <label>{title}</label>
                             <h1 className="my-1">{amount}</h1>
-                            <a
-                                href={`#`+collapse}
+                            <button
                                 type="button"
-                                className="btn-top-card"
+                                className="btn-none btn-top-card"
                                 data-toggle="collapse"
-                                role="button"
                                 aria-expanded={shown[index] ? true : false}
                                 aria-controls="multiCollapseExample1"
                                 onClick={() => props.toggle(index)}
                                 >
                                 Lihat Selengkapnya
                                 <i className="fa-arrow"></i>
-                            </a>
+                            </button>
                         </Col>
                         <Col>
                             <img src={require('assets/images/people.svg')} />

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tool, AddNewActionButton, PaginationLink, EditActionButton, ConfirmModal, OptionMembership } from 'components'
+import { Tool, AddNewActionButton, PaginationLink, EditActionButton, OptionMembership } from 'components'
 import { Table, Input,Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 export function UnitTable(props) {
