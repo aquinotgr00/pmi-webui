@@ -36,9 +36,9 @@ export function Volunteer (props) {
                         />
                     </td>
                     <td>{volunteer.gender}</td>
-                    <td>{(membership)? membership.name : '' }</td>
+                    <td></td>
                     <td>{volunteer.city}</td>
-                    <td>{(unit)? unit.name : '' }</td>
+                    <td></td>
                     <td>
                         <EditActionButton
                           path={`${path}/${volunteer.id}/edit`}
