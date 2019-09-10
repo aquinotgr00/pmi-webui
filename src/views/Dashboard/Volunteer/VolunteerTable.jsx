@@ -28,9 +28,9 @@ export function VolunteerTable(props) {
                                     <a href="#open-modal" onClick={() => props.toggleModal(item.id)}>{item.name}</a>
                                 </td>
                                 <td>{item.gender}</td>
-                                <td></td>
+                                <td>{(membership) ? membership.name : '-'}</td>
                                 <td>{item.city}</td>
-                                <td></td>
+                                <td>{(unit) ? unit.name : '-'}</td>
                             </tr>
                         )
                     })}

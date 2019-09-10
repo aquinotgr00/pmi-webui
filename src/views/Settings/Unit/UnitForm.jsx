@@ -171,7 +171,7 @@ export default class UnitForm extends Component {
 											invalid={errors.membership_id !== undefined} 
 											>
 												<option value="0">Pilih Jenis Anggota</option>
-												<OptionMembership membership={memberData} mode="2"/>
+												<OptionMembership membership={memberData} mode="1"/>
 											</Input>
 										)}
 									/>
