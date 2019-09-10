@@ -30,13 +30,17 @@ export function createRsvpApi (rsvp) {
   return authRequest().post(`/events/report`, formData)
 }
 
-export function updateRsvpApi (rsvpId, data) {
-  cancel && cancel()
-  return authRequest().put(`/events/report/${rsvpId}`, { ...data,
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })
+export function updateRsvpApi (rsvpId, rsvp) {
+  console.log(rsvp)
+  const formData = buildRsvpFormData(rsvp)
+  if (!rsvp.image) {
+    formData.delete('image_file')
+  }
+  if (!rsvp.village_id) {
+    formData.delete('village_id')
+  }
+  formData.append('_method', 'put')
+  return authRequest().post(`/events/report/${rsvpId}`, formData)
 }
 
 export function getRsvpApi (rsvpId) {

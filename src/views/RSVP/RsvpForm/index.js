@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { Col, FormFeedback, FormGroup, Input, Row } from 'reactstrap'
 import { Formik, Form, Field, connect, getIn } from 'formik'
 import Faker from 'faker'
-import { Main, CitySelect, RejectionModal, SubdistrictSelect, VillageSelect } from 'components'
+import { Main, ImagePickerPreview, CitySelect, RejectionModal, SubdistrictSelect, VillageSelect } from 'components'
 import AddRsvpSchema from 'validators/addRsvp'
 import UpdateRsvpSchema from 'validators/updateRsvp'
 import { ApprovalButtons, PublishButton, SaveButton } from './Buttons'
@@ -19,8 +19,6 @@ class RsvpForm extends Component {
   constructor (props) {
     super(props)
 
-    const { rsvpId, editMode } = this.props.match.params
-    console.log(rsvpId, editMode)
     this.state = {
       isLoading:false,
       error:null,
@@ -36,7 +34,6 @@ class RsvpForm extends Component {
     }
     this.loadRsvp = this.loadRsvp.bind(this)
     this.handleSaveRsvp = this.handleSaveRsvp.bind(this)
-    this.handleFileUpload = this.handleFileUpload.bind(this)
     this.handleCityChange = this.handleCityChange.bind(this)
     this.handleSubdistrictChange = this.handleSubdistrictChange.bind(this)
     this.handleVillageChange = this.handleVillageChange.bind(this)
@@ -60,7 +57,7 @@ class RsvpForm extends Component {
       const { status } = response.data
       if (status === 'success') {
         const { data: rsvp } = response.data
-        const previewImgUrl = (rsvp.image === null) ? require('assets/images/image-plus.svg') : rsvp.image_url
+        const previewImgUrl = rsvp.image?rsvp.image_url:require('assets/images/image-plus.svg')
         const { village } = rsvp
         this.setState({
           isLoading: false,
@@ -75,14 +72,6 @@ class RsvpForm extends Component {
       }
     } catch (error) {
       // TODO : handle error
-    }
-  }
-
-  handleFileUpload (event) {
-    const file = event.target.files[0]
-
-    if (file) {
-      generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
     }
   }
 
@@ -103,7 +92,6 @@ class RsvpForm extends Component {
     this.setState({ isLoading: true, error: null })
     try {
       const response = await (rsvpId?updateRsvpApi(rsvpId,rsvp):createRsvpApi(rsvp))
-      console.log(response)
       const { status } = response.data
       if (status === 'success') {
 
@@ -146,7 +134,7 @@ class RsvpForm extends Component {
           <div className='row pl-3'>
             <Formik
               enableReinitialize
-              validationSchema={AddRsvpSchema}
+              validationSchema={rsvp.id?UpdateRsvpSchema:AddRsvpSchema}
               initialValues={rsvp}
               onSubmit={(values, { setSubmitting }) => {
                 const { title, description, village_id, image, approved } = values
@@ -232,7 +220,9 @@ class RsvpForm extends Component {
 
                         if (file) {
                           setFieldValue('image', file)
-                          generatePreviewImgUrl(file, previewImgUrl => { this.setState({ previewImgUrl }) })
+                          generatePreviewImgUrl(file, previewImgUrl => { 
+                            this.setState({ previewImgUrl }) 
+                          })
                         }
                       }}
                     />
@@ -260,7 +250,12 @@ class RsvpForm extends Component {
                       <label>Gambar Utama</label>
                       <div className='mb-2'>
                         <label htmlFor='file-input' >
-                          <img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
+                          {
+                            values.image
+                            ?<ImagePickerPreview url={previewImgUrl} />
+                            :<img className='img-fluid img-thumbnail add-img-featured' src={previewImgUrl} alt='' />
+                          }
+                          
                         </label>
                       </div>
                       <small>
@@ -271,7 +266,7 @@ class RsvpForm extends Component {
                       <div className='invalid-feedback'>
                         {connect(function (props) {
                           const error = getIn(props.formik.errors, props.name)
-                          return error.image || null
+                          return error.image_file || null
                         })()}
                       </div>
                     </div>
