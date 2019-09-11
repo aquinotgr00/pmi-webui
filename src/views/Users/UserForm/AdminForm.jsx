@@ -155,7 +155,7 @@ class AdminForm extends Component {
               } else {
                 this.handleStoreUser(values)
               }
-              
+              setSubmitting(false)
             }}
           >
             {({
