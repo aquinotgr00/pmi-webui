@@ -215,12 +215,12 @@ a:hover {
 .side.active{
     color: #ED1C24;
 }
-a.side[aria-expanded="false"]::after, a.side[aria-expanded="true"]::after {
+button.side[aria-expanded="false"]::after, button.side[aria-expanded="true"]::after {
     content: url(../images/arrow-drop-down.svg);
     float: right;
     margin-top: 0.3em;
 }
-a.side[aria-expanded="true"]::after {
+button.side[aria-expanded="true"]::after {
     content: url(../images/arrow-drop-up.svg);
 }
 .dropdown-toggle::after{

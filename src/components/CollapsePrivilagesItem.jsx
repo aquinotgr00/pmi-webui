@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { CheckboxPrivilages } from 'components'
-import { Collapse } from 'reactstrap'
+import { Collapse, Button } from 'reactstrap'
 
 export class CollapsePrivilagesItem extends Component{
 	constructor (props) {
@@ -14,16 +14,24 @@ export class CollapsePrivilagesItem extends Component{
 	}
 
 	render(){
+		const { name, list, checkListItem } = this.props
+		const { collapse } = this.state
 		return (
 			<li>
-			<a href="#" aria-expanded="true" className="side" className="side" onClick={this.toggle} >{this.props.name}</a>
-			<hr />
-			<Collapse isOpen={this.state.collapse} className="collapse list-privilage">
-			<ul className="flex-column privilage-item">
-			{this.props.list.map(values => <CheckboxPrivilages value={values.id} key={values.id} label={values.text} />)}
-			</ul>
-			</Collapse>
+				<button type="button" aria-expanded={collapse} className="btn-none side" onClick={this.toggle} >{name}</button>
+				<hr />
+				<Collapse isOpen={collapse} className="collapse list-privilage">
+				<ul className="flex-column privilage-item">
+					{list.map(values => <CheckboxPrivilages 
+						value={values.id} 
+						key={values.id} 
+						label={values.name} 
+						checkListItem={checkListItem}
+						/>
+					)}
+				</ul>
+				</Collapse>
 			</li>
-			)
+		)
 	}
 }

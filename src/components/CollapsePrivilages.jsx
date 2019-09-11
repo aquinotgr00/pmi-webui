@@ -4,7 +4,17 @@ import { CollapsePrivilagesItem } from 'components'
 export function CollapsePrivilages(props) {
 	return (
 		<ul className="flex-column privilage-item">
-			{props.privilages.map((privilage, index) => <CollapsePrivilagesItem key={index} name={privilage.name} list={privilage.list} isOpen={privilage.isOpen} />)}
+			{props.privileges.map((privilage, index) => {
+				return(
+					<CollapsePrivilagesItem 
+					key={index} 
+					name={privilage.name} 
+					list={privilage.privileges}
+					checkListItem={props.checkListItem}
+					/>
+				)
+			}
+			)}
 		</ul>
 	)
 }

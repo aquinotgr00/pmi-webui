@@ -54,6 +54,7 @@ export default class TransactionList extends Component {
       if (index !== -1) checkList.splice(index, 1);
     }
     this.setState({ checkList })
+    console.log(this.state.checkList)
   }
 
   async loadTransaction(page = 1, searchFor = '', title = '', statusFilter = '', startDate = '', finishDate = '') {

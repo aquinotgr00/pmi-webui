@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
 import { Row, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
 import { Main, CollapsePrivilages } from 'components'
-import { detailsUserApi, storeUserApi, updateUserApi } from 'services/api'
+import { 
+  detailsUserApi, 
+  storeUserApi, 
+  updateUserApi,
+  listRolesApi,
+  listCategoryPrivilegesApi
+} from 'services/api'
 import { Formik, Form, Field } from 'formik'
 import { withRouter } from 'react-router-dom'
 import AddUserSchema from 'validators/addUser'
@@ -16,16 +22,18 @@ class AdminForm extends Component {
     this.handleUpdateUser = this.handleUpdateUser.bind(this)
 
     this.state = {
-      items: [],
       roles: [],
-      privilages: [],
+      privileges: [],
       name: '',
       email: '',
       role_id: '',
       password: '',
       password_confirmation: '',
-      userId: null
+      userId: null,
+      checkList: []
     }
+    this.checkListItem = this.checkListItem.bind(this)
+    this.handleChangeRole = this.handleChangeRole.bind(this)
   }
 
   componentDidMount() {
@@ -35,6 +43,25 @@ class AdminForm extends Component {
     }
     this.loadRoles()
     this.loadPrivilages()
+  }
+
+  handleChangeRole(e){
+    const role_id = e.target.value
+    this.setState({ role_id })
+  }
+
+  checkListItem(e){
+    
+    const { checkList } = this.state
+    let data = e.target.value
+    if (e.target.checked) {
+      if (checkList.indexOf(data) === -1) checkList.push(data)
+    }else{
+      var index = checkList.indexOf(data);
+      if (index !== -1) checkList.splice(index, 1);
+    }
+    
+    this.setState({ checkList })
   }
 
   async loadUser(userId) {
@@ -48,43 +75,24 @@ class AdminForm extends Component {
     }
   }
 
-  loadRoles() {
-    const roles = [
-      {
-        id: 1,
-        text: 'Super Admin'
-      },
-      {
-        id: 2,
-        text: 'Admin Donasi'
-      },
-      {
-        id: 3,
-        text: 'Admin Relawan'
-      }
-    ]
-    this.setState({ roles: roles })
+  async loadRoles() {
+    const response    = await listRolesApi()
+    const { status }  = response.data
+
+    if (status === 'success') {
+      const { data: roles } = response.data
+      this.setState({ roles })
+    }
   }
 
-  loadPrivilages() {
-    const privilages = [
-      {
-        id: 1,
-        name: 'Administrator',
-        isOpen: false,
-        list: [
-          {
-            id: 1,
-            text: 'Lihat Halaman Administrator'
-          },
-          {
-            id: 2,
-            text: 'Buat Administrator'
-          },
-        ]
-      },
-    ]
-    this.setState({ privilages: privilages })
+  async loadPrivilages() {
+    const response    = await listCategoryPrivilegesApi()
+    const { status }  = response.data
+
+    if (status === 'success') {
+      const { data: privileges } = response.data
+      this.setState({ privileges })
+    }
   }
 
 
@@ -96,9 +104,7 @@ class AdminForm extends Component {
         const { history } = this.props
         history.push(`/admin/users/admin`)
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   async handleUpdateUser(userId, values) {
@@ -109,9 +115,7 @@ class AdminForm extends Component {
         const { history } = this.props
         history.push(`/admin/users/admin`)
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   render() {
@@ -119,8 +123,24 @@ class AdminForm extends Component {
     const userCategory = ucwords(user.split('-').join(' '))
     const title = userId ? `Edit ${userCategory}` : `Tambah ${userCategory} Baru`
 
-    const { name, email, password, password_confirmation } = this.state
-    let initialValues = { name, email, password, password_confirmation }
+    const { 
+      name, 
+      email, 
+      password, 
+      password_confirmation,
+      role_id,
+      checkList: privileges  
+    } = this.state
+
+    let initialValues = { 
+      name, 
+      email, 
+      password, 
+      password_confirmation,
+      role_id,
+      privileges  
+    }
+
     return (
       <Main title={title}>
         <Row className="pl-3">
@@ -135,7 +155,7 @@ class AdminForm extends Component {
               } else {
                 this.handleStoreUser(values)
               }
-              setSubmitting(false)
+              
             }}
           >
             {({
@@ -172,11 +192,6 @@ class AdminForm extends Component {
                       )} />
 
                     {errors.email !== undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
-                  </FormGroup>
-
-                  <FormGroup>
-                    <label>Posisi</label>
-                    <Input type="text" />
                   </FormGroup>
 
                   <FormGroup>
@@ -220,11 +235,11 @@ class AdminForm extends Component {
           <div className='form-group col-md-4 col-lg-5 pl-5 grs'>
             <div className='mb-4'>
               <label>Pengaturan Hak Istimewa</label>
-              <Input type="select">
+              <Input type="select" onChange={this.handleChangeRole}>
                 <option key="0" value="0">Pilih Hak</option>
-                {this.state.roles.map(role => <option key={role.id} value={role.id}>{role.text}</option>)}
+                {this.state.roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)}
               </Input>
-              <CollapsePrivilages privilages={this.state.privilages} />
+              <CollapsePrivilages privileges={this.state.privileges} checkListItem={this.checkListItem} />
             </div>
           </div>
         </Row>

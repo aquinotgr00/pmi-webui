@@ -15,12 +15,7 @@ export function listProvinceApi (params) {
 }
 
 export function detailsProvinceApi(provinceId){
-	cancel && cancel()
-  	return authRequest().get('/settings/province/'+provinceId, { 
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })	
+  return authRequest().get(`/settings/province/${provinceId}`)
 }
 
 export function storeProvinceApi(params){
