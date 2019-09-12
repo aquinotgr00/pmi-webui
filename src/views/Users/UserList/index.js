@@ -170,7 +170,6 @@ export default class UserList extends Component {
   }
 
   async getSubdistrictList(param) {
-    console.log(this.state.cityId)
     const response = await getSubdistrictListApi(param)
     const { data: subdistricts } = response.data
     this.setState({ subdistricts })

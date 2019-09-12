@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
-import { Row, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
+import { Row, FormGroup, Input, Button, FormFeedback, Collapse } from 'reactstrap'
 import { Main, CollapsePrivilages } from 'components'
-import { detailsUserApi, storeUserApi, updateUserApi } from 'services/api'
-import { Formik, Form, Field } from 'formik'
+import {
+  detailsUserApi,
+  storeUserApi,
+  updateUserApi,
+  listRolesApi,
+  listCategoryPrivilegesApi
+} from 'services/api'
+import { Formik, Form, Field, FieldArray } from 'formik'
 import { withRouter } from 'react-router-dom'
 import AddUserSchema from 'validators/addUser'
 import UpdateUserSchema from 'validators/updateUser'
@@ -16,16 +22,18 @@ class AdminForm extends Component {
     this.handleUpdateUser = this.handleUpdateUser.bind(this)
 
     this.state = {
-      items: [],
       roles: [],
-      privilages: [],
+      options: [],
       name: '',
       email: '',
       role_id: '',
       password: '',
       password_confirmation: '',
-      userId: null
+      userId: null,
+      privileges: []
     }
+
+    this.handleChangeRole = this.handleChangeRole.bind(this)
   }
 
   componentDidMount() {
@@ -35,6 +43,11 @@ class AdminForm extends Component {
     }
     this.loadRoles()
     this.loadPrivilages()
+  }
+
+  handleChangeRole(e) {
+    const role_id = e.target.value
+    this.setState({ role_id })
   }
 
   async loadUser(userId) {
@@ -48,43 +61,24 @@ class AdminForm extends Component {
     }
   }
 
-  loadRoles() {
-    const roles = [
-      {
-        id: 1,
-        text: 'Super Admin'
-      },
-      {
-        id: 2,
-        text: 'Admin Donasi'
-      },
-      {
-        id: 3,
-        text: 'Admin Relawan'
-      }
-    ]
-    this.setState({ roles: roles })
+  async loadRoles() {
+    const response = await listRolesApi()
+    const { status } = response.data
+
+    if (status === 'success') {
+      const { data: roles } = response.data
+      this.setState({ roles })
+    }
   }
 
-  loadPrivilages() {
-    const privilages = [
-      {
-        id: 1,
-        name: 'Administrator',
-        isOpen: false,
-        list: [
-          {
-            id: 1,
-            text: 'Lihat Halaman Administrator'
-          },
-          {
-            id: 2,
-            text: 'Buat Administrator'
-          },
-        ]
-      },
-    ]
-    this.setState({ privilages: privilages })
+  async loadPrivilages() {
+    const response = await listCategoryPrivilegesApi()
+    const { status } = response.data
+
+    if (status === 'success') {
+      const { data: options } = response.data
+      this.setState({ options })
+    }
   }
 
 
@@ -96,9 +90,7 @@ class AdminForm extends Component {
         const { history } = this.props
         history.push(`/admin/users/admin`)
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) { }
   }
 
   async handleUpdateUser(userId, values) {
@@ -109,9 +101,7 @@ class AdminForm extends Component {
         const { history } = this.props
         history.push(`/admin/users/admin`)
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) { }
   }
 
   render() {
@@ -119,8 +109,30 @@ class AdminForm extends Component {
     const userCategory = ucwords(user.split('-').join(' '))
     const title = userId ? `Edit ${userCategory}` : `Tambah ${userCategory} Baru`
 
-    const { name, email, password, password_confirmation } = this.state
-    let initialValues = { name, email, password, password_confirmation }
+    const {
+      name,
+      email,
+      password,
+      password_confirmation,
+      role_id,
+      options,
+      roles,
+      privileges,
+      number
+    } = this.state
+
+    let initialValues = {
+      name,
+      email,
+      password,
+      password_confirmation,
+      role_id,
+      roles,
+      options,
+      privileges,
+      number
+    }
+
     return (
       <Main title={title}>
         <Row className="pl-3">
@@ -141,92 +153,114 @@ class AdminForm extends Component {
             {({
               errors,
               handleSubmit,
-              isSubmitting
-            }) => (
+              isSubmitting,
+              setFieldValue
+            }) => {
+              
+              return(
 
-                <Form onSubmit={handleSubmit} className='col-md-6 col-lg7 pl-0'>
+                <Form onSubmit={handleSubmit} className='col-12'>
+                  <div className='float-left col-md-6 col-lg-7 pl-0'>
+                    <FormGroup>
+                      <label>Nama Lengkap</label>
+                      <Field
+                        name="name"
+                        render={({ field }) => (
+                          <Input {...field}
+                            type="text"
+                            invalid={errors.name !== undefined}
+                          />
+                        )} />
 
-                  <FormGroup>
-                    <label>Nama Lengkap</label>
-                    <Field
-                      name="name"
-                      render={({ field }) => (
-                        <Input {...field}
-                          type="text"
-                          invalid={errors.name !== undefined}
-                        />
-                      )} />
+                      {errors.name !== undefined ? <FormFeedback>{errors.name}</FormFeedback> : ''}
+                    </FormGroup>
 
-                    {errors.name !== undefined ? <FormFeedback>{errors.name}</FormFeedback> : ''}
-                  </FormGroup>
+                    <FormGroup>
+                      <label>Email</label>
+                      <Field
+                        name="email"
+                        render={({ field }) => (
+                          <Input {...field}
+                            type="email"
+                            invalid={errors.email !== undefined}
+                          />
+                        )} />
 
-                  <FormGroup>
-                    <label>Email</label>
-                    <Field
-                      name="email"
-                      render={({ field }) => (
-                        <Input {...field}
-                          type="email"
-                          invalid={errors.email !== undefined}
-                        />
-                      )} />
+                      {errors.email !== undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
+                    </FormGroup>
 
-                    {errors.email !== undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
-                  </FormGroup>
+                    <FormGroup>
+                      <label>Kata Sandi</label>
+                      <Field
+                        name="password"
+                        render={({ field }) => (
+                          <Input {...field}
+                            type="password"
+                            invalid={errors.password !== undefined}
+                          />
+                        )} />
 
-                  <FormGroup>
-                    <label>Posisi</label>
-                    <Input type="text" />
-                  </FormGroup>
+                      {errors.password !== undefined ? <FormFeedback>{errors.password}</FormFeedback> : ''}
+                    </FormGroup>
 
-                  <FormGroup>
-                    <label>Kata Sandi</label>
-                    <Field
-                      name="password"
-                      render={({ field }) => (
-                        <Input {...field}
-                          type="password"
-                          invalid={errors.password !== undefined}
-                        />
-                      )} />
+                    <FormGroup>
+                      <label>Ulangi Kata Sandi</label>
+                      <Field
+                        name="password_confirmation"
+                        render={({ field }) => (
+                          <Input {...field}
+                            type="password"
+                            invalid={errors.password_confirmation !== undefined}
+                          />
+                        )} />
 
-                    {errors.password !== undefined ? <FormFeedback>{errors.password}</FormFeedback> : ''}
-                  </FormGroup>
-
-                  <FormGroup>
-                    <label>Ulangi Kata Sandi</label>
-                    <Field
-                      name="password_confirmation"
-                      render={({ field }) => (
-                        <Input {...field}
-                          type="password"
-                          invalid={errors.password_confirmation !== undefined}
-                        />
-                      )} />
-
-                    {errors.password_confirmation !== undefined ? <FormFeedback>{errors.password_confirmation}</FormFeedback> : ''}
-                  </FormGroup>
-                  <div className='float-right'>
-                    <Button type='submit' color='success' disabled={isSubmitting}>Simpan</Button>
+                      {errors.password_confirmation !== undefined ? <FormFeedback>{errors.password_confirmation}</FormFeedback> : ''}
+                    </FormGroup>
+                    <div className='float-right'>
+                      <Button type='submit' color='success' disabled={isSubmitting}>Simpan</Button>
+                    </div>
                   </div>
+                  <div className="float-left col-md-4 col-lg-4 pl-5 grs">
+                    <div className='mb-4'>
+                      <label>Pengaturan Hak Istimewa</label>
+                      <Field
+                        name="role_id"
+                        render={({ field }) => (
+                          <Input {...field} 
+                            type="select" 
+                            invalid={errors.role_id !== undefined} >
+                          
+                            <option value="0">Pilih salah satu</option>
+                            {roles.map((role, key) => <option key={key} value={role.id}>{role.name}</option>)}
 
-
+                          </Input>
+                        )} />
+                      {errors.role_id !== undefined ? <FormFeedback>{errors.role_id}</FormFeedback> : ''}
+                    </div>
+                    {errors.privileges !== undefined ? <b className="text-danger">{errors.privileges}</b> : ''}
+                    <FormGroup>
+                      <FieldArray
+                        name="privileges"
+                        render={arrayHelpers => (
+                          <>
+                            <CollapsePrivilages 
+                              options={options} 
+                              setFieldValue={setFieldValue} 
+                              />
+                          </>
+                        )} />
+                        
+                    </FormGroup>
+                  </div>
                 </Form>
 
-              )}
+              )
+            }
+            }
 
           </Formik>
 
-          <div className='form-group col-md-4 col-lg-5 pl-5 grs'>
-            <div className='mb-4'>
-              <label>Pengaturan Hak Istimewa</label>
-              <Input type="select">
-                <option key="0" value="0">Pilih Hak</option>
-                {this.state.roles.map(role => <option key={role.id} value={role.id}>{role.text}</option>)}
-              </Input>
-              <CollapsePrivilages privilages={this.state.privilages} />
-            </div>
-          </div>
+
         </Row>
       </Main>
     )
