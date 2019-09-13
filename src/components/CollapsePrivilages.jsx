@@ -2,8 +2,8 @@ import React from 'react'
 import { CollapsePrivilagesItem } from 'components'
 
 export function CollapsePrivilages(props) {
-	const { setFieldValue, options  } = props
-
+	const { options } = props
+	
 	return (
 		<ul className="flex-column privilage-item">
 			{options.map((opsi, index) => {
@@ -11,8 +11,7 @@ export function CollapsePrivilages(props) {
 					<CollapsePrivilagesItem 
 					key={index} 
 					name={opsi.name} 
-					list={opsi.privileges}
-					setFieldValue={setFieldValue}
+					list={opsi.privileges}					
 					/>
 				)
 			}

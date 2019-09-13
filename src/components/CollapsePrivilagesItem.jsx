@@ -14,7 +14,7 @@ export class CollapsePrivilagesItem extends Component {
 	}
 
 	render() {
-		const { name, list, checkListItem, setFieldValue } = this.props
+		const { name, list, checkListItem } = this.props
 		const { collapse } = this.state
 		return (
 			<li>
@@ -29,7 +29,6 @@ export class CollapsePrivilagesItem extends Component {
 									index={index}
 									key={index}
 									label={item.name}
-									setFieldValue={setFieldValue}
 								/>
 							)
 						}

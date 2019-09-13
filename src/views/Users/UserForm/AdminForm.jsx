@@ -153,8 +153,7 @@ class AdminForm extends Component {
             {({
               errors,
               handleSubmit,
-              isSubmitting,
-              setFieldValue
+              isSubmitting
             }) => {
               
               return(
@@ -243,10 +242,7 @@ class AdminForm extends Component {
                         name="privileges"
                         render={arrayHelpers => (
                           <>
-                            <CollapsePrivilages 
-                              options={options} 
-                              setFieldValue={setFieldValue} 
-                              />
+                            <CollapsePrivilages options={options} />
                           </>
                         )} />
                         
