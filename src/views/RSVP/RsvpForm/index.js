@@ -125,13 +125,13 @@ class RsvpForm extends Component {
   }
 
   render () {
-    const { rsvp, previewImgUrl, selectedCityId, selectedSubdistrictId, rejectModalIsOpen } = this.state
+    const { rsvp, previewImgUrl, selectedCityId, selectedSubdistrictId, rejectModalIsOpen, isLoading } = this.state
     const isGeneralDiscussion = rsvp.id===1
     const { editMode } = this.props.match.params
     return (
       <>
-        <Main title='Form RSVP' back>
-          <div className='row pl-3'>
+        <Main title='Form RSVP' back isLoading={isLoading}>
+          <Row className='pl-3'>
             <Formik
               enableReinitialize
               validationSchema={rsvp.id?UpdateRsvpSchema:AddRsvpSchema}
@@ -274,7 +274,7 @@ class RsvpForm extends Component {
                 </>
               )}
             </Formik>
-          </div>
+          </Row>
         </Main>
         {editMode==='approval' &&
           <RejectionModal
