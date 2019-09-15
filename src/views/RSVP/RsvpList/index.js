@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Button, FormFeedback, FormGroup, Input, Label, Modal, ModalHeader, ModalBody } from 'reactstrap'
-import { Formik, Form, Field, } from 'formik'
 import { AddNewActionButton, PaginationLink, RejectionModal, Tool } from 'components'
 import { Active, Pending, Archived } from './tables'
 import { updateRsvpApi, listRsvpApi } from 'services/api'
