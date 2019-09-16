@@ -3,7 +3,7 @@ import { Label, Input } from 'reactstrap'
 import { Field, connect } from 'formik'
 
 export const CheckboxPrivilages = connect(function (props) {
-	const { index, value, label } = props
+	const { value, label } = props
 
 	return (
 		<li>

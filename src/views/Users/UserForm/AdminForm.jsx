@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, FormGroup, Input, Button, FormFeedback, Collapse } from 'reactstrap'
+import { Row, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
 import { Main, CollapsePrivilages } from 'components'
 import {
   detailsUserApi,

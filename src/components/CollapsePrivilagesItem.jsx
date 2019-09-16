@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { CheckboxPrivilages } from 'components'
-import { Collapse, Button } from 'reactstrap'
+import { Collapse } from 'reactstrap'
 
 export class CollapsePrivilagesItem extends Component {
 	constructor(props) {
@@ -14,7 +14,7 @@ export class CollapsePrivilagesItem extends Component {
 	}
 
 	render() {
-		const { name, list, checkListItem } = this.props
+		const { name, list } = this.props
 		const { collapse } = this.state
 		return (
 			<li>

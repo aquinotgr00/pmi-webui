@@ -89,7 +89,7 @@ export default class CampaignView extends Component {
   }
 
   render() {
-    const { type_id, title, description, image, image_url, ranges_donation: rangeDonation, amount_goal: goal, amount_real: realAmount, fundraising } = this.state.campaign
+    const { type_id, title, description, image_url, ranges_donation: rangeDonation, amount_goal: goal, amount_real: realAmount, fundraising } = this.state.campaign
     const list_donators = this.state.donators || {}
 
     let donationType = '-'
@@ -198,7 +198,7 @@ export default class CampaignView extends Component {
         </div>
         <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
           <ModalBody className="mb-0 p-0">
-            <img src={image_url} style={{ width: '100%' }} />
+            <img src={image_url} style={{ width: '100%' }} alt="zoom in"/>
           </ModalBody>
           <ModalFooter>
             <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}

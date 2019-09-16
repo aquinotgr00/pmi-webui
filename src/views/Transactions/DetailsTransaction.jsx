@@ -186,7 +186,7 @@ export default class DetailsTransaction extends Component {
             <Col>
               <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
                 <ModalBody className="mb-0 p-0">
-                  <img src={image_url} style={{ width: '100%' }} />
+                  <img src={image_url} style={{ width: '100%' }} alt="zoom in" />
                 </ModalBody>
                 <ModalFooter>
                   <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}
