@@ -18,10 +18,10 @@ export class CollapsePrivilagesItem extends Component {
 		const { collapse } = this.state
 		return (
 			<li>
-				<button type="button" aria-expanded={collapse} className="btn-none side" onClick={this.toggle} >{name}</button>
+				<button type="button" aria-expanded={collapse} className="btn-privilege side" onClick={this.toggle} >{name}</button>
 				<hr />
 				<Collapse isOpen={collapse} className="collapse list-privilage">
-					<ul className="flex-column privilage-item">
+					<ul className="flex-column privilage-item ">
 						{list.map((item, index) => {
 							return (
 								<CheckboxPrivilages

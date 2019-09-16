@@ -74,6 +74,8 @@ export default class DetailsTransaction extends Component {
       donation_items
     } = data
 
+    console.log(donation_items)
+
     const { get_type } = campaign
 
     const details = [

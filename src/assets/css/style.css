@@ -885,3 +885,13 @@ button[aria-expanded="true"]>.fa-arrow{
     width: 1px;
     height: 1px;
 }
+
+.btn-privilege{
+    background-color: transparent;
+    text-decoration: none;
+    color: inherit;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	outline: inherit;
+}
