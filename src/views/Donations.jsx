@@ -131,6 +131,7 @@ class Donations extends React.Component {
 			email: '',
 			phone: '',
 			amount: 0,
+			fundraising: (itemDonation)? 0 : 1
 		}
 		if (this.state.redirect) {
 			const url = '/admin/transactions/' + this.props.match.params.donation
@@ -143,8 +144,7 @@ class Donations extends React.Component {
 					initialValues={initialValues}
 					enableReinitialize={true}
 					validationSchema={DonationSchema}
-					onSubmit={(values, { setSubmitting, resetForm }) => {
-						
+					onSubmit={(values, { setSubmitting, resetForm }) => {						
 						this.handleStoreDonation(values)
 						setSubmitting(false)
 						resetForm(initialValues)
@@ -275,6 +275,11 @@ class Donations extends React.Component {
 										</div>
 									</Col>
 								</Row>
+								<Field
+									name="fundraising"
+									render={({ field }) => (
+									<Input {...field} type='hidden' invalid={errors.fundraising !== undefined} />
+								)} />
 								<Button innerRef={this.submitButton} type='submit' disabled={isSubmitting} style={{ display: 'none' }}></Button>
 							</Form>
 						)}

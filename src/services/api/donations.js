@@ -35,6 +35,7 @@ export function storeApi (data) {
   formData.append('email', data.email)
   formData.append('phone', data.phone)
   formData.append('image_file', data.image_file)
+  formData.append('fundraising', data.fundraising)
   if (typeof data.donation_items !== 'undefined') {
     data.donation_items.map((item, key) => {
       return formData.append('donation_items[' + key + ']', JSON.stringify(item))

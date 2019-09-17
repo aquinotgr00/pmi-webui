@@ -175,7 +175,7 @@ export default class DashboardVolunteer extends Component {
                     />
                 </Card>
                 <form action="#" method="get" id="form-download-pdf" >
-                    <button type="submit" formtarget="_blank"></button>
+                    <button type="submit" formTarget="_blank"></button>
                 </form> 
             </Main>
         )

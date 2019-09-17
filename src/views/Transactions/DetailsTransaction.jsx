@@ -38,9 +38,9 @@ export default class DetailsTransaction extends Component {
       const response = await updateTransaction(id, values)
       const { data, status } = response.data
       if (status === 'success') {
-        const { campaign, donator } = data
-        this.setState({ data, campaign, donator })
-
+        //const { campaign, donator } = data
+        //this.setState({ data, campaign, donator })
+        this.loadDetailsTransaction(id)
         let close = document.getElementById('btn-cancel')
         if (typeof close !== 'undefined') {
           close.click()
@@ -73,8 +73,6 @@ export default class DetailsTransaction extends Component {
       pick_method_text,
       donation_items
     } = data
-
-    console.log(donation_items)
 
     const { get_type } = campaign
 
