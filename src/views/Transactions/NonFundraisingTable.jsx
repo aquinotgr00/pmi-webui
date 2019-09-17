@@ -32,22 +32,23 @@ export function NonFundraisingTable(props) {
 						</td>
 						<td>Dijemput</td>
 						<td>
-							{donation_items.map((item, index) => {
+
+							{(donation_items) && donation_items.map((item, index) => {
 								return (
 									<p key={index}> {item.type} </p>
 								)
 							})}
 						</td>
 						<td>
-							{donation_items.map((item, index) => {
+							{(donation_items) && donation_items.map((item, index) => {
 								return (
 									<p key={index}>{item.name} </p>
 								)
 							})}
 						</td>
 						<td>
-							
-							{donation_items.map((item, index) => {
+
+							{(donation_items) && donation_items.map((item, index) => {
 								amount += parseInt(item.amount)
 								return (
 									<p key={index}>{item.amount} </p>
