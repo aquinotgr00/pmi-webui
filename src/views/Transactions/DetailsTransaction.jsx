@@ -38,9 +38,9 @@ export default class DetailsTransaction extends Component {
       const response = await updateTransaction(id, values)
       const { data, status } = response.data
       if (status === 'success') {
-        const { campaign, donator } = data
-        this.setState({ data, campaign, donator })
-
+        //const { campaign, donator } = data
+        //this.setState({ data, campaign, donator })
+        this.loadDetailsTransaction(id)
         let close = document.getElementById('btn-cancel')
         if (typeof close !== 'undefined') {
           close.click()
@@ -186,7 +186,7 @@ export default class DetailsTransaction extends Component {
             <Col>
               <Modal className="modal-lg" isOpen={this.state.isOpen} toggle={this.toggleImage}>
                 <ModalBody className="mb-0 p-0">
-                  <img src={image_url} style={{ width: '100%' }} />
+                  <img src={image_url} style={{ width: '100%' }} alt="zoom in" />
                 </ModalBody>
                 <ModalFooter>
                   <Button color='secondary' onClick={this.toggleImage}>Tutup</Button>{' '}

@@ -2,13 +2,19 @@ import * as Yup from 'yup'
 
 export default Yup.object().shape({
   campaign_id: Yup.string()
-    .required('Required'),
+    .required('Judul harus dipilih'),
   name: Yup.string()
-    .required('Required'),
+    .required('Nama harus diisi'),
   email: Yup.string()
     .email()
-    .required('Required'),
+    .required('E-mail harus diisi'),
   phone: Yup.number()
-    .required('Required'),
+    .required('No. Telephone harus diisi'),
+  fundraising: Yup.number(),
   amount: Yup.number()
+    .when('fundraising', {
+      is: 1,
+      then: Yup.number().min(10000),
+      otherwise: Yup.number().nullable(),
+    })
 })

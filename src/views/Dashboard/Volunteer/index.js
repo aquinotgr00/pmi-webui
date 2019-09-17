@@ -79,9 +79,9 @@ export default class DashboardVolunteer extends Component {
             const { status } = response.data
             if (status === "success") {
                 const { url } = response.data.data
-                let btn_download = document.getElementById('btn-download-pdf')
-                btn_download.setAttribute('href', url)
-                btn_download.click()                
+                let form_download = document.getElementById('form-download-pdf')
+                form_download.setAttribute('action', url)
+                form_download.submit()                
             }
         } catch (error) { }
     }
@@ -174,7 +174,9 @@ export default class DashboardVolunteer extends Component {
                         toggleModal={this.toggleModal}
                     />
                 </Card>
-                <a href="#" target='_blank' id="btn-download-pdf" alt="download"></a>
+                <form action="#" method="get" id="form-download-pdf" >
+                    <button type="submit" formTarget="_blank"></button>
+                </form> 
             </Main>
         )
     }

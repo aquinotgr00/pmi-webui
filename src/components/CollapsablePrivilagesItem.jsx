@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { CheckboxPrivilages } from 'components'
-import { Collapse, Button } from 'reactstrap'
+import { CheckboxPrivileges } from 'components'
+import { Collapse } from 'reactstrap'
 
-export class CollapsePrivilagesItem extends Component {
+export class CollapsablePrivilagesItem extends Component {
 	constructor(props) {
 		super(props)
 		this.toggle = this.toggle.bind(this)
@@ -14,22 +14,21 @@ export class CollapsePrivilagesItem extends Component {
 	}
 
 	render() {
-		const { name, list, checkListItem, setFieldValue } = this.props
+		const { name, list } = this.props
 		const { collapse } = this.state
 		return (
 			<li>
-				<button type="button" aria-expanded={collapse} className="btn-none side" onClick={this.toggle} >{name}</button>
+				<button type="button" aria-expanded={collapse} className="btn-privilege side" onClick={this.toggle} >{name}</button>
 				<hr />
 				<Collapse isOpen={collapse} className="collapse list-privilage">
-					<ul className="flex-column privilage-item">
+					<ul className="flex-column privilage-item ">
 						{list.map((item, index) => {
 							return (
-								<CheckboxPrivilages
+								<CheckboxPrivileges
 									value={item.id}
 									index={index}
 									key={index}
 									label={item.name}
-									setFieldValue={setFieldValue}
 								/>
 							)
 						}

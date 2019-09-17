@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Row, FormGroup, Input, Button, FormFeedback, Collapse } from 'reactstrap'
-import { Main, CollapsePrivilages } from 'components'
+import { Row, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
+import { Main, CollapsablePrivilages } from 'components'
 import {
   detailsUserApi,
   storeUserApi,
@@ -153,8 +153,7 @@ class AdminForm extends Component {
             {({
               errors,
               handleSubmit,
-              isSubmitting,
-              setFieldValue
+              isSubmitting
             }) => {
               
               return(
@@ -243,10 +242,7 @@ class AdminForm extends Component {
                         name="privileges"
                         render={arrayHelpers => (
                           <>
-                            <CollapsePrivilages 
-                              options={options} 
-                              setFieldValue={setFieldValue} 
-                              />
+                            <CollapsablePrivilages options={options} />
                           </>
                         )} />
                         

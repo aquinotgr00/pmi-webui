@@ -4,7 +4,7 @@ import { Table } from 'reactstrap'
 export function NonFundraisingTable(props) {
 	const { pick_method_text, donation_items, data } = props
 	const { image, title, get_type } = data
-
+	let amount = 0;
 	return (
 		<>
 			<Table>
@@ -30,28 +30,37 @@ export function NonFundraisingTable(props) {
 						<td>
 							<p>{(get_type) ? get_type.name : ''}</p>
 						</td>
-						<td>{pick_method_text}</td>
+						<td>Dijemput</td>
 						<td>
-							{donation_items.map((item, index) => {
+
+							{(donation_items) && donation_items.map((item, index) => {
 								return (
 									<p key={index}> {item.type} </p>
 								)
 							})}
 						</td>
 						<td>
-							{donation_items.map((item, index) => {
+							{(donation_items) && donation_items.map((item, index) => {
 								return (
 									<p key={index}>{item.name} </p>
 								)
 							})}
 						</td>
-						<td>{props.amount}</td>
+						<td>
+
+							{(donation_items) && donation_items.map((item, index) => {
+								amount += parseInt(item.amount)
+								return (
+									<p key={index}>{item.amount} </p>
+								)
+							})}
+						</td>
 					</tr>
 					<tr>
 						<th><h1>Total :</h1></th>
 						<td colSpan="5"></td>
 						<td>
-							<h1>{props.amount}</h1>
+							<h1>{amount}</h1>
 						</td>
 					</tr>
 				</tbody>
