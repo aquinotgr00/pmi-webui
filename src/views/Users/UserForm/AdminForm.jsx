@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Row, FormGroup, Input, Button, FormFeedback } from 'reactstrap'
-import { Main, CollapsePrivilages } from 'components'
+import { Main, CollapsablePrivilages } from 'components'
 import {
   detailsUserApi,
   storeUserApi,
@@ -242,7 +242,7 @@ class AdminForm extends Component {
                         name="privileges"
                         render={arrayHelpers => (
                           <>
-                            <CollapsePrivilages options={options} />
+                            <CollapsablePrivilages options={options} />
                           </>
                         )} />
                         

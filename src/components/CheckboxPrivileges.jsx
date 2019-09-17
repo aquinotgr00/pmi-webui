@@ -2,7 +2,7 @@ import React from 'react'
 import { Label, Input } from 'reactstrap'
 import { Field, connect } from 'formik'
 
-export const CheckboxPrivilages = connect(function (props) {
+export const CheckboxPrivileges = connect(function (props) {
 	const { value, label } = props
 
 	return (

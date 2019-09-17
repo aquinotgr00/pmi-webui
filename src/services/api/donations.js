@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { authRequest } from 'utils/network'
+import { object } from 'yup';
 
 const CancelToken = axios.CancelToken
 let cancel
@@ -30,15 +31,23 @@ export function storeApi (data) {
   const formData = new FormData()
   formData.append('name', data.name)
   formData.append('campaign_id', data.campaign_id)
-  formData.append('amount', data.amount)
+  
+  if(data.amount) {
+    formData.append('amount', data.amount)
+  }
+  
   formData.append('category', data.category)
   formData.append('email', data.email)
   formData.append('phone', data.phone)
   formData.append('image_file', data.image_file)
   formData.append('fundraising', data.fundraising)
+  
   if (typeof data.donation_items !== 'undefined') {
     data.donation_items.map((item, key) => {
-      return formData.append('donation_items[' + key + ']', JSON.stringify(item))
+      let keys = Object.keys(item)
+      Object.values(item).map((val,index) => {
+        return formData.append('donation_items[' + key + ']['+keys[index]+']', val)
+      })
     })
   }
   return authRequest().post('/donations', formData)

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { CheckboxPrivilages } from 'components'
+import { CheckboxPrivileges } from 'components'
 import { Collapse } from 'reactstrap'
 
-export class CollapsePrivilagesItem extends Component {
+export class CollapsablePrivilagesItem extends Component {
 	constructor(props) {
 		super(props)
 		this.toggle = this.toggle.bind(this)
@@ -24,7 +24,7 @@ export class CollapsePrivilagesItem extends Component {
 					<ul className="flex-column privilage-item ">
 						{list.map((item, index) => {
 							return (
-								<CheckboxPrivilages
+								<CheckboxPrivileges
 									value={item.id}
 									index={index}
 									key={index}

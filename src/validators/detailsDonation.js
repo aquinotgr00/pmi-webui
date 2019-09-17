@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 
 export default Yup.object().shape({
   manual_payment: Yup.boolean()
-    .required('Metode Pembayaran wajib dipilih'),
+    .required('Required'),
   status: Yup.string()
-    .required('Status wajib dipilih')
+    .required('Required')
 })

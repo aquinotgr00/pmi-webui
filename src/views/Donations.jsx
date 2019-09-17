@@ -130,7 +130,7 @@ class Donations extends React.Component {
 			name: '',
 			email: '',
 			phone: '',
-			amount: 0,
+			amount: (itemDonation)? null : 0,
 			fundraising: (itemDonation)? 0 : 1
 		}
 		if (this.state.redirect) {
@@ -144,7 +144,7 @@ class Donations extends React.Component {
 					initialValues={initialValues}
 					enableReinitialize={true}
 					validationSchema={DonationSchema}
-					onSubmit={(values, { setSubmitting, resetForm }) => {						
+					onSubmit={(values, { setSubmitting, resetForm }) => {				
 						this.handleStoreDonation(values)
 						setSubmitting(false)
 						resetForm(initialValues)

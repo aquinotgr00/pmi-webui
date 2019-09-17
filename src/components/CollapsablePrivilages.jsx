@@ -1,14 +1,14 @@
 import React from 'react'
-import { CollapsePrivilagesItem } from 'components'
+import { CollapsablePrivilagesItem } from 'components'
 
-export function CollapsePrivilages(props) {
+export function CollapsablePrivilages(props) {
 	const { options } = props
 	
 	return (
 		<ul className="flex-column privilage-item">
 			{options.map((opsi, index) => {
 				return(
-					<CollapsePrivilagesItem 
+					<CollapsablePrivilagesItem 
 					key={index} 
 					name={opsi.name} 
 					list={opsi.privileges}					
