@@ -23,7 +23,8 @@ export default class DashboardVolunteer extends Component {
             shown: {},
             panelNumber: null,
             membershipName: '',
-            openModal: false
+            openModal: false,
+            isLoading:false
         }
         this.loadAmountVolunteer = this.loadAmountVolunteer.bind(this)
         this.toggleCollapse = this.toggleCollapse.bind(this)
@@ -109,6 +110,8 @@ export default class DashboardVolunteer extends Component {
     }
 
     async loadVolunteer(page = 1) {
+        this.setState({ isLoading: true })
+        
         try {
             const volunteerParams = new URLSearchParams()
             volunteerParams.append('page', page)
@@ -119,7 +122,9 @@ export default class DashboardVolunteer extends Component {
                 const { current_page: currentPage, last_page: numberOfPages, data: volunteers, from, to, total: numberOfEntries } = data
                 this.setState({ isLoading: false, volunteers, currentPage, numberOfPages, from, to, numberOfEntries })
             }
-        } catch (error) { }
+        } catch (error) { 
+            this.setState({ isLoading: false })
+        }
     }
 
     render() {
@@ -138,11 +143,12 @@ export default class DashboardVolunteer extends Component {
             to,
             numberOfEntries,
             openModal,
-            volunteer
+            volunteer,
+            isLoading
         } = this.state
 
         return (
-            <Main title={title}>
+            <Main title={title} isLoading={isLoading}>
                 <MembershipCard
                     membership={membership}
                     collapse={collapse}

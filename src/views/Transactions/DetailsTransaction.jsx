@@ -14,6 +14,7 @@ export default class DetailsTransaction extends Component {
       campaign: [],
       donator: [],
       isOpen: false,
+      isLoading: false
     }
     this.toggleImage = this.toggleImage.bind(this)
     this.updateDonation = this.updateDonation.bind(this)
@@ -25,15 +26,23 @@ export default class DetailsTransaction extends Component {
   }
 
   async loadDetailsTransaction(transactionId) {
+    this.setState({ isLoading:true })
+
     const response = await showTransaction(transactionId)
     const { data, status } = response.data
     if (status === 'success') {
+      
       const { campaign, donator } = data
       this.setState({ data, campaign, donator })
+      this.setState({ isLoading:false })
+    }else{
+      this.setState({ isLoading:false })
     }
   }
 
   async updateDonation(id, values) {
+    this.setState({ isLoading:true })
+
     try {
       const response = await updateTransaction(id, values)
       const { data, status } = response.data
@@ -45,9 +54,11 @@ export default class DetailsTransaction extends Component {
         if (typeof close !== 'undefined') {
           close.click()
         }
-
+        this.setState({ isLoading:false })
       }
-    } catch (e) { }
+    } catch (e) { 
+      this.setState({ isLoading:false })
+    }
   }
 
   toggleImage() {
@@ -57,7 +68,7 @@ export default class DetailsTransaction extends Component {
   }
 
   render() {
-    const { campaign, donator, data } = this.state
+    const { campaign, donator, data, isLoading } = this.state
     const {
       id,
       name,
@@ -124,7 +135,7 @@ export default class DetailsTransaction extends Component {
     ]
     return (
       <>
-        <Main title={invoice_id}>
+        <Main title={invoice_id} isLoading={isLoading}>
           <Row className="mt-4 mb-5">
             {details.map((detail, index) => {
               return (

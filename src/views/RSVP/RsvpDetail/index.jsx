@@ -54,7 +54,7 @@ class RsvpDetail extends Component {
   render() {
     const { viewMode } = this.props.match.params
     const { isLoading, rsvp } = this.state
-    console.log(rsvp)
+    
     return (
       <Main title={rsvp.title} back isLoading={isLoading}>
         <Row className='pl-3'>
@@ -87,7 +87,8 @@ class RsvpDetail extends Component {
               </small>
             </div>
 
-            <Participants />
+            <Participants rsvpId={rsvp.id} />
+            
           </Col>
         </Row>
       </Main>
