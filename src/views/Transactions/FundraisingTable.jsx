@@ -4,7 +4,7 @@ import { formatCurrency } from 'utils/number'
 
 export function FundraisingTable(props) {
 	const { payment_method_text, amount, data } = props
-	const { title, image, get_type } 	= data
+	const { title, image_url, get_type } 	= data
 
 	return (
 		<Table>
@@ -20,7 +20,7 @@ export function FundraisingTable(props) {
 			<tbody>
 				<tr>
 					<th>
-					<img src={image} alt="poster donasi" />
+					<img src={image_url} alt="poster donasi" />
 					</th>
 					<td>{title}</td>
 					<td>{(get_type)? get_type.name : '' }</td>

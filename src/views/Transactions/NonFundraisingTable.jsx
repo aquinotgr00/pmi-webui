@@ -3,7 +3,7 @@ import { Table } from 'reactstrap'
 
 export function NonFundraisingTable(props) {
 	const { pick_method_text, donation_items, data } = props
-	const { image, title, get_type } = data
+	const { image_url, title, get_type } = data
 	let amount = 0;
 	return (
 		<>
@@ -22,7 +22,7 @@ export function NonFundraisingTable(props) {
 				<tbody>
 					<tr>
 						<th>
-							<img src={image} alt="poster donasi" />
+							<img src={image_url} alt="poster donasi" />
 						</th>
 						<td>
 							<p>{title}</p>
