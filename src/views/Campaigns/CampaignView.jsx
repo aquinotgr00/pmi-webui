@@ -181,10 +181,10 @@ export default class CampaignView extends Component {
                 <img className='img-fluid img-thumbnail img-featured-size' src={image_url} alt='' />
                 <div className='overlay btn-img'>
                   <span>
-                    <button type="button" onClick={this.toggleImage} className='btn-none btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
+                    <button type="button" onClick={this.toggleImage} className='btn btn-table circle-table view-img mr-2' data-toggle='tooltip' data-placement='top' title='' data-original-title='Lihat Gambar' />
                   </span>
                   <span data-toggle='modal' role='button' data-target='#ModalMediaLibrary'>
-                    <button type="button" className='btn-none btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
+                    <button type="button" className='btn btn-table circle-table edit-table' data-toggle='tooltip' data-placement='top' title='' data-original-title='Ubah Gambar' />
                   </span>
                 </div>
               </div>

@@ -14,7 +14,7 @@ export class CollapsablePrivilagesItem extends Component {
 	}
 
 	render() {
-		const { name, list } = this.props
+		const { name, list, handleCheckbox } = this.props
 		const { collapse } = this.state
 		return (
 			<li>
@@ -23,12 +23,15 @@ export class CollapsablePrivilagesItem extends Component {
 				<Collapse isOpen={collapse} className="collapse list-privilage">
 					<ul className="flex-column privilage-item ">
 						{list.map((item, index) => {
+							
 							return (
 								<CheckboxPrivileges
 									value={item.id}
 									index={index}
 									key={index}
 									label={item.name}
+									privilege_id={item.privilege_id}
+									handleCheckbox={handleCheckbox}
 								/>
 							)
 						}

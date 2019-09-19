@@ -26,6 +26,7 @@ class Donations extends React.Component {
 			redirect: false,
 			typeDonate: null,
 			previewImgUrl: require('assets/images/image-plus.svg'),
+			isLoading: false
 		}
 
 		this.uploadImage  = React.createRef()
@@ -108,12 +109,16 @@ class Donations extends React.Component {
 	}
 
 	async handleStoreDonation(value) {
-		value.category = 1
+		this.setState({ isLoading:true })
+
+		value.category 		= 1
 		const storeResponse = await storeApi(value)
-		const { status } = storeResponse.data
+		const { status } 	= storeResponse.data
+
 		if (status === 'success') {
-			this.setState({ redirect: true })
+			this.setState({ redirect: true, isLoading: false })
 		} else {
+			this.setState({ isLoading: false })
 			alert('oops, something wrong.')
 		}
 	}
@@ -122,7 +127,7 @@ class Donations extends React.Component {
 		const { donation } = this.props.match.params
 		const bulanDana = donation === 'bulan-dana'
 		const itemDonation = donation === 'donasi-barang'
-		const { previewImgUrl } = this.state
+		const { previewImgUrl, isLoading } = this.state
 
 		const initialValues = {
 			category: '',
@@ -139,7 +144,7 @@ class Donations extends React.Component {
 		}
 
 		return (
-			<Main title={'Form ' + ucwords(donation.split('-').join(' '))}>
+			<Main title={'Form ' + ucwords(donation.split('-').join(' '))} isLoading={isLoading}>
 				<Formik
 					initialValues={initialValues}
 					enableReinitialize={true}
