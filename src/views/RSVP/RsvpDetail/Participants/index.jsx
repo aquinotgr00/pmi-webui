@@ -1,36 +1,53 @@
 import React, { Component } from 'react'
+import { PaginationLink } from 'components/PaginationLink'
 
 export default class index extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      currentPage: 1,
+      numberOfPages: 3,
+      from: 1,
+      to: 5,
+      numberOfEntries: 24,
+    }
+
+    this.goToPage = this.goToPage.bind(this)
+  }
+
+  componentDidMount() {
+    this.loadParticipants(1)
+  }
+
+  loadParticipants(page) {
+
+  }
+  
+  goToPage (page) {
+    this.loadParticipants(page)
+  }
+  
   render() {
+    const { currentPage, numberOfPages, from, to, numberOfEntries } = this.state
     return (
       <div className='user-group'>
         <div className='header-user'>
           <label className='mr-md-auto align-self-stretch'>Anggota Grup</label>
-          <a href='#' className='user-a' data-toggle='modal' data-target='#modalAnggota'>Tambah Anggota +</a>
+          {this.props.ableToAdd && 
+            <a href='#' className='user-a' data-toggle='modal' data-target='#modalAnggota'>Tambah Anggota +</a>
+          }
         </div>
         <hr />
 
-        <div className='row'>
-          <div className='col col-xs-4 pgntn'>Showing 1 to 5 of 24 enteries</div>
-            <div className='col col-xs-8 pgntn'>
-              <ul className='pagination hidden-xs float-right'>
-                <li className='page-item'>
-                  <a className='page-link' href='#' aria-label='Previous'>
-                    <span aria-hidden='true'>«</span>
-                    <span className='sr-only'>Previous</span>
-                  </a>
-                </li>
-                <li className='page-item'><a className='page-link' href='#'>1</a></li>
-                <li className='page-item'>
-                  <a className='page-link' href='#' aria-label='Next'>
-                    <span aria-hidden='true'>»</span>
-                    <span className='sr-only'>Next</span>
-                  </a>
-                </li>
-                <li className='page-item'>of 3</li>
-              </ul>
-            </div>
-        </div>
+        <PaginationLink
+          rowFrom={from}
+          rowTo={to}
+          numberOfEntries={numberOfEntries}
+          currentPage={currentPage}
+          numberOfPages={numberOfPages}
+          onPageChange={this.goToPage}
+        />
 
         <div className='table-responsive'>
           <table className='table table-hover'>
