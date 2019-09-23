@@ -1,9 +1,12 @@
 import * as Yup from 'yup'
+import localeID from './setLocaleID.js'
+
+Yup.setLocale(localeID)
 
 export default Yup.object().shape({
     subdistrict_id: Yup.number()
-        .positive('Kecamatan harus dipilih')
-        .required('Kecamatan harus dipilih'),
+        .positive()
+        .required(),
     name: Yup.string()
-        .required('Nama harus diisi')
+        .required()
 })

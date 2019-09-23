@@ -1,10 +1,13 @@
 import * as Yup from 'yup'
+import localeID from './setLocaleID.js'
+
+Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   title: Yup.string()
-    .required('Judul harus diisi'),
+    .required(),
   description: Yup.string()
-    .required('Deskripsi harus diisi'),
+    .required(),
   image: Yup.mixed()
-    .required('Harap upload gambar')
+    .required()
 })

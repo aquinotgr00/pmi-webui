@@ -1,26 +1,29 @@
 import * as Yup from 'yup'
+import localeID from './setLocaleID.js'
+
+Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   name: Yup.string()
-    .required('Required'),
+    .required(),
   birthplace: Yup.string()
-    .required('Required'),
+    .required(),
   dob: Yup.string()
-    .required('Required'),
+    .required(),
   gender:  Yup.string()
-    .required('Required'),
+    .required(),
   religion:  Yup.string()
-    .required('Required'),
+    .required(),
   city:  Yup.string()
-    .required('Required'),
+    .required(),
   subdistrict:  Yup.string()
-    .required('Required'),
+    .required(),
   subdivision:  Yup.string()
-    .required('Required'),
+    .required(),
   unit:  Yup.string()
-    .required('Required'),
+    .required(),
   type:  Yup.string()
-    .required('Required'),
+    .required(),
   sub_type:  Yup.string()
-    .required('Required'),
+    .required(),
 })

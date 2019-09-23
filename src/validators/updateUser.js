@@ -1,13 +1,16 @@
 import * as Yup from 'yup'
+import localeID from './setLocaleID.js'
+
+Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   name: Yup.string()
-    .required('Required'),
+    .required(),
   email: Yup.string()
     .email()
-    .required('Required'),
+    .required(),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters'),
+    .min(6),
   password_confirmation:  Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .oneOf([Yup.ref('password'), null])
 })
