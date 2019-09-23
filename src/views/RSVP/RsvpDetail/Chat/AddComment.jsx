@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Input, Label } from 'reactstrap'
+import { Input, Label } from 'reactstrap'
 
 
 export default class AddComment extends Component {
@@ -32,7 +32,7 @@ export default class AddComment extends Component {
           />
           <Label htmlFor='media-input' className='add-img-red my-auto' />
           <div className='input-group input-chat'>
-            <input type='text' className='form-control input-box' placeholder='Tulis Sesuatu' onKeyPress={this.sendMessage} />
+            <Input className='form-control input-box' placeholder='Tulis Sesuatu' onKeyPress={this.sendMessage} />
           </div>
         </div>
       </div>

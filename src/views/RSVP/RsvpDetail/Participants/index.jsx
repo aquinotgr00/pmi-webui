@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Button } from 'reactstrap'
 import { PaginationLink } from 'components/PaginationLink'
 
 export default class index extends Component {
@@ -35,7 +36,7 @@ export default class index extends Component {
         <div className='header-user'>
           <label className='mr-md-auto align-self-stretch'>Anggota Grup</label>
           {this.props.ableToAdd && 
-            <a href='#' className='user-a' data-toggle='modal' data-target='#modalAnggota'>Tambah Anggota +</a>
+            <Button color="link">Tambah Anggota +</Button>
           }
         </div>
         <hr />
