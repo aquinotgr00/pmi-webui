@@ -10,7 +10,7 @@ import {
   detailsRolesApi,
   listadminPrivilegesApi
 } from 'services/api'
-import { Formik, Form, Field, FieldArray } from 'formik'
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
 import { withRouter } from 'react-router-dom'
 import AddUserSchema from 'validators/addUser'
 import UpdateUserSchema from 'validators/updateUser'
@@ -27,7 +27,6 @@ class AdminForm extends Component {
       password: '',
       password_confirmation: '',
       userId: null,
-      privileges: [],
       isLoading: false,
       privileges: [],
       options: [],
@@ -35,15 +34,15 @@ class AdminForm extends Component {
     }
 
     this.handleUpdateUser = this.handleUpdateUser.bind(this)
-    this.handleStoreUser  = this.handleStoreUser.bind(this) 
-    this.loadUser         = this.loadUser.bind(this)
-    this.loadRoles        = this.loadRoles.bind(this)
+    this.handleStoreUser = this.handleStoreUser.bind(this)
+    this.loadUser = this.loadUser.bind(this)
+    this.loadRoles = this.loadRoles.bind(this)
     this.handleChangeRole = this.handleChangeRole.bind(this)
     this.loadPrivilages = this.loadPrivilages.bind(this)
-		this.loadAdminPrivilages = this.loadAdminPrivilages.bind(this)
-		this.handleCheckbox = this.handleCheckbox.bind(this)
-		this.handleCreateOptions = this.handleCreateOptions.bind(this)
-		this.groupBy = this.groupBy.bind(this)
+    this.loadAdminPrivilages = this.loadAdminPrivilages.bind(this)
+    this.handleCheckbox = this.handleCheckbox.bind(this)
+    this.handleCreateOptions = this.handleCreateOptions.bind(this)
+    this.groupBy = this.groupBy.bind(this)
   }
 
   componentDidMount() {
@@ -57,78 +56,79 @@ class AdminForm extends Component {
   }
 
   handleCheckbox(e) {
-		const id = e.target.value
+    const id = e.target.value
     const { privileges } = this.state
-    
-		privileges.find(privilege => privilege.id == id).privilege_id = (e.target.checked) ? id : false
-    
+
+    privileges.find(privilege => privilege.id == id).privilege_id = (e.target.checked) ? id : false
+    console.log(privileges.find(privilege => privilege.id == id))
+
     let options = this.handleCreateOptions(privileges)
-		this.setState({ options })
-	}
+    this.setState({ options })
+  }
 
-	handleCreateOptions(privileges) {
-		let keys = [...new Set(privileges.map(item => item.privilege_category))]
-		const groupped = this.groupBy(privileges, item => item.privilege_category)
-		let options = []
+  handleCreateOptions(privileges) {
+    let keys = [...new Set(privileges.map(item => item.privilege_category))]
+    const groupped = this.groupBy(privileges, item => item.privilege_category)
+    let options = []
 
-		keys.map((value, index) => {
-			options[value] = groupped.get(value)
-		})
+    keys.map((value, index) => {
+      options[value] = groupped.get(value)
+    })
 
-		options = Object.values(options)
+    options = Object.values(options)
 
-		return options
-	}
+    return options
+  }
 
-	groupBy(list, keyGetter) {
-		const map = new Map();
-		list.forEach((item) => {
-			const key = keyGetter(item);
-			const collection = map.get(key);
-			if (!collection) {
-				map.set(key, [item]);
-			} else {
-				collection.push(item);
-			}
-		});
-		return map;
-	}
+  groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+      const key = keyGetter(item);
+      const collection = map.get(key);
+      if (!collection) {
+        map.set(key, [item]);
+      } else {
+        collection.push(item);
+      }
+    });
+    return map;
+  }
 
-	async loadPrivilages(roleId = null) {
+  async loadPrivilages(roleId = null) {
 
-		const privilegeParams = new URLSearchParams()
+    const privilegeParams = new URLSearchParams()
 
-		privilegeParams.append('r_id', roleId)
+    privilegeParams.append('r_id', roleId)
 
-		const response = await listPrivilegesApi(privilegeParams)
-		const { status } = response.data
+    const response = await listPrivilegesApi(privilegeParams)
+    const { status } = response.data
 
-		if (status === 'success') {
-			const { data: privileges } = response.data
-			const options = this.handleCreateOptions(privileges)
-			this.setState({ options, privileges })
-		}
-	}
+    if (status === 'success') {
+      const { data: privileges } = response.data
+      const options = this.handleCreateOptions(privileges)
+      this.setState({ options, privileges })
+    }
+  }
 
-	async loadAdminPrivilages(adminId = null) {
+  async loadAdminPrivilages(adminId = null) {
 
-		const privilegeParams = new URLSearchParams()
+    const privilegeParams = new URLSearchParams()
 
-		privilegeParams.append('a_id', adminId)
+    privilegeParams.append('a_id', adminId)
 
-		const response = await listadminPrivilegesApi(privilegeParams)
-		const { status } = response.data
+    const response = await listadminPrivilegesApi(privilegeParams)
+    const { status } = response.data
 
-		if (status === 'success') {
-			const { data: privileges } = response.data
-			const options = this.handleCreateOptions(privileges)
-			this.setState({ options, privileges })
-		}
-	}
+    if (status === 'success') {
+      const { data: privileges } = response.data
+      const options = this.handleCreateOptions(privileges)
+      this.setState({ options, privileges })
+    }
+  }
 
   async handleChangeRole(e) {
     const role_id = e.target.value
-    
+
   }
 
   async loadUser(userId) {
@@ -219,12 +219,12 @@ class AdminForm extends Component {
     return (
       <Main title={title} isLoading={isLoading}>
         <Row className="pl-3">
-
           <Formik
             enableReinitialize={true}
             initialValues={initialValues}
             validationSchema={this.state.userId > 0 ? UpdateUserSchema : AddUserSchema}
             onSubmit={(values, { setSubmitting }) => {
+              
               if (this.state.userId > 0) {
                 this.handleUpdateUser(this.state.userId, values)
               } else {
@@ -269,7 +269,8 @@ class AdminForm extends Component {
                           />
                         )} />
 
-                      {errors.email !== undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}
+                      {errors.email !== undefined ? <FormFeedback>{errors.email}</FormFeedback> : ''}        
+                          
                     </FormGroup>
 
                     <FormGroup>
@@ -323,10 +324,10 @@ class AdminForm extends Component {
                         )} />
                       {errors.role_id !== undefined ? <FormFeedback>{errors.role_id}</FormFeedback> : ''}
                     </div>
-                    {errors.privileges !== undefined ? <b className="text-danger">{errors.privileges}</b> : ''}
+                    {errors.options !== undefined ? <b className="text-danger">{errors.options}</b> : ''}
                     <FormGroup>
                       <FieldArray
-                        name="privileges"
+                        name="options"
                         render={arrayHelpers => (
                           <>
                             <CollapsablePrivilages options={options} handleCheckbox={this.handleCheckbox} />

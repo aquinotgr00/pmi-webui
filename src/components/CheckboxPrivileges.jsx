@@ -8,14 +8,14 @@ export const CheckboxPrivileges = connect(function (props) {
 		<li>
 			<div className="form-check mb-3">
 				<Field
-					name={`privileges[${value}].privilege_id`}
+					name={`options[${value}].privilege_id`}
 					render={({ field }) => (
 						<Input {...field}
 							type="checkbox"
 							className="form-check-input"
 							value={value}
 							onChange={e => {
-								props.formik.setFieldValue(`privileges[${value}].privilege_id`, e.target.value)
+								props.formik.setFieldValue(`options[${value}].privilege_id`, e.target.value)
 								props.handleCheckbox(e)
 							}}
                             checked={privilege_id}

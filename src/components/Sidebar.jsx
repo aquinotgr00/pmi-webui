@@ -19,12 +19,6 @@ export function Sidebar() {
               <NavItem>
                 <NavLink to='/admin/users/donator'>Donatur</NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink to='/admin/users/volunteer'>Relawan</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to='/admin/users/volunteer-moderation'>Moderasi Relawan</NavLink>
-              </NavItem>
             </UncontrolledCollapse>
           </NavItem>
         </Nav>
@@ -82,7 +76,19 @@ export function Sidebar() {
         <hr />
         <Nav className='flex-column'>
           <NavItem>
-            <NavLink to='/admin/dashboard/volunteer' className='nav-link'>Dashboard Relawan</NavLink>
+            <SubMenu href='#' id='toggler-volunteer' className='side'>Relawan</SubMenu>
+            <UncontrolledCollapse toggler='#toggler-volunteer' tag='ul' className='list-unstyled'>
+            <NavItem>
+                <NavLink to='/admin/dashboard/volunteer'>Dashboard</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/users/volunteer'>List Relawan</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to='/admin/users/volunteer-moderation'>Moderasi Relawan</NavLink>
+              </NavItem>
+            </UncontrolledCollapse>
+
             <SubMenu href='#' id='toggler-rsvp' className='side'>RSVP</SubMenu>
 
             <UncontrolledCollapse toggler='#toggler-rsvp' tag='ul' className='list-unstyled'>

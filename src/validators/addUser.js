@@ -1,20 +1,23 @@
 import * as Yup from 'yup'
+import localeID from './setLocaleID.js'
+
+Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   name: Yup.string()
-    .required('Required'),
+    .required(),
   email: Yup.string()
     .email()
-    .required('Required'),
+    .required(),
   role_id: Yup.string()
-    .required('Required'),
-  privileges: Yup.array()      
-      .required('Must have privileges')
-      .min(1, 'Minimum of 1 privilege'),
+    .required(),
+  options: Yup.array()      
+      .required()
+      .min(1),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(6)
+    .required(),
   password_confirmation:  Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required')
+    .oneOf([Yup.ref('password'), null])
+    .required()
 })
