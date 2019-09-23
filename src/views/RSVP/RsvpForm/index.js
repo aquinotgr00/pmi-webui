@@ -266,13 +266,14 @@ class RsvpForm extends Component {
                       <div className='invalid-feedback'>
                         {connect(function (props) {
                           const error = getIn(props.formik.errors, props.name)
-                          return error.image_file || null
+                          return error.image || null
                         })()}
                       </div>
                     </div>
                   </div>
                 </>
-              )}
+              )
+              }
             </Formik>
           </Row>
         </Main>

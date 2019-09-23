@@ -1,15 +1,18 @@
 import * as Yup from 'yup'
+import localeID from './setLocaleID.js'
+
+Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   campaign_id: Yup.string()
-    .required('Judul harus dipilih'),
+    .required(),
   name: Yup.string()
-    .required('Nama harus diisi'),
+    .required(),
   email: Yup.string()
     .email()
-    .required('E-mail harus diisi'),
+    .required(),
   phone: Yup.number()
-    .required('No. Telephone harus diisi'),
+    .required(),
   fundraising: Yup.number(),
   amount: Yup.number()
     .when('fundraising', {

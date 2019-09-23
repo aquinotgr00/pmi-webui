@@ -54,6 +54,7 @@ class RsvpDetail extends Component {
   render() {
     const { viewMode } = this.props.match.params
     const { isLoading, rsvp } = this.state
+    
     return (
       <Main title={rsvp.title} back isLoading={isLoading}>
         <Row className='pl-3'>
@@ -86,7 +87,8 @@ class RsvpDetail extends Component {
               </small>
             </div>
 
-            { rsvp.id && <Participants ableToAdd={rsvp.id!==1 && viewMode!=='archive'} /> }
+            { rsvp.id && <Participants ableToAdd={rsvp.id!==1 && viewMode!=='archive'} rsvpId={rsvp.id} /> }
+            
           </Col>
         </Row>
       </Main>
