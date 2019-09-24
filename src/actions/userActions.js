@@ -42,11 +42,11 @@ export function logout () {
     dispatch({
       type: 'LOGOUT_REQUEST'
     })
-
-    const logoutResponse = await logoutApi()
-    const { status } = logoutResponse.data
-    console.log(status)
-    if (status === 'success') {
+    try {
+      await logoutApi()
+    } catch (error) {
+      // TODO : handle error
+    } finally {
       persistor.purge()
       dispatch({
         type: 'LOGOUT_SUCCESS'

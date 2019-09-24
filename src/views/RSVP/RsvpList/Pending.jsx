@@ -20,14 +20,14 @@ export function Pending (props) {
       </thead>
       <tbody>
         {data && data.map((rsvp, key) => {
-          const {created_at, id, title, village_id, village, admin_id, admin, volunteer} = rsvp
+          const {created_at, id, title, village_id, village, admin_id, admin, app_user} = rsvp
           return (
             <tr key={key}>
               <td>{key+1}</td>
               <td><DateTime data={created_at} /></td>
               <td><Link to={`approval/${id}`}>{title}</Link></td>
               <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
-              <td>{admin_id?admin.name:volunteer.name}</td>
+              <td>{admin_id?admin.name:app_user.name}</td>
               <td>
                 <ApproveActionButton onClick={props.onApprove} id={id} />
                 <RejectActionButton onClick={props.onReject} id={id} />

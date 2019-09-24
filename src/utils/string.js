@@ -3,3 +3,7 @@ export default function ucwords (str) {
     return letter.toUpperCase()
   })
 }
+
+export function genderTranslate(gender) {
+  return gender==='male'?'Laki-Laki':'Perempuan'
+}

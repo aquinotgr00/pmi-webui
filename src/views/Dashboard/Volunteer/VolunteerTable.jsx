@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
 import { VolunteerProfileModal } from 'components'
+import { genderTranslate } from 'utils/string'
 
 export function VolunteerTable(props) {
     const { data, volunteer } = props
@@ -19,8 +20,7 @@ export function VolunteerTable(props) {
                 </thead>
                 <tbody>
                     {data.map((item, key) => {
-                        const { unit } = item
-                        const { membership } = unit
+                        const { unit, membership, gender, city } = item
                         return (
                             <tr key={key}>
                                 <td>{key + 1}</td>
@@ -33,9 +33,9 @@ export function VolunteerTable(props) {
                                         handleExportPdf={props.exportToPdf}
                                     />
                                 </td>
-                                <td>{item.gender}</td>
+                                <td>{genderTranslate(gender)}</td>
                                 <td>{(membership) ? membership.name : '-'}</td>
-                                <td>{item.city}</td>
+                                <td>{city}</td>
                                 <td>{(unit) ? unit.name : '-'}</td>
                             </tr>
                         )
