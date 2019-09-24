@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { CheckboxPrivileges } from 'components'
 import { Collapse } from 'reactstrap'
+import { FieldArray, connect } from 'formik'
 
-export class CollapsablePrivilagesItem extends Component {
+class CollapsablePrivilagesItem extends Component {
 	constructor(props) {
 		super(props)
 		this.toggle = this.toggle.bind(this)
@@ -14,7 +15,7 @@ export class CollapsablePrivilagesItem extends Component {
 	}
 
 	render() {
-		const { name, list, handleCheckbox } = this.props
+		const { name, list, values } = this.props
 		const { collapse } = this.state
 		return (
 			<li>
@@ -22,23 +23,25 @@ export class CollapsablePrivilagesItem extends Component {
 				<hr />
 				<Collapse isOpen={collapse} className="collapse list-privilage">
 					<ul className="flex-column privilage-item ">
-						{list.map((item, index) => {
-							
-							return (
-								<CheckboxPrivileges
-									value={item.id}
-									index={index}
-									key={index}
-									label={item.name}
-									privilege_id={item.privilege_id}
-									handleCheckbox={handleCheckbox}
-								/>
-							)
-						}
-						)}
+						<FieldArray
+							name="privileges"
+							render={arrayHelpers => (
+								<>
+									{list.map((item, index) => (
+										<CheckboxPrivileges
+											key={index}
+											item={item}
+											arrayHelpers={arrayHelpers}
+											values={values} />
+									))}
+								</>
+							)}
+						/>
 					</ul>
 				</Collapse>
 			</li>
 		)
 	}
 }
+
+export default connect(CollapsablePrivilagesItem)

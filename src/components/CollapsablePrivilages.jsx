@@ -1,9 +1,9 @@
 import React from 'react'
-import { CollapsablePrivilagesItem } from 'components'
+import CollapsablePrivilagesItem  from './CollapsablePrivilagesItem'
 
 export function CollapsablePrivilages(props) {
-	const { options, handleCheckbox } = props
-	const data = (options.length > 0) ? options : []
+	const { checkboxes, values } = props
+	const data = (checkboxes.length > 0) ? checkboxes : []
 	
 	return (
 		<ul className="flex-column privilage-item">
@@ -13,7 +13,7 @@ export function CollapsablePrivilages(props) {
 						key={index}
 						name={opsi[0].privilege_category}
 						list={opsi}
-						handleCheckbox={handleCheckbox}
+						values={values}
 					/>
 				)
 			}

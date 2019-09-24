@@ -11,13 +11,13 @@ export default Yup.object().shape({
     .required(),
   role_id: Yup.string()
     .required(),
-  options: Yup.array()      
-      .required()
-      .min(1),
+  privileges: Yup.array()
+    .required()
+    .min(1),
   password: Yup.string()
     .min(6)
     .required(),
-  password_confirmation:  Yup.string()
+  password_confirmation: Yup.string()
     .oneOf([Yup.ref('password'), null])
     .required()
 })
