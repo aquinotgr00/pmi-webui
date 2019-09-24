@@ -13,3 +13,17 @@ export function getEventActivityApi (params) {
     })
   })
 }
+
+function buildEventActivityFormData (activity) {
+  const formData = new FormData()
+  formData.append('event_report_id', activity.event_report_id)
+  formData.append('comment', activity.comment)
+
+  return formData
+}
+
+export function postEventActivityApi (comment) {
+  const formData = buildEventActivityFormData(comment)
+
+  return authRequest().post('/events/comment', formData)
+}
