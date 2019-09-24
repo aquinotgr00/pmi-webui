@@ -1,17 +1,8 @@
 import axios from 'axios'
 import { authRequest } from 'utils/network'
 
-const CancelToken = axios.CancelToken
-let cancel
-
 export function listrolePrivilegesApi (params) {
-  cancel && cancel()
-
-  return authRequest().get('/grant/rolesprivileges', { params,
-    cancelToken: new CancelToken(function executor (c) {
-      cancel = c
-    })
-  })
+  return authRequest().get('/grant/rolesprivileges', { params })
 }
 
 export function detailsrolePrivilegesApi(roleId){

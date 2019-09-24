@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table } from 'reactstrap'
-import { VolunteerModal } from './VolunteerModal'
+import { VolunteerProfileModal } from 'components'
 import { genderTranslate } from 'utils/string'
 
 export function VolunteerTable(props) {
@@ -25,7 +25,13 @@ export function VolunteerTable(props) {
                             <tr key={key}>
                                 <td>{key + 1}</td>
                                 <td>
-                                    <a href="#open-modal" onClick={() => props.toggleModal(item.id)}>{item.name}</a>
+                                    <VolunteerProfileModal
+                                        title={item.name}
+                                        data={item}
+                                        isOpen={props.openModal}
+                                        toggle={props.toggleModal}
+                                        handleExportPdf={props.exportToPdf}
+                                    />
                                 </td>
                                 <td>{genderTranslate(gender)}</td>
                                 <td>{(membership) ? membership.name : '-'}</td>
@@ -36,14 +42,6 @@ export function VolunteerTable(props) {
                     })}
                 </tbody>
             </Table>
-            {(volunteer.user) &&
-                <VolunteerModal
-                    exportToPdf={props.exportToPdf}
-                    volunteer={volunteer}
-                    openModal={props.openModal}
-                    toggleModal={props.toggleModal}
-                />
-            }
         </>
     )
 }
