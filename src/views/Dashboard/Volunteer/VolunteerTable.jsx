@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table } from 'reactstrap'
 import { VolunteerModal } from './VolunteerModal'
+import { genderTranslate } from 'utils/string'
 
 export function VolunteerTable(props) {
     const { data, volunteer } = props
@@ -19,17 +20,16 @@ export function VolunteerTable(props) {
                 </thead>
                 <tbody>
                     {data.map((item, key) => {
-                        const { unit } = item
-                        const { membership } = unit
+                        const { unit, membership, gender, city } = item
                         return (
                             <tr key={key}>
                                 <td>{key + 1}</td>
                                 <td>
                                     <a href="#open-modal" onClick={() => props.toggleModal(item.id)}>{item.name}</a>
                                 </td>
-                                <td>{item.gender}</td>
+                                <td>{genderTranslate(gender)}</td>
                                 <td>{(membership) ? membership.name : '-'}</td>
-                                <td>{item.city}</td>
+                                <td>{city}</td>
                                 <td>{(unit) ? unit.name : '-'}</td>
                             </tr>
                         )

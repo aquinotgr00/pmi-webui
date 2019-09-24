@@ -151,6 +151,7 @@ a:hover {
 .btn-top-card{
     font-size: 11px;
     color: #ED1C24;
+    padding-left: 0;
 }
 .fa-arrow{
     background-image: url(../images/collapse-arrow-closed.svg);

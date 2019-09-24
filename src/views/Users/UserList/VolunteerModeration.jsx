@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, Button } from 'reactstrap'
 import { VolunteerProfileModal, RejectModal } from 'components'
+import { genderTranslate } from 'utils/string'
 
 export function VolunteerModeration (props) {
   return (
@@ -19,7 +20,6 @@ export function VolunteerModeration (props) {
       </thead>
       <tbody>
         {props.data.map((volunteer, key) => {
-            key++
             const { membership } = volunteer.unit
             let memberType = membership.name
             let subMemberType = membership.name
@@ -27,10 +27,10 @@ export function VolunteerModeration (props) {
               memberType = membership.parent_member.name
             }
             return (
-                <tr key={key}>
-                    <td>{key}</td>
+                <tr key={`${volunteer.id}`}>
+                    <td>{key+1}</td>
                     <td><VolunteerProfileModal title={volunteer.name} data={volunteer} isOpen={props.isOpen} toggle={props.toggleProfileModal} /></td>
-                    <td>{volunteer.gender}</td>
+                    <td>{genderTranslate(volunteer.gender)}</td>
                     <td>{volunteer.unit === null ? '':memberType}</td>
                     <td>{memberType === subMemberType ? '':subMemberType}</td>
                     <td>{volunteer.city}</td>
