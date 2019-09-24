@@ -20,7 +20,7 @@ export function MembershipCardItem(props) {
                                 aria-controls="multiCollapseExample1"
                                 onClick={() => props.toggle(index)}
                                 >
-                                Lihat Selengkapnya
+                                Info Lebih Lanjut
                                 <i className="fa-arrow"></i>
                             </Button>
                         </Col>

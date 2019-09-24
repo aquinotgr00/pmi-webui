@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Button } from 'reactstrap'
 import { VolunteerProfileModal } from 'components'
 import { EditActionButton } from 'components/ActionButtons/EditActionButton'
+import { genderTranslate } from 'utils/string'
 
 export function Volunteer (props) {
   const { path } = props
@@ -20,28 +21,27 @@ export function Volunteer (props) {
       </thead>
       <tbody>
         {props.data.map((volunteer, key) => {
-            key++
-            const { unit } = volunteer
+            const { id, name, unit, gender, city } = volunteer
             const { membership } = unit
             return (
-                <tr key={key}>
-                    <td>{key}</td>
+                <tr key={`${id}`}>
+                    <td>{key+1}</td>
                     <td>
                         <VolunteerProfileModal
-                            title={volunteer.name}
+                            title={name}
                             data={volunteer}
                             isOpen={props.isOpen}
                             toggle={props.toggleProfileModal}
                             handleExportPdf={props.handleExportPdf}
                         />
                     </td>
-                    <td>{volunteer.gender}</td>
+                    <td>{genderTranslate(gender)}</td>
                     <td>{(membership)? membership.name : '' }</td>
-                    <td>{volunteer.city}</td>
+                    <td>{city}</td>
                     <td>{(unit)? unit.name : '' }</td>
                     <td>
                         <EditActionButton
-                          path={`${path}/${volunteer.id}/edit`}
+                          path={`${path}/${id}/edit`}
                           data={volunteer}
                         />
                         <Button
