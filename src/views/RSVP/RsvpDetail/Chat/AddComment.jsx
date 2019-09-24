@@ -1,17 +1,33 @@
 import React, { Component } from 'react'
-import { Button, Input, Label } from 'reactstrap'
-
+import { Input, Label } from 'reactstrap'
+import { postEventActivityApi } from 'services/api'
 
 export default class AddComment extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      comment:''
+    }
+  }
 
+  handleComment = event => {
+    this.setState({ comment: event.target.value })
+  }
+  
   sendMessage = async e => {
     if(e.key==='Enter') {
       e.preventDefault()
       try {
-        console.log(e.target.value)
-        // const response = await this.sendCommentApi()
+        const event_report_id = this.props.rsvpId
+        const { comment } = this.state
+        const response = await postEventActivityApi({event_report_id,comment})
+        const { status, data } = response.data
+        if(status==='success') {
+          this.setState({comment:''})
+        }
       } catch (error) {
-        
+        console.log(error)
       }
     }
   }
@@ -32,7 +48,13 @@ export default class AddComment extends Component {
           />
           <Label htmlFor='media-input' className='add-img-red my-auto' />
           <div className='input-group input-chat'>
-            <input type='text' className='form-control input-box' placeholder='Tulis Sesuatu' onKeyPress={this.sendMessage} />
+            <Input
+              className='form-control input-box'
+              placeholder='Tulis Sesuatu'
+              onKeyPress={this.sendMessage}
+              onChange={this.handleComment}
+              value={this.state.comment}
+            />
           </div>
         </div>
       </div>

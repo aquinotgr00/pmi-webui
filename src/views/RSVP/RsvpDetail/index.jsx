@@ -87,7 +87,7 @@ class RsvpDetail extends Component {
               </small>
             </div>
 
-            <Participants rsvpId={rsvp.id} />
+            { rsvp.id && <Participants ableToAdd={rsvp.id!==1 && viewMode!=='archive'} rsvpId={rsvp.id} /> }
             
           </Col>
         </Row>

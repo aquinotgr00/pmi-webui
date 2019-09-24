@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Button, Label } from 'reactstrap'
+import { Label } from 'reactstrap'
 import Pusher from 'pusher-js'
 import { connect } from 'react-redux'
+import { getEventActivityApi } from 'services/api'
 import AddNewComment from './AddComment'
 import ChatBubble from './Bubble'
 
@@ -41,13 +42,23 @@ class Chatbox extends Component {
     })
     const channel = pusher.subscribe(`private-event.${rsvpId}`)
 
+    channel.bind('pusher:subscription_succeeded', function () {
+      
+    })
+
     channel.bind('pusher:subscription_error', function (status) {
       console.log(status)
     })
 
-    channel.bind('event.comment', function (data) {
-      console.log(data)
+    channel.bind('event.comment', data => {
+      const { comment } = data
+      console.log(comment)
+      this.setState({
+        comments:[...this.state.comments,comment]
+      })
     })
+
+    this.loadChat()
   }
 
   addMedia = mediaFile => {
@@ -55,7 +66,30 @@ class Chatbox extends Component {
       this.setState({ previewMedia }) 
     })
   }
-  
+
+  async loadChat(page=1) {
+    const { rsvpId } =this.props
+    this.setState({ isLoading: true, error: null })
+    const chatParams = new URLSearchParams()
+    chatParams.append('e', rsvpId)
+    chatParams.append('page',page)
+    try {
+      const response = await getEventActivityApi(chatParams)
+      const { status, data } = response.data
+      if (status === 'success') {
+        const { current_page:currentPage, data:comments } = data
+        
+        this.setState({ comments:[ ...this.state.comments, ...comments.reverse()], currentPage, isLoading:false })
+      } else {
+        // TODO : handle error
+        this.setState({ isLoading: false })
+      }
+    } catch (error) {
+      // TODO : handle error
+      this.setState({ isLoading: false })
+    }
+  }
+
   render() {
     const { comments } = this.state
     return (
@@ -63,85 +97,20 @@ class Chatbox extends Component {
         <Label>Chat Box</Label>
         <div className='chat-box'>
           <div className='chat'>
-            { comments.map(comment=>
-                <ChatBubble
-                  avatar={comment.user.image_url}
-                  commentatorName={comment.name}
-                  media={comment.attachment}
-                  key={`${comment.id}`}
-                />
-              )
-            }
-            <div className='chat-bubble'>
-              <div className='row'>
-                <div className='col-md-2'>
-                  <img src='images/donasi-images/profil.png' className='img-circle' />
-                </div>
-                <div className='col-md'>
-                  <div className='card bubble-card'>
-                    <div className='bubble-head'>
-                      <h2 className='mr-md-auto align-self-stretch'>Niken Anisa Putri</h2>
-                      <small>3:16 PM</small>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className='chat-bubble'>
-              <div className='row'>
-                <div className='col-md-2'>
-                  <img src='images/donasi-images/profil.png' className='img-circle' />
-                </div>
-                <div className='col-md'>
-                  <div className='card bubble-card'>
-                    <div className='bubble-head'>
-                      <h2 className='mr-md-auto align-self-stretch'>Niken Anisa Putri</h2>
-                      <small>3:16 PM</small>
-                    </div>
-                    <a href='#' className='a-img-bubble'>
-                      <img src='images/donasi-images/01.jpg' className='img-inside-bubble' />
-                    </a>
-                    <p>Lorem ipsum dolor sit amet</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className='chat-bubble'>
-              <div className='row'>
-                <div className='col-md-2'>
-                  <img src='images/donasi-images/profil.png' className='img-circle' />
-                </div>
-                <div className='col-md'>
-                  <div className='card bubble-card'>
-                    <div className='bubble-head'>
-                      <h2 className='mr-md-auto align-self-stretch'>Niken Anisa Putri</h2>
-                      <small>3:16 PM</small>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className='chat-bubble'>
-              <div className='row'>
-                <div className='col-md-2'>
-                  <img src='images/donasi-images/profil.png' className='img-circle' />
-                </div>
-                <div className='col-md'>
-                  <div className='card bubble-card'>
-                    <div className='bubble-head'>
-                      <h2 className='mr-md-auto align-self-stretch'>Niken Anisa Putri</h2>
-                      <small>3:16 PM</small>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            { comments.map(comment => {
+                const { comment:text, comment_attachment:attachment, media_url:mediaUrl, admin, volunteer,created_at:timestamp } = comment
+                const senderName = admin?admin.name:volunteer.name
+                return (
+                  <ChatBubble
+                    avatar={volunteer?volunteer.image_url:null}
+                    senderName={senderName}
+                    text={text}
+                    media={attachment?mediaUrl:null}
+                    timestamp={timestamp}
+                    key={`${comment.id}`}
+                  />
+                )
+            })}
           </div>
 
           {!this.props.readOnly && 

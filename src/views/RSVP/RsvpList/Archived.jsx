@@ -19,7 +19,7 @@ export function Archived (props) {
       </thead>
       <tbody>
         {data && data.map((rsvp, key) => {
-          const {created_at, id, deleted_at, title, village_id, village, admin_id, admin, volunteer} = rsvp
+          const {created_at, id, deleted_at, title, village_id, village, admin_id, admin, app_user} = rsvp
           return (
             <tr key={key}>
               <td>{key+1}</td>
@@ -27,7 +27,7 @@ export function Archived (props) {
               <td><DateTime data={deleted_at} /></td>
               <td><Link to={`archive/${id}`}>{title}</Link></td>
               <td>{village_id?village.subdistrict.city.name.toUpperCase():''}</td>
-              <td>{admin_id?admin.name:volunteer.name}</td>
+              <td>{admin_id?admin.name:app_user.name}</td>
             </tr>
           )}
         )}
