@@ -5,7 +5,9 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   manual_payment: Yup.boolean()
-    .required(),
+    .required()
+    .label('Metode Transfer'),
   status: Yup.string()
     .required()
+    .label('Status Donasi')
 })

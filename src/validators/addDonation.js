@@ -5,14 +5,18 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   campaign_id: Yup.string()
-    .required(),
+    .required()
+    .label('Judul'),
   name: Yup.string()
-    .required(),
+    .required()
+    .label('Nama Donatur'),
   email: Yup.string()
     .email()
-    .required(),
+    .required()
+    .label('E-mail'),
   phone: Yup.number()
-    .required(),
+    .required()
+    .label('No. Telepon'),
   fundraising: Yup.number(),
   amount: Yup.number()
     .when('fundraising', {
@@ -20,4 +24,5 @@ export default Yup.object().shape({
       then: Yup.number().min(10000),
       otherwise: Yup.number().nullable(),
     })
+    .label('Besar Donasi')
 })

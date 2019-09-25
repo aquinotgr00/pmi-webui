@@ -6,7 +6,9 @@ Yup.setLocale(localeID)
 export default Yup.object().shape({
     subdistrict_id: Yup.number()
         .positive()
-        .required(),
+        .required()
+        .label('Kecamatan'),
     name: Yup.string()
         .required()
+        .label('Kelurahan/Desa')
 })

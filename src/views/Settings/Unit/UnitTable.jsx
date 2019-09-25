@@ -41,7 +41,7 @@ export function UnitTable(props) {
             <div className="form-group ml-3">
               <Input type="select" id="filterParent" onChange={props.handleFilterParent}>
                 <option value="0">Pilih Jenis Anggota</option>
-                <OptionMembership membership={memberData} mode="2" />
+                <OptionMembership membership={memberData} mode="3" />
               </Input>
             </div>
 
@@ -76,15 +76,15 @@ export function UnitTable(props) {
         <tbody>
           {unitData &&
             unitData.map((unit, key) => {
-              const { membership } = unit || null
-              const { city } = unit || null
-              const { parent_member } = membership || null
+              const { membership } = unit
+              const { city } = unit
+              const { parent_member } = membership
               return (
                 <tr key={key}>
                   <td>{key + 1}</td>
                   <td>{unit.name}</td>
                   <td>{(city) ? city.name : ""} </td>
-                  <td>{(parent_member) ? parent_member.name + ' > ' + membership.name : membership.name} </td>
+                  <td>{(parent_member) ? parent_member.name + ' >> ' + membership.name : membership.name} </td>
                   <td>
                     <EditActionButton path={`${pathname}/${unit.id}/edit`} />
                     <Button

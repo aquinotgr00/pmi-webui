@@ -238,8 +238,8 @@ export default class UserList extends Component {
     const response = postVolunteerUpdateApi(volunteerId, data)
     const userData = this.state.userData
     userData.splice(index, 1)
-    this.setState({ userData })
-    console.log(response);
+    console.log(index)
+    this.setState({ userData })   
   }
 
   renderUserList(user) {

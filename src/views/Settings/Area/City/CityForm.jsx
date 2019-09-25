@@ -49,16 +49,6 @@ export function CityForm(props) {
                                         {errors.name !== undefined ? <FormFeedback>{errors.name}</FormFeedback> : ''}
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label>Kode Pos</Label>
-                                        <Field
-                                            name='postal_code'
-                                            render={({ field }) => (
-                                                <Input {...field} id='postal_code' maxLength={10} invalid={errors.postal_code !== undefined} />
-                                            )}
-                                        />
-                                        {errors.postal_code !== undefined ? <FormFeedback>{errors.postal_code}</FormFeedback> : ''}
-                                    </FormGroup>
-                                    <FormGroup>
                                         <div className="float-right">
                                             <Button
                                                 type="submit"

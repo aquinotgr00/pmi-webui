@@ -9,7 +9,7 @@ import {
   listPrivilegesApi,
   listrolePrivilegesApi
 } from 'services/api'
-import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import { withRouter } from 'react-router-dom'
 import AddUserSchema from 'validators/addUser'
 import UpdateUserSchema from 'validators/updateUser'
@@ -40,7 +40,7 @@ class AdminForm extends Component {
     this.loadPrivilages = this.loadPrivilages.bind(this)
     this.loadRolePrivilages = this.loadRolePrivilages.bind(this)
     this.handleSaveUser = this.handleSaveUser.bind(this)    
-    this.handleCheckbox = this.handleCheckbox.bind(this)
+    
     this.handleCreateOptions = this.handleCreateOptions.bind(this)
     this.groupBy = this.groupBy.bind(this)
   }
@@ -53,16 +53,6 @@ class AdminForm extends Component {
     this.loadRoles()
     this.loadPrivilages()
     this.loadRolePrivilages()
-  }
-
-  handleCheckbox(e) {
-    const id = e.target.value
-    const { listPrivileges } = this.state
-
-    listPrivileges.find(privilege => privilege.id == id).privilege_id = (e.target.checked) ? id : false
-
-    let checkboxes = this.handleCreateOptions(listPrivileges)
-    this.setState({ checkboxes })
   }
 
   handleCreateOptions(listPrivileges) {
@@ -163,7 +153,6 @@ class AdminForm extends Component {
     const {
       checkboxes,
       roles,
-      listPrivileges,
       isLoading,
       userData,
       rolePrivileges
@@ -275,7 +264,7 @@ class AdminForm extends Component {
                     </div>
                     {errors.checkboxes !== undefined ? <b className="text-danger">{errors.checkboxes}</b> : ''}
                     <FormGroup>
-                      <CollapsablePrivilages checkboxes={checkboxes} handleCheckbox={this.handleCheckbox} values={values.privileges} />
+                      <CollapsablePrivilages checkboxes={checkboxes} values={values.privileges} />
                     </FormGroup>
                   </div>
                 </Form>

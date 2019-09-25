@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { authRequest } from 'utils/network'
-import { object } from 'yup';
 
 const CancelToken = axios.CancelToken
 let cancel

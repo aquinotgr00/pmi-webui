@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Label, Input } from 'reactstrap'
-import { Field, connect } from 'formik'
+import { connect } from 'formik'
 
 export const CheckboxPrivileges = connect(function (props) {
 	const { item, arrayHelpers, values } = props	

@@ -2,7 +2,7 @@ import React from 'react'
 import { Table } from 'reactstrap'
 
 export function NonFundraisingTable(props) {
-	const { pick_method_text, donation_items, data } = props
+	const { donation_items, data } = props
 	const { image_url, title, get_type } = data
 	let amount = 0;
 	return (

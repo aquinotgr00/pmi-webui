@@ -20,15 +20,17 @@ export function VolunteerModeration (props) {
       </thead>
       <tbody>
         {props.data.map((volunteer, key) => {
-            const { membership } = volunteer.unit
-            let memberType = membership.name
-            let subMemberType = membership.name
+            const { membership }  = volunteer.unit
+            let memberType        = membership.name
+            let subMemberType     = membership.name
+            key++
+            
             if(membership.parent_member) {
               memberType = membership.parent_member.name
             }
             return (
                 <tr key={`${volunteer.id}`}>
-                    <td>{key+1}</td>
+                    <td>{key}</td>
                     <td><VolunteerProfileModal title={volunteer.name} data={volunteer} isOpen={props.isOpen} toggle={props.toggleProfileModal} /></td>
                     <td>{genderTranslate(volunteer.gender)}</td>
                     <td>{volunteer.unit === null ? '':memberType}</td>

@@ -6,7 +6,9 @@ Yup.setLocale(localeID)
 export default Yup.object().shape({
   city_id: Yup.number()
     .positive()
-    .required(),
+    .required()
+    .label('Kabupaten/Kota'),
   name: Yup.string()
     .required()
+    .label('Kecamatan')
 })

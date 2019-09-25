@@ -123,24 +123,18 @@ export default class UnitList extends Component {
 				this.setState({ isLoading: false, error: null })
 			}
 
-		} catch (error) {
-			console.log(error)
-		}
+		} catch (error) {}
 	}
 
 	async loadMembership() {
 		try {
-			const memberParams = new URLSearchParams()
-			memberParams.append('l', '[0,1]')
-			const response = await listMembershipApi(memberParams)
+			const response = await listMembershipApi()
 			const { status } = response.data
 			if (status === "success") {
 				const { data: memberData } = response.data
 				this.setState({ memberData })
 			}
-		} catch (error) {
-			console.log(error)
-		}
+		} catch (error) {}
 	}
 
 	async loadCities() {
@@ -151,9 +145,7 @@ export default class UnitList extends Component {
 				const { data: cityData } = response.data
 				this.setState({ cityData })
 			}
-		} catch (error) {
-			console.log(error)
-		}
+		} catch (error) {}
 	}
 
 	async actionDelete() {

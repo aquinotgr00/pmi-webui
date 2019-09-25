@@ -40,7 +40,6 @@ export default class AddComment extends Component {
             className='hidden-file-input'
             onChange={event => {
               const file = event.target.files[0]
-
               if (file) {
                 this.props.onAddMedia(file)
               }
