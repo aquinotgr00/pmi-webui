@@ -5,4 +5,6 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   name: Yup.string()
+      .label('Jenis Anggota')
+      .required()
 })
