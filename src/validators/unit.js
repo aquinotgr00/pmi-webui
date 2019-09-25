@@ -5,9 +5,12 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
 	name: Yup.string()
-		.required(),
+		.required()
+		.label('Unit'),
 	city_id: Yup.string()
-		.required(),
+		.required()
+		.label('Kabupaten/Kota'),
 	membership_id: Yup.string()
 		.required()
+		.label('Jenis Anggota')
 })

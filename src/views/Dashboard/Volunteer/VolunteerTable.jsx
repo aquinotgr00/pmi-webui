@@ -4,7 +4,7 @@ import { VolunteerProfileModal } from 'components'
 import { genderTranslate } from 'utils/string'
 
 export function VolunteerTable(props) {
-    const { data, volunteer } = props
+    const { data } = props
     return (
         <>
             <Table hover>

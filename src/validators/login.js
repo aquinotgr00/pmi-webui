@@ -6,7 +6,9 @@ Yup.setLocale(localeID)
 export default Yup.object().shape({
   email: Yup.string()
     .email()
-    .required(),
+    .required()
+    .label('E-mail'),
   password: Yup.string()
     .required()
+    .label('Password')
 })

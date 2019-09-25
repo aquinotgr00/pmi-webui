@@ -5,25 +5,33 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   name: Yup.string()
-    .required(),
+    .required()
+    .label('Nama'),
   birthplace: Yup.string()
-    .required(),
+    .required()
+    .label('Tempat Lahir'),
   dob: Yup.string()
-    .required(),
+    .required()
+    .label('Tanggal Lahir'),
   gender:  Yup.string()
-    .required(),
+    .required()
+    .label('Jenis Kelamin'),
   religion:  Yup.string()
-    .required(),
+    .required()
+    .label('Agama'),
   city:  Yup.string()
-    .required(),
+    .required()
+    .label('Kabupaten/Kota'),
   subdistrict:  Yup.string()
-    .required(),
+    .required()
+    .label('Kecamatan'),
   subdivision:  Yup.string()
-    .required(),
+    .required()
+    .label('Kelurahan/Desa'),
   unit:  Yup.string()
-    .required(),
+    .required()
+    .label('Unit'),
   type:  Yup.string()
-    .required(),
-  sub_type:  Yup.string()
-    .required(),
+    .required()
+    .label('Judul Anggota')
 })

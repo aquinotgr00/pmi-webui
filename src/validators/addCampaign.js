@@ -5,7 +5,9 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   title: Yup.string()
-    .required(),
+    .required()
+    .label('Judul'),
   description: Yup.string()
     .required()
+    .label('Deskripsi')
 })

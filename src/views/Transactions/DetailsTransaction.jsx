@@ -45,10 +45,8 @@ export default class DetailsTransaction extends Component {
 
     try {
       const response = await updateTransaction(id, values)
-      const { data, status } = response.data
+      const { status } = response.data
       if (status === 'success') {
-        //const { campaign, donator } = data
-        //this.setState({ data, campaign, donator })
         this.loadDetailsTransaction(id)
         let close = document.getElementById('btn-cancel')
         if (typeof close !== 'undefined') {
@@ -101,11 +99,11 @@ export default class DetailsTransaction extends Component {
             text: (donator) ? donator.address : ''
           },
           {
-            label: 'No Tlp',
+            label: 'No. Telepon',
             text: phone
           },
           {
-            label: 'Email',
+            label: 'E-mail',
             text: email
           },
         ]

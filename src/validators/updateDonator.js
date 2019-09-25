@@ -5,10 +5,13 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
 	name: Yup.string()
-		.required(),
+		.required()
+		.label('Nama Donatur'),
 	email: Yup.string()
 		.email()
-		.required(),
+		.required()
+		.label('E-mail'),
 	phone: Yup.number()
 		.required()
+		.label('No. Telepon')
 })

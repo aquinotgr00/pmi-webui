@@ -5,7 +5,9 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   province_id: Yup.number()
-    .required(),
+    .required()
+    .label('Provinsi'),
   name: Yup.string()
     .required()
+    .label('Kabupaten/Kota')
 })

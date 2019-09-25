@@ -5,12 +5,16 @@ Yup.setLocale(localeID)
 
 export default Yup.object().shape({
   name: Yup.string()
-    .required(),
+    .required()
+    .label('Nama Lengkap'),
   email: Yup.string()
     .email()
-    .required(),
+    .required()
+    .label('E-mail'),
   password: Yup.string()
-    .min(6),
+    .min(6)
+    .label('Kata sandi'),
   password_confirmation:  Yup.string()
     .oneOf([Yup.ref('password'), null])
+    .label('Konfirmasi kata sandi')
 })
